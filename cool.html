@@ -1,0 +1,3810 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Diamond Plan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@600;800;900&family=Inter:wght@500;600;700;800&display=swap');
+
+        :root {
+            --accent-cyan: #38bdf8;
+            --accent-blue: #2563eb;
+            --accent-gold: #f59e0b;
+            --accent-emerald: #10b981;
+        }
+
+        body, html {
+            background-color: #0b1120;
+            color: #f8fafc;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            overflow: hidden;
+            -webkit-user-select: none;
+            user-select: none;
+            touch-action: none;
+        }
+
+        .font-pixel { font-family: 'Press Start 2P', monospace; }
+        .font-orbitron { font-family: 'Orbitron', sans-serif; }
+
+        @keyframes subtleFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+        }
+        .float-anim { animation: subtleFloat 3.5s ease-in-out infinite; }
+        .diamond-anim { animation: subtleFloat 3s ease-in-out infinite; }
+
+        .holo-pedestal {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+        }
+
+        /* Спокойные современные кнопки главного меню */
+        .game-menu-btn {
+            position: relative;
+            background: linear-gradient(90deg, #0f172a 0%, #1e293b 100%);
+            border: 2px solid #334155;
+            border-left: 8px solid #38bdf8;
+            color: #f8fafc;
+            font-family: 'Press Start 2P', monospace;
+            font-size: clamp(0.75rem, 1.9vw, 0.98rem);
+            padding: 18px 24px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: transform 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+            text-transform: uppercase;
+        }
+        .game-menu-btn:hover {
+            transform: translateX(6px);
+            background: linear-gradient(90deg, #1e293b 0%, #1d4ed8 100%);
+            border-color: #60a5fa;
+        }
+        .game-menu-btn:active {
+            transform: translateX(3px) translateY(2px);
+        }
+
+        .game-menu-btn.btn-mp {
+            border-left-color: #10b981;
+        }
+        .game-menu-btn.btn-mp:hover {
+            background: linear-gradient(90deg, #064e3b 0%, #059669 100%);
+            border-color: #34d399;
+        }
+
+        .game-menu-btn.btn-friends {
+            border-left-color: #a855f7;
+        }
+        .game-menu-btn.btn-friends:hover {
+            background: linear-gradient(90deg, #3b0764 0%, #7e22ce 100%);
+            border-color: #c084fc;
+        }
+
+        .game-menu-btn.btn-editor {
+            border-left-color: #f59e0b;
+        }
+        .game-menu-btn.btn-editor:hover {
+            background: linear-gradient(90deg, #451a03 0%, #d97706 100%);
+            border-color: #fbbf24;
+        }
+
+        /* Стандартные кнопки интерфейса */
+        .dp-btn {
+            background: #2563eb;
+            border: 2px solid #60a5fa;
+            color: #fff;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.75rem;
+            padding: 13px 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.15s ease, transform 0.1s ease;
+            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-align: center;
+        }
+        .dp-btn:hover { background: #1d4ed8; }
+        .dp-btn:active { transform: translateY(2px); }
+        .dp-btn-gold { background: #d97706; border-color: #fbbf24; }
+        .dp-btn-gold:hover { background: #b45309; }
+        .dp-btn-emerald { background: #059669; border-color: #34d399; }
+        .dp-btn-emerald:hover { background: #047857; }
+        .dp-btn-purple { background: #7c3aed; border-color: #a78bfa; }
+        .dp-btn-purple:hover { background: #6d28d9; }
+        .dp-btn-dark { background: #1e293b; border-color: #475569; }
+        .dp-btn-dark:hover { background: #334155; }
+        .dp-btn-danger { background: #e11d48; border-color: #fb7185; }
+        .dp-btn-danger:hover { background: #be123c; }
+
+        /* Узлы карты */
+        .map-node {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            z-index: 10;
+        }
+        .map-node:hover { transform: translate(-50%, -50%) scale(1.15); }
+        .node-diamond { border-radius: 10px; transform: translate(-50%, -50%) rotate(45deg); }
+        .node-diamond span { transform: rotate(-45deg); display: block; }
+        .node-diamond:hover { transform: translate(-50%, -50%) rotate(45deg) scale(1.15); }
+        .node-circle { border-radius: 9999px; }
+        .node-hex { clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%); width: 66px; height: 60px; }
+
+        .node-locked { background: #1e293b; border: 3px solid #475569; color: #64748b; }
+        .node-unlocked {
+            background: #1d4ed8;
+            border: 3px solid #38bdf8;
+            color: #ffffff;
+            box-shadow: 0 4px 14px rgba(56, 189, 248, 0.35);
+        }
+        .node-completed {
+            background: #059669;
+            border: 3px solid #34d399;
+            color: #ecfdf5;
+        }
+
+        #gameCanvas {
+            image-rendering: pixelated;
+            outline: none;
+            border: 3px solid #334155;
+            border-radius: 10px;
+            background-color: #090d16;
+        }
+
+        /* Мобильное управление только внутри игры */
+        #joystickZone, #pauseHudBtn, #actionRightHud { display: none !important; }
+        body.in-game.show-touch #joystickZone {
+            position: fixed;
+            bottom: calc(22px + env(safe-area-inset-bottom, 0px));
+            left: calc(22px + env(safe-area-inset-left, 0px));
+            width: 150px;
+            height: 150px;
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+        }
+        body.in-game.show-touch #actionRightHud {
+            position: fixed;
+            bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+            right: calc(22px + env(safe-area-inset-right, 0px));
+            display: flex !important;
+            gap: 14px;
+            align-items: center;
+            z-index: 50;
+        }
+        body.in-game #pauseHudBtn {
+            position: fixed;
+            top: calc(14px + env(safe-area-inset-top, 0px));
+            right: calc(14px + env(safe-area-inset-right, 0px));
+            display: flex !important;
+            z-index: 50;
+        }
+
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+    </style>
+</head>
+<body>
+
+    <!-- Спокойный фоновый холст для Главного Меню -->
+    <canvas id="menuBgCanvas" class="fixed inset-0 w-full h-full pointer-events-none z-0"></canvas>
+
+    <!-- ==================== 1. ЗАСТАВКА 1: DIAMOND PLAN ==================== -->
+    <div id="screen-splash-1" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black cursor-pointer" onclick="window.skipSplash1()">
+        <div class="relative flex flex-col items-center">
+            <svg class="w-36 h-36 sm:w-48 sm:h-48 diamond-anim mb-8" viewBox="0 0 100 100" fill="none">
+                <polygon points="50,5 90,32 50,95 10,32" fill="url(#diamGrad)" stroke="#38bdf8" stroke-width="3"/>
+                <polygon points="50,5 70,32 50,95 30,32" fill="rgba(255,255,255,0.14)" stroke="#60a5fa" stroke-width="1.5"/>
+                <line x1="10" y1="32" x2="90" y2="32" stroke="#38bdf8" stroke-width="2"/>
+                <defs>
+                    <linearGradient id="diamGrad" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0%" stop-color="#38bdf8"/>
+                        <stop offset="50%" stop-color="#2563eb"/>
+                        <stop offset="100%" stop-color="#1e1b4b"/>
+                    </linearGradient>
+                </defs>
+            </svg>
+            <h1 class="font-pixel text-3xl sm:text-5xl text-sky-400 tracking-wider text-center">
+                DIAMOND PLAN
+            </h1>
+            <p class="font-orbitron text-sm sm:text-base text-slate-400 tracking-[0.3em] mt-4 uppercase">
+                Tactical Stealth Action
+            </p>
+        </div>
+        <p class="absolute bottom-12 font-pixel text-xs text-slate-400">
+            [ НАЖМИТЕ ДЛЯ СТАРТА ]
+        </p>
+    </div>
+
+    <!-- ==================== 2. ЗАСТАВКА 2: HTML5 LOGO ==================== -->
+    <div id="screen-splash-2" class="fixed inset-0 z-50 hidden flex-col items-center justify-center bg-black cursor-pointer" onclick="window.skipSplash2()">
+        <div class="flex flex-col items-center float-anim">
+            <svg class="w-32 h-32 sm:w-40 sm:h-40 mb-6" viewBox="0 0 128 128">
+                <path fill="#E44D26" d="M19.037 113.876L9.032 1.661h109.936l-10.016 112.198-45.019 12.48z"/>
+                <path fill="#F16529" d="M64 116.8l36.378-10.086 8.559-95.878H64z"/>
+                <path fill="#EBEBEB" d="M64 52.455H45.788L44.53 38.361H64V24.599H29.489l.33 3.692 3.382 37.927H64zm0 35.743l-.061.017-15.327-4.14-.979-10.975H33.816l1.928 21.609 28.193 7.826.063-.017z"/>
+                <path fill="#FFF" d="M63.952 52.455v13.763h16.947l-1.597 17.849-15.35 4.143v14.319l28.215-7.82.207-2.325 3.234-36.233.335-3.696h-3.708zm0-27.856v13.762h33.244l.276-3.092.628-6.978.329-3.692z"/>
+            </svg>
+            <h2 class="font-pixel text-xl sm:text-2xl text-white tracking-widest mb-3">POWERED BY HTML5</h2>
+            <p class="font-orbitron text-sm text-orange-400 tracking-[0.2em] uppercase">Canvas 2D • Gamepad • WebAudio</p>
+        </div>
+        <p class="absolute bottom-12 font-pixel text-xs text-slate-500">НАЖМИТЕ ДЛЯ ПРОДОЛЖЕНИЯ...</p>
+    </div>
+
+    <!-- ==================== 3. ЗАСТАВКА 3: GOOGLE LOGO + СПАСИБО ВАМ! ==================== -->
+    <div id="screen-splash-3" class="fixed inset-0 z-50 hidden flex-col items-center justify-center bg-black cursor-pointer" onclick="window.skipSplash3()">
+        <div class="flex flex-col items-center float-anim">
+            <svg class="w-32 h-32 sm:w-40 sm:h-40 mb-6" viewBox="0 0 48 48">
+                <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+                <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+                <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+                <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+            </svg>
+            <div class="flex items-center gap-1 font-bold text-3xl sm:text-5xl tracking-tight mb-4">
+                <span class="text-[#4285F4]">G</span><span class="text-[#EA4335]">o</span><span class="text-[#FBBC05]">o</span><span class="text-[#4285F4]">g</span><span class="text-[#34A853]">l</span><span class="text-[#EA4335]">e</span>
+            </div>
+            <h2 class="font-pixel text-xl sm:text-2xl text-emerald-400 text-center px-4">
+                СПАСИБО ВАМ!
+            </h2>
+        </div>
+        <p class="absolute bottom-12 font-pixel text-xs text-slate-500">ЗАПУСК ИГРЫ...</p>
+    </div>
+
+    <!-- ==================== 4. АВТОРИЗАЦИЯ: ВХОД / РЕГИСТРАЦИЯ / ГОСТЬ ==================== -->
+    <div id="screen-auth" class="fixed inset-0 z-40 hidden flex-col items-center justify-center p-4 bg-slate-950/95 overflow-y-auto">
+        <div class="w-full max-w-lg bg-slate-900 border-2 border-slate-700 rounded-3xl p-7 sm:p-8 shadow-2xl flex flex-col items-center">
+            <div class="flex items-center gap-2.5 text-emerald-400 font-pixel text-[10px] mb-4">
+                <span id="authCloudDot" class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+                <span id="authCloudStatus">СЕРВЕР ОНЛАЙН ГОТОВ</span>
+            </div>
+
+            <h2 class="font-pixel text-lg sm:text-2xl text-white text-center mb-5">ВХОД В ИГРУ</h2>
+
+            <div class="grid grid-cols-2 gap-2.5 w-full bg-slate-950 p-2 rounded-2xl border border-slate-800 mb-5">
+                <button id="tabBtnLogin" onclick="window.switchAuthTab('login')" class="font-pixel text-xs py-3.5 rounded-xl bg-blue-600 text-white transition-all">🔑 ВХОД</button>
+                <button id="tabBtnRegister" onclick="window.switchAuthTab('register')" class="font-pixel text-xs py-3.5 rounded-xl text-slate-400 hover:text-white transition-all">📝 РЕГИСТРАЦИЯ</button>
+            </div>
+
+            <div class="flex items-center gap-5 mb-5">
+                <button onclick="window.cycleAuthAvatar(-1)" class="w-12 h-12 rounded-xl bg-slate-800 border border-slate-600 hover:border-sky-400 text-lg">◀</button>
+                <div id="authAvatarPreview" class="w-20 h-20 rounded-2xl bg-slate-950 border-2 border-sky-400 flex items-center justify-center text-5xl">🕵️</div>
+                <button onclick="window.cycleAuthAvatar(1)" class="w-12 h-12 rounded-xl bg-slate-800 border border-slate-600 hover:border-sky-400 text-lg">▶</button>
+            </div>
+
+            <div id="authDisplayNameGroup" class="w-full mb-4 hidden">
+                <label class="block font-pixel text-[10px] text-sky-300 mb-2 uppercase">Позывной агента</label>
+                <input id="authDisplayNameInput" type="text" maxlength="16" value="АГЕНТ СПЕКТР"
+                    class="w-full bg-slate-950 border-2 border-slate-700 focus:border-sky-400 rounded-xl px-4 py-3.5 text-white font-pixel text-sm text-center outline-none">
+            </div>
+
+            <div class="w-full mb-4">
+                <div class="flex justify-between items-center mb-2">
+                    <label class="font-pixel text-[10px] text-amber-300 uppercase">Уникальный @username</label>
+                    <span id="usernameCheckBadge" class="font-pixel text-[10px] text-slate-400">ЛАТИНИЦА/ЦИФРЫ</span>
+                </div>
+                <div class="relative flex items-center">
+                    <span class="absolute left-4 font-pixel text-base text-sky-400">@</span>
+                    <input id="authUsernameInput" type="text" maxlength="15" value="" oninput="window.onUsernameInput()"
+                        class="w-full bg-slate-950 border-2 border-slate-700 focus:border-sky-400 rounded-xl pl-10 pr-4 py-3.5 text-white font-pixel text-sm lowercase outline-none"
+                        placeholder="agent_007">
+                </div>
+            </div>
+
+            <div class="w-full mb-4">
+                <label class="block font-pixel text-[10px] text-slate-300 mb-2 uppercase">Пароль</label>
+                <input id="authPasswordInput" type="password" maxlength="24" value=""
+                    class="w-full bg-slate-950 border-2 border-slate-700 focus:border-sky-400 rounded-xl px-4 py-3.5 text-white font-pixel text-sm text-center outline-none"
+                    placeholder="••••••••">
+            </div>
+
+            <div id="authErrorBox" class="hidden w-full bg-rose-950/90 border border-rose-500 text-rose-200 rounded-xl p-3.5 text-xs font-pixel text-center mb-4"></div>
+
+            <button id="authSubmitBtn" onclick="window.handleAuthSubmit()" class="dp-btn w-full py-4 text-sm mb-3">
+                ВОЙТИ В ИГРУ ▶
+            </button>
+
+            <button onclick="window.loginAsGuest()" class="dp-btn dp-btn-dark w-full py-3.5 !text-xs">
+                🕵️ ИГРАТЬ КАК ГОСТЬ (ОФЛАЙН)
+            </button>
+        </div>
+    </div>
+
+    <!-- ==================== 5. ГЛАВНОЕ МЕНЮ ==================== -->
+    <div id="screen-hub" class="fixed inset-0 z-30 hidden flex-col justify-between p-4 sm:p-8 overflow-y-auto">
+        <!-- Верхний игровой статус-бар -->
+        <div class="w-full max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4 z-10">
+            <div class="flex items-center gap-4 bg-slate-900/95 border border-slate-700 rounded-2xl px-5 py-3">
+                <span class="text-3xl">💎</span>
+                <div>
+                    <div class="font-pixel text-[10px] text-sky-400">АЛМАЗОВ В СЛОТЕ #<span id="hubSlotBadge">1</span></div>
+                    <div id="hubDiamondsCount" class="font-pixel text-xl text-amber-400 mt-1">0</div>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <div id="gamepadHudBadge" class="hidden bg-indigo-950 border border-indigo-500 rounded-xl px-4 py-2.5 items-center gap-2">
+                    <span class="text-xl">🎮</span><span class="font-pixel text-[10px] text-indigo-200">ГЕЙМПАД АКТИВЕН</span>
+                </div>
+                <button onclick="window.openSettingsModal()" class="dp-btn dp-btn-dark !py-3 !px-4 !text-xs">⚙️ НАСТРОЙКИ</button>
+                <button onclick="window.logoutAccount()" class="dp-btn dp-btn-danger !py-3 !px-4 !text-xs">🚪 ВЫХОД</button>
+            </div>
+        </div>
+
+        <!-- Центральная игровая сцена -->
+        <div class="w-full max-w-7xl mx-auto my-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center z-10 py-4">
+            <!-- Левая колонка: Логотип + Игровые кнопки -->
+            <div class="lg:col-span-7 flex flex-col items-center lg:items-start">
+                <div class="mb-6 text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-slate-800 border border-slate-600 font-pixel text-[10px] text-sky-300 mb-3">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                        <span>ОГРОМНЫЕ КАРТЫ 36×24 • 20 МИССИЙ • 5 РЕЖИМОВ ОНЛАЙН</span>
+                    </div>
+                    <h1 class="font-pixel text-3xl sm:text-5xl xl:text-6xl text-white tracking-wider">
+                        DIAMOND PLAN
+                    </h1>
+                </div>
+
+                <!-- Стек крупных игровых кнопок -->
+                <div class="w-full max-w-xl flex flex-col gap-3.5">
+                    <button onclick="window.showScreen('map')" class="game-menu-btn">
+                        <span>▶ КАМПАНИЯ (20 ОГРОМНЫХ КАРТ)</span>
+                        <span class="text-2xl">🗺️</span>
+                    </button>
+
+                    <button onclick="window.openMultiplayerModal()" class="game-menu-btn btn-mp">
+                        <span>🌐 МУЛЬТИПЛЕЕР (ГАЛЯ / БОМБА / ЗОМБИ)</span>
+                        <span class="text-2xl">🏃💣</span>
+                    </button>
+
+                    <button onclick="window.openFriendsModal()" class="game-menu-btn btn-friends">
+                        <span>👥 ДРУЗЬЯ И ЧАТ В СЕТИ</span>
+                        <span class="text-2xl">💬</span>
+                    </button>
+
+                    <button onclick="window.openEditor()" class="game-menu-btn btn-editor">
+                        <span>🛠️ КОНСТРУКТОР КАРТ (36×24)</span>
+                        <span class="text-2xl">⚡</span>
+                    </button>
+
+                    <button onclick="window.showScreen('slots')" class="game-menu-btn !border-l-amber-400">
+                        <span>💾 СЛОТЫ СОХРАНЕНИЯ (#<span id="cardSlotNum">1</span>)</span>
+                        <span class="text-2xl">💎</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Правая колонка: Карточка оперативника -->
+            <div class="lg:col-span-5 flex flex-col items-center">
+                <div class="w-full max-w-md bg-slate-900/95 border-2 border-slate-700 rounded-3xl p-7 flex flex-col items-center relative holo-pedestal">
+                    <div class="w-full flex items-center justify-between border-b border-slate-800 pb-3 mb-5">
+                        <span id="hubModeBadge" class="px-3 py-1.5 text-[10px] font-pixel rounded-lg bg-emerald-950 text-emerald-300 border border-emerald-600">В СЕТИ</span>
+                        <span id="hubOnlineCounter" class="font-pixel text-[10px] text-sky-300">🟢 ОНЛАЙН: 1</span>
+                    </div>
+
+                    <div onclick="window.openProfileModal()" class="relative w-36 h-36 sm:w-40 sm:h-40 rounded-full bg-slate-800 border-4 border-sky-400 flex items-center justify-center cursor-pointer group my-2">
+                        <div id="hubAvatar" class="text-7xl sm:text-8xl float-anim group-hover:scale-105 transition-transform">🕵️</div>
+                        <div class="absolute -bottom-3 bg-amber-500 text-black font-pixel text-[9px] px-3 py-1 rounded-full border border-white">
+                            СМЕНИТЬ СКИН
+                        </div>
+                    </div>
+
+                    <h3 id="hubAgentName" class="font-pixel text-lg text-white mt-6 text-center">АГЕНТ СПЕКТР</h3>
+                    <div id="hubUsernameTag" class="font-mono text-base font-bold text-sky-400 mt-1">@agent</div>
+                    <p id="hubBioText" class="text-sm text-slate-400 mt-2 text-center">«Мастер скрытных операций»</p>
+
+                    <div class="grid grid-cols-2 gap-3 w-full mt-6 pt-5 border-t border-slate-800">
+                        <button onclick="window.openProfileModal()" class="dp-btn !py-3 !text-xs w-full">✏️ ПРОФИЛЬ</button>
+                        <button onclick="window.showScreen('slots')" class="dp-btn dp-btn-gold !py-3 !text-xs w-full">💾 СЛОТ #<span id="podiumSlotNum">1</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-full max-w-7xl mx-auto text-center z-10">
+            <p class="font-pixel text-[10px] text-slate-400">
+                УПРАВЛЕНИЕ: WASD / СТРЕЛКИ • [SHIFT] РЫВОК • [E] ГАДЖЕТ / ПЕРЕДАЧА ГАЛИ • [Z] МАСШТАБ КАМЕРЫ
+            </p>
+        </div>
+    </div>
+
+    <!-- ==================== 6. МОДАЛКА ПРОФИЛЯ АГЕНТА ==================== -->
+    <div id="modal-profile" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80">
+        <div class="w-full max-w-lg bg-slate-900 border-2 border-slate-700 rounded-3xl p-7 shadow-2xl relative">
+            <button onclick="window.closeProfileModal()" class="absolute top-4 right-4 w-10 h-10 rounded-xl bg-slate-800 hover:bg-rose-600 text-white font-bold text-lg">✕</button>
+            <h2 class="font-pixel text-base text-sky-400 mb-5">ПРОФИЛЬ ОПЕРАТИВНИКА</h2>
+
+            <div class="flex items-center justify-center gap-5 mb-5">
+                <button onclick="window.cycleProfileAvatar(-1)" class="w-12 h-12 rounded-xl bg-slate-800 border border-slate-600 text-lg">◀</button>
+                <div id="profAvatarBox" class="w-24 h-24 rounded-2xl bg-slate-950 border-2 border-sky-400 flex items-center justify-center text-6xl">🕵️</div>
+                <button onclick="window.cycleProfileAvatar(1)" class="w-12 h-12 rounded-xl bg-slate-800 border border-slate-600 text-lg">▶</button>
+            </div>
+
+            <div class="space-y-4 mb-6">
+                <div>
+                    <label class="font-pixel text-[10px] text-slate-300 block mb-1.5">ОТОБРАЖАЕМОЕ ИМЯ</label>
+                    <input id="profDisplayName" type="text" maxlength="16" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-white font-pixel text-sm text-center">
+                </div>
+                <div>
+                    <label class="font-pixel text-[10px] text-amber-400 block mb-1.5">УНИКАЛЬНЫЙ @USERNAME</label>
+                    <input id="profUsername" type="text" maxlength="15" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sky-300 font-mono text-base text-center lowercase">
+                </div>
+                <div>
+                    <label class="font-pixel text-[10px] text-slate-300 block mb-1.5">ДЕВИЗ АГЕНТА</label>
+                    <input id="profBio" type="text" maxlength="36" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-slate-200 text-sm text-center">
+                </div>
+            </div>
+
+            <div id="profStatusMsg" class="hidden text-center font-pixel text-xs text-emerald-400 mb-4"></div>
+            <button onclick="window.saveProfileChanges()" class="dp-btn w-full py-4 text-sm">💾 СОХРАНИТЬ ИЗМЕНЕНИЯ</button>
+        </div>
+    </div>
+
+    <!-- ==================== 7. ДРУЗЬЯ И ЧАТ В РЕАЛЬНОМ ВРЕМЕНИ ==================== -->
+    <div id="modal-friends" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80">
+        <div class="w-full max-w-5xl bg-slate-900 border-2 border-slate-700 rounded-3xl p-6 sm:p-7 shadow-2xl relative max-h-[92vh] flex flex-col">
+            <button onclick="window.closeFriendsModal()" class="absolute top-4 right-4 w-10 h-10 rounded-xl bg-slate-800 hover:bg-rose-600 text-white font-bold text-lg">✕</button>
+            <h2 class="font-pixel text-lg text-purple-300 mb-5">👥 ДРУЗЬЯ И ЧАТ</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-5 flex-1 overflow-hidden min-h-[400px]">
+                <div class="md:col-span-5 bg-slate-950 border border-slate-800 rounded-2xl p-4 flex flex-col overflow-hidden">
+                    <div class="font-pixel text-[10px] text-sky-400 mb-2.5">ДОБАВИТЬ ДРУГА ПО @USERNAME</div>
+                    <div class="flex gap-2 mb-4">
+                        <input id="friendSearchInput" type="text" maxlength="16" placeholder="@username друга"
+                            class="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white font-mono lowercase outline-none focus:border-sky-400">
+                        <button onclick="window.addFriendByUsername()" class="dp-btn !py-2.5 !px-4 !text-xs">➕</button>
+                    </div>
+                    <div class="font-pixel text-[10px] text-slate-400 mb-2.5 flex justify-between">
+                        <span>СПИСОК ДРУЗЕЙ</span>
+                        <span id="friendsCountLabel" class="text-sky-400">0</span>
+                    </div>
+                    <div id="friendsListContainer" class="flex-1 overflow-y-auto space-y-2.5 pr-1 text-sm"></div>
+                </div>
+
+                <div class="md:col-span-7 bg-slate-950 border border-slate-800 rounded-2xl p-4 flex flex-col overflow-hidden">
+                    <div class="border-b border-slate-800 pb-3 mb-3 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <span id="chatPartnerAvatar" class="text-2xl">🌐</span>
+                            <div>
+                                <div id="chatPartnerName" class="font-pixel text-xs text-white">ОБЩИЙ КАНАЛ АГЕНТОВ</div>
+                                <div id="chatPartnerStatus" class="text-xs text-emerald-400">Выберите друга слева для личного чата</div>
+                            </div>
+                        </div>
+                        <button onclick="window.selectFriendForChat(null)" class="text-[10px] font-pixel text-sky-400 underline">ОБЩИЙ ЧАТ</button>
+                    </div>
+
+                    <div id="chatMessagesBox" class="flex-1 overflow-y-auto space-y-2.5 p-3 bg-slate-900 rounded-xl mb-3 text-sm max-h-64"></div>
+
+                    <div class="flex gap-2.5">
+                        <input id="chatMessageInput" type="text" maxlength="140" placeholder="Введите сообщение..."
+                            onkeydown="if(event.key==='Enter') window.sendChatMessage()"
+                            class="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white outline-none focus:border-purple-400">
+                        <button onclick="window.sendChatMessage()" class="dp-btn dp-btn-purple !py-3 !px-5 !text-xs">ОТПРАВИТЬ ▶</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 8. МУЛЬТИПЛЕЕР: 5 РЕЖИМОВ (ВКЛЮЧАЯ ДОГОНЯЛКИ «ГАЛЯ») ==================== -->
+    <div id="modal-multiplayer" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80">
+        <div class="w-full max-w-6xl bg-slate-900 border-2 border-slate-700 rounded-3xl p-5 sm:p-7 shadow-2xl relative max-h-[95vh] flex flex-col overflow-y-auto">
+            <button onclick="window.closeMultiplayerModal()" class="absolute top-4 right-4 w-10 h-10 rounded-xl bg-slate-800 hover:bg-rose-600 text-white font-bold text-lg">✕</button>
+            <h2 class="font-pixel text-lg sm:text-xl text-emerald-400 mb-4">🌐 МУЛЬТИПЛЕЕР И ВЫБОР РЕЖИМА</h2>
+
+            <!-- 5 режимов игры -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 mb-5">
+                <div id="mpModeCard-normal" onclick="window.selectMpGameMode('normal')" class="p-3.5 rounded-2xl bg-slate-950 border-2 border-sky-400 cursor-pointer transition-all">
+                    <div class="flex justify-between items-center mb-1.5">
+                        <span class="text-2xl">💎</span>
+                        <span class="px-2 py-0.5 rounded bg-sky-950 border border-sky-600 font-pixel text-[8px] text-sky-300">150 СЕК</span>
+                    </div>
+                    <div class="font-pixel text-[10px] text-sky-300 mb-1">1. КООП-ОГРАБЛЕНИЕ</div>
+                    <p class="text-xs text-slate-400">Совместный взлом огромного хранилища 36×24 с напарниками.</p>
+                </div>
+
+                <div id="mpModeCard-galya" onclick="window.selectMpGameMode('galya')" class="p-3.5 rounded-2xl bg-slate-950 border-2 border-slate-700 cursor-pointer transition-all">
+                    <div class="flex justify-between items-center mb-1.5">
+                        <span class="text-2xl">🏃</span>
+                        <span class="px-2 py-0.5 rounded bg-amber-950 border border-amber-500 font-pixel text-[8px] text-amber-300">120 СЕК</span>
+                    </div>
+                    <div class="font-pixel text-[10px] text-amber-300 mb-1">2. ДОГОНЯЛКИ (ГАЛЯ)</div>
+                    <p class="text-xs text-slate-400">Выбирается «Галя» (Вода) 👑! Догоните другого игрока, чтобы передать ему роль «Гали»!</p>
+                </div>
+
+                <div id="mpModeCard-infection" onclick="window.selectMpGameMode('infection')" class="p-3.5 rounded-2xl bg-slate-950 border-2 border-slate-700 cursor-pointer transition-all">
+                    <div class="flex justify-between items-center mb-1.5">
+                        <span class="text-2xl">🧟</span>
+                        <span class="px-2 py-0.5 rounded bg-lime-950 border border-lime-600 font-pixel text-[8px] text-lime-300">120 СЕК</span>
+                    </div>
+                    <div class="font-pixel text-[10px] text-lime-400 mb-1">3. ЗАРАЖЕНИЕ</div>
+                    <p class="text-xs text-slate-400">Убегайте от Заражённых 🧟 по огромному био-комплексу и вентиляциям.</p>
+                </div>
+
+                <div id="mpModeCard-hideseek" onclick="window.selectMpGameMode('hideseek')" class="p-3.5 rounded-2xl bg-slate-950 border-2 border-slate-700 cursor-pointer transition-all">
+                    <div class="flex justify-between items-center mb-1.5">
+                        <span class="text-2xl">📦</span>
+                        <span class="px-2 py-0.5 rounded bg-purple-950 border border-purple-500 font-pixel text-[8px] text-purple-300">120 СЕК</span>
+                    </div>
+                    <div class="font-pixel text-[10px] text-purple-300 mb-1">4. ПРЯТКИ</div>
+                    <p class="text-xs text-slate-400">Нажмите [E], чтобы замаскироваться под контейнер 📦 на огромном складе.</p>
+                </div>
+
+                <div id="mpModeCard-bomb" onclick="window.selectMpGameMode('bomb')" class="p-3.5 rounded-2xl bg-slate-950 border-2 border-slate-700 cursor-pointer transition-all">
+                    <div class="flex justify-between items-center mb-1.5">
+                        <span class="text-2xl">💣</span>
+                        <span class="px-2 py-0.5 rounded bg-rose-950 border border-rose-500 font-pixel text-[8px] text-rose-300">90 СЕК</span>
+                    </div>
+                    <div class="font-pixel text-[10px] text-rose-400 mb-1">5. ГОРЯЧАЯ БОМБА</div>
+                    <p class="text-xs text-slate-400">Передайте бомбу 💣 другому игроку или обезвредьте её у терминалов!</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+                <!-- Создание / вход в комнату + Выбор Гали (Ведущего) -->
+                <div class="lg:col-span-4 bg-slate-950 border border-slate-800 rounded-2xl p-4 flex flex-col justify-between">
+                    <div>
+                        <div class="font-pixel text-xs text-emerald-400 mb-3">НАСТРОЙКИ КОМНАТЫ И ГАЛИ</div>
+                        <div class="mb-3">
+                            <label class="font-pixel text-[9px] text-slate-300 block mb-1">КОД КОМНАТЫ</label>
+                            <input id="mpRoomCodeInput" type="text" maxlength="12" value="ROOM_1" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white font-pixel text-sm uppercase text-center">
+                        </div>
+                        <div class="mb-3">
+                            <label class="font-pixel text-[9px] text-slate-300 block mb-1">ОГРОМНАЯ АРЕНА (36×24)</label>
+                            <select id="mpArenaSelect" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-amber-300 font-pixel text-[10px] outline-none">
+                                <option value="mp_citadel">🏦 МЕГА-БАНК «ЦИТАДЕЛЬ» (150с)</option>
+                                <option value="mp_polygon">🏃 КИБЕР-ПОЛИГОН «ГАЛЯ» (120с)</option>
+                                <option value="mp_biolab">🧪 БИО-КОМПЛЕКС «ОМЕГА» (120с)</option>
+                                <option value="mp_warehouse">📦 ГРУЗОВОЙ ТЕРМИНАЛ (120с)</option>
+                                <option value="mp_reactor">☢️ РЕАКТОР ДЕТОНАЦИИ (90с)</option>
+                            </select>
+                        </div>
+
+                        <!-- Панель выбора «Гали» (Воды / Ведущего) -->
+                        <div class="bg-slate-900 border border-amber-500/40 rounded-xl p-3 mb-3">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="font-pixel text-[9px] text-amber-300">👑 КТО «ГАЛЯ» (ВОДА):</span>
+                                <span id="mpCurrentGalyaLabel" class="font-mono text-xs font-bold text-white">АВТО</span>
+                            </div>
+                            <div class="flex gap-2">
+                                <button onclick="window.rollRandomGalya()" class="dp-btn dp-btn-gold !py-2 !px-3 !text-[9px] flex-1">🎲 СЛУЧАЙНАЯ ГАЛЯ</button>
+                                <button onclick="window.makeMeGalya()" class="dp-btn dp-btn-dark !py-2 !px-3 !text-[9px]">Я ГАЛЯ ✋</button>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="window.startMultiplayerMatch()" class="dp-btn dp-btn-emerald w-full py-3.5 text-xs">🚀 ЗАПУСТИТЬ / ВОЙТИ В МАТЧ</button>
+                </div>
+
+                <!-- Активные комнаты и реальные игроки -->
+                <div class="lg:col-span-4 bg-slate-950 border border-slate-800 rounded-2xl p-4 flex flex-col">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="font-pixel text-[10px] text-sky-400">КОМНАТЫ И ИГРОКИ (НАЗНАЧИТЬ ГАЛЮ)</span>
+                        <span id="mpOnlineBadge" class="font-pixel text-[10px] text-emerald-400">1 В СЕТИ</span>
+                    </div>
+                    <div id="mpPlayersList" class="space-y-2 flex-1 overflow-y-auto max-h-48 text-xs mb-3"></div>
+                    <div class="font-pixel text-[10px] text-amber-400 mb-1.5">КАРТЫ ИГРОКОВ (36×24)</div>
+                    <div id="mpCloudMapsList" class="space-y-1.5 overflow-y-auto max-h-24 text-xs"></div>
+                </div>
+
+                <!-- Живой чат мультиплеера -->
+                <div class="lg:col-span-4 bg-slate-950 border border-slate-800 rounded-2xl p-4 flex flex-col">
+                    <div class="font-pixel text-[10px] text-purple-300 mb-2">💬 ЧАТ МУЛЬТИПЛЕЕРА</div>
+                    <div id="mpLobbyChatBox" class="flex-1 overflow-y-auto space-y-2 p-2.5 bg-slate-900 rounded-xl mb-3 text-xs max-h-52 min-h-[160px]"></div>
+                    <div class="flex gap-2">
+                        <input id="mpLobbyChatInput" type="text" maxlength="120" placeholder="Написать в чат..."
+                            onkeydown="if(event.key==='Enter') window.sendMpChatMessage('lobby')"
+                            class="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white outline-none focus:border-emerald-400">
+                        <button onclick="window.sendMpChatMessage('lobby')" class="dp-btn dp-btn-emerald !py-2 !px-3.5 !text-xs">▶</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 9. СЛОТЫ СОХРАНЕНИЯ (1, 2, 3) ==================== -->
+    <div id="screen-slots" class="fixed inset-0 z-40 hidden flex-col items-center justify-center p-4 bg-slate-950/95">
+        <div class="w-full max-w-4xl bg-slate-900 border-2 border-slate-700 rounded-3xl p-6 sm:p-8 shadow-2xl">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-6">
+                <div class="flex items-center gap-4">
+                    <span id="slotHeaderAvatar" class="text-4xl bg-slate-800 p-2.5 rounded-2xl border border-slate-600">🕵️</span>
+                    <div>
+                        <div class="font-pixel text-[10px] text-sky-400">ПРОГРЕСС КАМПАНИИ</div>
+                        <div id="slotHeaderName" class="font-pixel text-base text-white mt-1">AGENT</div>
+                    </div>
+                </div>
+                <button onclick="window.showScreen('hub')" class="dp-btn dp-btn-dark !py-3 !px-5 !text-xs">◀ В МЕНЮ</button>
+            </div>
+            <h2 class="font-pixel text-center text-base sm:text-lg text-amber-400 mb-6">ВЫБЕРИТЕ СЛОТ СОХРАНЕНИЯ (1 - 3)</h2>
+            <div id="slotsContainer" class="grid grid-cols-1 sm:grid-cols-3 gap-5"></div>
+        </div>
+    </div>
+
+    <!-- ==================== 10. КАРТА 20 УРОВНЕЙ ==================== -->
+    <div id="screen-map" class="fixed inset-0 z-30 hidden flex-col bg-[#0b1120]">
+        <div class="h-20 bg-slate-900 border-b border-slate-800 px-4 sm:px-8 flex items-center justify-between z-20">
+            <div class="flex items-center gap-4">
+                <span class="text-3xl">💎</span>
+                <div>
+                    <div class="font-pixel text-sm sm:text-base text-sky-400">КАРТА ОПЕРАЦИЙ (20 ОГРОМНЫХ МИССИЙ)</div>
+                    <div id="mapSlotInfo" class="font-pixel text-[10px] text-slate-300 mt-1">СЛОТ #1 • НАЖМИТЕ НА УРОВЕНЬ ДЛЯ ЗАПУСКА</div>
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="window.openMultiplayerModal()" class="dp-btn dp-btn-emerald !py-2.5 !px-4 !text-xs">🌐 МУЛЬТИПЛЕЕР</button>
+                <button onclick="window.showScreen('hub')" class="dp-btn dp-btn-dark !py-2.5 !px-4 !text-xs">🏠 МЕНЮ</button>
+            </div>
+        </div>
+
+        <div id="mapScrollArea" class="relative flex-1 overflow-y-auto overflow-x-hidden flex justify-center">
+            <div id="mapCanvasWrapper" class="relative w-full max-w-4xl h-[2000px] py-14">
+                <svg id="mapSvgConnections" class="absolute inset-0 w-full h-full pointer-events-none z-0"></svg>
+                <div id="mapNodesContainer" class="absolute inset-0 z-10"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 11. БРИФИНГ УРОВНЯ И ДОПОЛНЕНИЯ ==================== -->
+    <div id="modal-briefing" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80">
+        <div class="w-full max-w-xl bg-slate-900 border-2 border-slate-700 rounded-3xl p-7 shadow-2xl relative max-h-[94vh] overflow-y-auto">
+            <button onclick="window.closeBriefing()" class="absolute top-4 right-4 w-10 h-10 rounded-xl bg-slate-800 hover:bg-rose-600 text-white font-bold text-lg">✕</button>
+            <div class="flex items-center gap-2 font-pixel text-xs text-sky-400 mb-2">
+                <span id="briefLevelNum">ОПЕРАЦИЯ #01</span>
+                <span>•</span>
+                <span class="text-amber-300">КАРТА 36×24</span>
+            </div>
+            <h2 id="briefLevelTitle" class="font-pixel text-lg sm:text-2xl text-white mb-5">ТИХИЙ ВХОД</h2>
+
+            <div class="grid grid-cols-2 gap-4 bg-slate-950 border border-slate-800 rounded-2xl p-4 mb-5">
+                <div>
+                    <div class="font-pixel text-[10px] text-slate-400 mb-1">СЛОЖНОСТЬ</div>
+                    <div id="briefDifficulty" class="font-pixel text-sm text-amber-400">★☆☆☆☆ ЛЕГКО</div>
+                </div>
+                <div>
+                    <div class="font-pixel text-[10px] text-slate-400 mb-1">МАСШТАБ ОБЪЕКТА</div>
+                    <div id="briefStatus" class="font-pixel text-sm text-emerald-400">ОГРОМНЫЙ (36×24)</div>
+                </div>
+            </div>
+
+            <div class="mb-5">
+                <div class="font-pixel text-[10px] text-slate-300 mb-2.5">ОБЪЕКТЫ В СЕКТОРЕ:</div>
+                <div id="briefBuiltInTags" class="flex flex-wrap gap-2"></div>
+            </div>
+
+            <div class="mb-6">
+                <div class="font-pixel text-[10px] text-sky-300 mb-2.5">МОДИФИКАТОРЫ МИССИИ:</div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <label class="flex items-center gap-3 bg-slate-950 border border-slate-700 rounded-xl p-3 cursor-pointer">
+                        <input type="checkbox" id="mod-darkness" class="w-5 h-5 accent-sky-400">
+                        <div>
+                            <div class="font-pixel text-[10px] text-white">🔦 БЛЭКАУТ</div>
+                            <div class="text-xs text-slate-400">Ограниченный обзор</div>
+                        </div>
+                    </label>
+                    <label class="flex items-center gap-3 bg-slate-950 border border-slate-700 rounded-xl p-3 cursor-pointer">
+                        <input type="checkbox" id="mod-timer" class="w-5 h-5 accent-sky-400">
+                        <div>
+                            <div class="font-pixel text-[10px] text-white">⏱️ БЛИЦ-ТАЙМЕР</div>
+                            <div class="text-xs text-slate-400">Лимит времени 90 сек</div>
+                        </div>
+                    </label>
+                    <label class="flex items-center gap-3 bg-slate-950 border border-slate-700 rounded-xl p-3 cursor-pointer">
+                        <input type="checkbox" id="mod-turbo" class="w-5 h-5 accent-sky-400">
+                        <div>
+                            <div class="font-pixel text-[10px] text-white">⚡ ТУРБО-ОХРАНА</div>
+                            <div class="text-xs text-slate-400">Быстрые патрули</div>
+                        </div>
+                    </label>
+                    <label class="flex items-center gap-3 bg-slate-950 border border-slate-700 rounded-xl p-3 cursor-pointer">
+                        <input type="checkbox" id="mod-ghost" class="w-5 h-5 accent-sky-400">
+                        <div>
+                            <div class="font-pixel text-[10px] text-white">👻 ФАНТОМ</div>
+                            <div class="text-xs text-slate-400">Бесконечный рывок + 3 ЭМИ</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <button onclick="window.launchSelectedLevel()" class="dp-btn w-full py-4 text-base">
+                🎮 НАЧАТЬ ОПЕРАЦИЮ
+            </button>
+        </div>
+    </div>
+
+    <!-- ==================== 12. ИГРОВОЙ ЭКРАН (CANVAS + КАМЕРА + МИНИКАРТА + HUD) ==================== -->
+    <div id="screen-game" class="fixed inset-0 z-20 hidden flex-col items-center justify-center bg-[#070b14]">
+        <div id="gameTopHud" class="fixed top-3 left-3 z-40 flex flex-wrap items-center gap-2 pointer-events-none pr-16">
+            <div class="bg-slate-900/95 border border-slate-700 px-3.5 py-2 rounded-xl">
+                <span id="hudLevelName" class="font-pixel text-[11px] text-sky-400">МИССИЯ #1</span>
+            </div>
+            <div class="bg-slate-900/95 border border-slate-700 px-3.5 py-2 rounded-xl">
+                <span id="hudObjective" class="font-pixel text-[11px] text-amber-300">ЦЕЛЬ: АЛМАЗ 💎</span>
+            </div>
+            <div class="bg-slate-900/95 border border-slate-700 px-3.5 py-2 rounded-xl pointer-events-auto cursor-pointer" onclick="window.triggerActionSkill()">
+                <span id="hudInventoryText" class="font-pixel text-[11px] text-purple-300">💳:0 | 🛜ЭМИ(E):1</span>
+            </div>
+            <div id="hudGalyaBox" class="hidden bg-amber-950/95 border border-amber-500 px-3.5 py-2 rounded-xl pointer-events-auto cursor-pointer" onclick="window.rollRandomGalya()">
+                <span id="hudGalyaText" class="font-pixel text-[11px] text-amber-300">👑 ГАЛЯ: АВТО (🎲)</span>
+            </div>
+            <div id="hudTimerBox" class="hidden bg-rose-950/95 border border-rose-500 px-3.5 py-2 rounded-xl">
+                <span id="hudTimerText" class="font-pixel text-[11px] text-rose-300">⏱️ 90.0с</span>
+            </div>
+            <button onclick="window.toggleCameraZoom()" class="pointer-events-auto bg-slate-900/95 border border-slate-600 px-3 py-2 rounded-xl font-pixel text-[10px] text-slate-200 hover:border-sky-400 cursor-pointer">
+                📷 КАМЕРА (Z)
+            </button>
+            <button id="hudMpChatToggleBtn" onclick="window.toggleInGameMpChat()" class="hidden pointer-events-auto bg-emerald-950/95 border border-emerald-500 px-3 py-2 rounded-xl font-pixel text-[10px] text-emerald-300 cursor-pointer">
+                💬 ЧАТ
+            </button>
+        </div>
+
+        <!-- Баннер обучения на 1 уровне -->
+        <div id="tutorialBanner" class="fixed top-16 left-1/2 -translate-x-1/2 z-40 hidden bg-slate-900/95 border border-emerald-500 rounded-2xl px-5 py-2.5 max-w-xl w-[94%] text-center pointer-events-none">
+            <div id="tutorialStepText" class="font-pixel text-[11px] text-emerald-300 leading-relaxed">
+                ШАГ 1: ДВИГАЙТЕСЬ ПО УКАЗАТЕЛЮ К БАТАРЕЕ ЭМИ 🔋
+            </div>
+        </div>
+
+        <!-- Внутриигровой чат для Мультиплеера -->
+        <div id="inGameMpChatPanel" class="fixed top-16 right-4 z-50 hidden w-80 sm:w-96 bg-slate-900/95 border-2 border-slate-700 rounded-2xl p-3.5 shadow-2xl">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-2 mb-2">
+                <span class="font-pixel text-[10px] text-emerald-400">💬 ЧАТ МАТЧА</span>
+                <button onclick="window.toggleInGameMpChat()" class="text-slate-400 hover:text-white font-bold">✕</button>
+            </div>
+            <div id="inGameMpChatMessages" class="h-40 overflow-y-auto space-y-1.5 p-2 bg-slate-950 rounded-xl mb-2.5 text-xs"></div>
+            <div class="flex gap-2">
+                <input id="inGameMpChatInput" type="text" maxlength="100" placeholder="Сообщение игрокам..."
+                    onkeydown="if(event.key==='Enter'){ window.sendMpChatMessage('ingame'); event.stopPropagation(); }"
+                    class="flex-1 bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white outline-none focus:border-emerald-400">
+                <button onclick="window.sendMpChatMessage('ingame')" class="dp-btn dp-btn-emerald !py-2 !px-3 !text-[10px]">▶</button>
+            </div>
+        </div>
+
+        <canvas id="gameCanvas" tabindex="0"></canvas>
+
+        <div id="staminaContainer" class="fixed bottom-4 left-1/2 -translate-x-1/2 w-48 sm:w-64 h-3 bg-slate-900 border border-slate-600 rounded-full overflow-hidden z-40">
+            <div id="staminaFill" class="w-full h-full bg-amber-400 transition-all duration-75"></div>
+        </div>
+
+        <!-- Панель Конструктора Уровней (36×24) -->
+        <div id="editorHud" class="hidden">
+            <div class="fixed top-3 left-3 z-50 bg-slate-900/95 border border-slate-700 px-4 py-2.5 rounded-xl flex items-center gap-2">
+                <span class="font-pixel text-xs text-sky-400">🛠️ РЕДАКТОР (36×24):</span>
+                <span id="editorActiveToolName" class="font-pixel text-xs text-amber-300">🧱 СТЕНА</span>
+            </div>
+
+            <div class="fixed bottom-3 left-1/2 -translate-x-1/2 bg-slate-900/95 border border-slate-700 p-2 rounded-2xl flex flex-wrap justify-center gap-1.5 z-50 w-[96vw] max-w-3xl shadow-2xl">
+                <button class="ed-tool w-10 h-10 rounded-xl bg-slate-800 border-2 border-emerald-400 flex items-center justify-center text-base" onclick="window.selectEditorTool(1, '🧱 СТЕНА', this)">🧱</button>
+                <button class="ed-tool w-10 h-10 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-base" onclick="window.selectEditorTool(0, '⬛ ПОЛ', this)">⬛</button>
+                <button class="ed-tool w-10 h-10 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-xs" onclick="window.selectEditorTool(2, '👮↔ ОХРАНА X', this)">👮↔</button>
+                <button class="ed-tool w-10 h-10 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-xs" onclick="window.selectEditorTool(3, '👮↕ ОХРАНА Y', this)">👮↕</button>
+                <button class="ed-tool w-10 h-10 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-base" onclick="window.selectEditorTool(15, '🛸 ДРОН', this)">🛸</button>
+                <button class="ed-tool w-10 h-10 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-base" onclick="window.selectEditorTool(11, '📹 КАМЕРА', this)">📹</button>
+                <button class="ed-tool w-10 h-10 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-base" onclick="window.selectEditorTool(6, '🟥 ЛАЗЕР', this)">🟥</button>
+                <button class="ed-tool w-10 h-10 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-base" onclick="window.selectEditorTool(7, '🌀 ПОРТАЛ', this)">🌀</button>
+                <button class="ed-tool w-10 h-10 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-base" onclick="window.selectEditorTool(9, '💳 КЛЮЧ-КАРТА', this)">💳</button>
+                <button class="ed-tool w-10 h-10 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-base" onclick="window.selectEditorTool(10, '🔒 ДВЕРЬ', this)">🔒</button>
+                <button class="ed-tool w-10 h-10 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-base" onclick="window.selectEditorTool(12, '💻 ТЕРМИНАЛ', this)">💻</button>
+                <button class="ed-tool w-10 h-10 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-base" onclick="window.selectEditorTool(13, '🕳️ ВЕНТИЛЯЦИЯ', this)">🕳️</button>
+                <button class="ed-tool w-10 h-10 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-base" onclick="window.selectEditorTool(14, '🔋 БАТАРЕЯ ЭМИ', this)">🔋</button>
+                <button class="ed-tool w-10 h-10 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-base" onclick="window.selectEditorTool(16, '⚙️ ШИПЫ', this)">⚙️</button>
+                <button class="ed-tool w-10 h-10 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-base" onclick="window.selectEditorTool(4, '🕵️ СТАРТ', this)">🕵️</button>
+                <button class="ed-tool w-10 h-10 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-base" onclick="window.selectEditorTool(5, '💎 АЛМАЗ', this)">💎</button>
+                <button class="ed-tool w-10 h-10 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-base" onclick="window.selectEditorTool(8, '📝 ТЕКСТ', this)">📝</button>
+            </div>
+
+            <div class="fixed top-3 right-3 z-50 flex flex-wrap gap-2 justify-end">
+                <button onclick="window.testEditorMap()" class="dp-btn dp-btn-emerald !py-2 !px-3 !text-[10px]">▶ ТЕСТ</button>
+                <button onclick="window.publishCustomMapToCloud()" class="dp-btn dp-btn-purple !py-2 !px-3 !text-[10px]">☁️ ОПУБЛИКОВАТЬ</button>
+                <button onclick="window.saveCustomMap()" class="dp-btn !py-2 !px-3 !text-[10px]">💾 СОХР.</button>
+                <button onclick="window.clearCustomMap()" class="dp-btn dp-btn-gold !py-2 !px-3 !text-[10px]">🗑️</button>
+                <button onclick="window.exitToHub()" class="dp-btn dp-btn-dark !py-2 !px-3 !text-[10px]">🏠 МЕНЮ</button>
+            </div>
+        </div>
+
+        <button id="pauseHudBtn" onclick="window.togglePauseGame()" class="w-11 h-11 rounded-xl bg-slate-900 border border-slate-600 items-center justify-center text-lg">⏸️</button>
+        
+        <div id="actionRightHud">
+            <button onclick="window.triggerActionSkill()" class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-purple-700/60 border-2 border-purple-400 flex flex-col items-center justify-center text-2xl">
+                <span id="actionSkillIcon">🛜</span>
+                <span id="actionSkillLabel" class="font-pixel text-[8px] text-purple-100 mt-0.5">ЭМИ</span>
+            </button>
+            <button id="sprintHudBtn"
+                ontouchstart="window.setSprint(true); event.preventDefault();"
+                ontouchend="window.setSprint(false); event.preventDefault();"
+                onmousedown="window.setSprint(true)" onmouseup="window.setSprint(false)"
+                class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-amber-600/60 border-2 border-amber-400 flex flex-col items-center justify-center text-3xl">
+                <span>⚡</span>
+                <span class="font-pixel text-[8px] text-amber-100 mt-0.5">РЫВОК</span>
+            </button>
+        </div>
+
+        <div id="joystickZone">
+            <div id="joystickBase" class="w-32 h-32 rounded-full bg-slate-900/85 border-2 border-slate-500 relative flex items-center justify-center">
+                <div id="joystickStick" class="w-14 h-14 rounded-full bg-sky-500 border-2 border-white pointer-events-none"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 13. ЧИСТЫЕ ИГРОВЫЕ НАСТРОЙКИ (БЕЗ RULES) ==================== -->
+    <div id="modal-settings" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80">
+        <div class="w-full max-w-lg bg-slate-900 border-2 border-slate-700 rounded-3xl p-7 relative">
+            <button onclick="window.closeSettingsModal()" class="absolute top-4 right-4 w-10 h-10 rounded-xl bg-slate-800 hover:bg-rose-600 text-white font-bold text-lg">✕</button>
+            <h2 class="font-pixel text-base sm:text-lg text-sky-400 mb-5">⚙️ НАСТРОЙКИ ИГРЫ</h2>
+
+            <div class="space-y-4 mb-6">
+                <div>
+                    <div class="font-pixel text-[10px] text-slate-400 mb-2">ЦВЕТОВАЯ ТЕМА КАРТЫ</div>
+                    <div class="grid grid-cols-3 gap-2.5">
+                        <button onclick="window.changeVisualStyle('CYBER')" class="dp-btn dp-btn-dark !py-3 !text-[10px]">ТЕМНАЯ</button>
+                        <button onclick="window.changeVisualStyle('TACTICAL')" class="dp-btn dp-btn-dark !py-3 !text-[10px]">ТАКТИКА</button>
+                        <button onclick="window.changeVisualStyle('ARCADE')" class="dp-btn dp-btn-dark !py-3 !text-[10px]">КОНТРАСТ</button>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap gap-3 justify-between items-center bg-slate-950 p-4 rounded-2xl border border-slate-800">
+                    <span class="font-pixel text-xs text-slate-300">АУДИО И УПРАВЛЕНИЕ</span>
+                    <div class="flex gap-2.5">
+                        <button id="muteBtnToggle" onclick="window.toggleAudioMute()" class="dp-btn !py-2.5 !px-4 !text-[10px]">ЗВУК: ВКЛ 🔊</button>
+                        <button id="touchModeBtn" onclick="window.cycleTouchMode()" class="dp-btn dp-btn-dark !py-2.5 !px-4 !text-[10px]">ДЖОЙСТИК: АВТО 📱</button>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap gap-3 justify-between items-center bg-slate-950 p-4 rounded-2xl border border-slate-800">
+                    <span class="font-pixel text-xs text-slate-300">РЕЖИМ КАМЕРЫ НА УРОВНЯХ (36×24)</span>
+                    <button id="cameraModeSettingBtn" onclick="window.toggleCameraZoom()" class="dp-btn dp-btn-emerald !py-2.5 !px-4 !text-[10px]">КАМЕРА: СЛЕЖЕНИЕ 📷</button>
+                </div>
+            </div>
+            <button onclick="window.closeSettingsModal()" class="dp-btn w-full py-4">СОХРАНИТЬ И ЗАКРЫТЬ</button>
+        </div>
+    </div>
+
+    <!-- ==================== 14. ПАУЗА, ПОБЕДА, ПОРАЖЕНИЕ ==================== -->
+    <div id="modal-pause" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80">
+        <div class="w-full max-w-md bg-slate-900 border-2 border-slate-700 rounded-3xl p-7 text-center">
+            <h2 class="font-pixel text-2xl text-sky-400 mb-6">ПАУЗА</h2>
+            <div class="flex flex-col gap-3.5">
+                <button onclick="window.togglePauseGame()" class="dp-btn w-full py-4">▶ ПРОДОЛЖИТЬ</button>
+                <button onclick="window.restartActiveLevel()" class="dp-btn dp-btn-dark w-full py-4">🔄 ЗАНОВО</button>
+                <button onclick="window.exitToMap()" class="dp-btn dp-btn-gold w-full py-4">🗺️ КАРТА МИССИЙ</button>
+                <button onclick="window.exitToHub()" class="dp-btn dp-btn-danger w-full py-4">🏠 ГЛАВНОЕ МЕНЮ</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-gameover" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/85">
+        <div class="w-full max-w-md bg-slate-900 border-2 border-rose-600 rounded-3xl p-7 text-center shadow-2xl">
+            <div class="text-6xl mb-4">🚨</div>
+            <h2 class="font-pixel text-2xl text-rose-500 mb-3">ПРОВАЛ!</h2>
+            <p id="gameOverReason" class="font-pixel text-xs text-slate-300 mb-6 leading-relaxed">МИССИЯ СОРВАНА</p>
+            <div class="flex flex-col gap-3.5">
+                <button onclick="window.restartActiveLevel()" class="dp-btn w-full py-4">🔄 ПОПРОБОВАТЬ СНОВА</button>
+                <button onclick="window.exitToHub()" class="dp-btn dp-btn-dark w-full py-4">🏠 В ГЛАВНОЕ МЕНЮ</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-win" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/85">
+        <div class="w-full max-w-md bg-slate-900 border-2 border-amber-500 rounded-3xl p-7 text-center shadow-2xl">
+            <div class="text-6xl mb-4">💎</div>
+            <h2 class="font-pixel text-xl text-amber-400 mb-3">ПЛАН ВЫПОЛНЕН!</h2>
+            <p id="winStatsText" class="font-pixel text-xs text-emerald-300 mb-6 leading-relaxed">АЛМАЗ ДОСТАВЛЕН НА БАЗУ</p>
+            <div class="flex flex-col gap-3.5">
+                <button onclick="window.playNextLevel()" class="dp-btn dp-btn-gold w-full py-4">➡️ СЛЕДУЮЩАЯ МИССИЯ</button>
+                <button onclick="window.exitToMap()" class="dp-btn dp-btn-dark w-full py-4">🗺️ КАРТА ОПЕРАЦИЙ</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-custom-prompt" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-black/85">
+        <div class="w-full max-w-md bg-slate-900 border-2 border-slate-600 rounded-3xl p-6 text-center shadow-2xl">
+            <h3 id="cpTitle" class="font-pixel text-sm text-sky-400 mb-3">СООБЩЕНИЕ</h3>
+            <p id="cpMessage" class="text-sm text-slate-200 mb-5 leading-relaxed"></p>
+            <input id="cpInput" type="text" maxlength="24" class="hidden w-full bg-slate-950 border border-sky-500 rounded-xl px-4 py-3 text-white font-pixel text-sm text-center mb-5 outline-none">
+            <div class="flex gap-3 justify-center">
+                <button id="cpCancelBtn" class="dp-btn dp-btn-dark flex-1 !py-3 !text-xs">ОТМЕНА</button>
+                <button id="cpOkBtn" class="dp-btn flex-1 !py-3 !text-xs">ОК</button>
+            </div>
+        </div>
+    </div>
+
+<script>
+/* =========================================================================
+   1. ЗАСТАВКИ И АУДИОСИНТЕЗАТОР
+   ========================================================================= */
+const AudioEngine = {
+    ctx: null,
+    isMuted: false,
+    bgmTimer: null,
+    step: 0,
+    init() {
+        if (!this.ctx && (window.AudioContext || window.webkitAudioContext)) {
+            try { this.ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) {}
+        }
+        if (this.ctx && this.ctx.state === 'suspended') {
+            this.ctx.resume().catch(() => {});
+        }
+    },
+    tone(freq, type = 'sine', duration = 0.15, vol = 0.12, delay = 0) {
+        if (this.isMuted || !this.ctx) return;
+        try {
+            const t = this.ctx.currentTime + delay;
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, t);
+            gain.gain.setValueAtTime(0.001, t);
+            gain.gain.linearRampToValueAtTime(vol, t + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.001, t + duration);
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start(t);
+            osc.stop(t + duration);
+        } catch(e) {}
+    },
+    sfx(name) {
+        this.init();
+        switch(name) {
+            case 'splash': [220, 330, 440, 660].forEach((f, i) => this.tone(f, 'triangle', 0.4, 0.14, i * 0.1)); break;
+            case 'google': [261.6, 329.6, 392.0, 523.2].forEach((f, i) => this.tone(f, 'sine', 0.55, 0.15, i * 0.09)); break;
+            case 'click':  this.tone(880, 'sine', 0.05, 0.1); break;
+            case 'login':  [523.2, 659.2, 1046.5].forEach((f, i) => this.tone(f, 'triangle', 0.2, 0.15, i * 0.09)); break;
+            case 'pickup': this.tone(587.3, 'sawtooth', 0.12, 0.18, 0); this.tone(880, 'sawtooth', 0.35, 0.2, 0.12); break;
+            case 'hack':   [440, 660, 880].forEach((f, i) => this.tone(f, 'square', 0.1, 0.12, i * 0.07)); break;
+            case 'emp':    this.tone(780, 'sawtooth', 0.15, 0.2, 0); this.tone(240, 'sawtooth', 0.35, 0.22, 0.1); break;
+            case 'portal': this.tone(300, 'sine', 0.12, 0.15, 0); this.tone(750, 'sine', 0.25, 0.15, 0.08); break;
+            case 'win':    [523, 659, 783, 1046].forEach((f, i) => this.tone(f, 'triangle', 0.25, 0.2, i * 0.1)); break;
+            case 'lose':   this.tone(180, 'sawtooth', 0.35, 0.25, 0); this.tone(110, 'sawtooth', 0.45, 0.25, 0.2); break;
+        }
+    },
+    startBGM(mode = 'map') {
+        this.stopBGM();
+        this.init();
+        if (this.isMuted || !this.ctx) return;
+        this.step = 0;
+        const patterns = {
+            map:      { tempo: 185, notes: [110, 0, 130.8, 0, 146.8, 0, 130.8, 0, 98, 0, 110, 0, 164.8, 0, 146.8, 0], wave: 'triangle' },
+            tutorial: { tempo: 195, notes: [196, 246.9, 293.6, 0, 246.9, 293.6, 392, 0, 174.6, 220, 261.6, 0, 220, 261.6, 329.6, 0], wave: 'sine' },
+            stealth:  { tempo: 145, notes: [82.4, 0, 82.4, 98, 82.4, 0, 110, 0, 73.4, 0, 82.4, 0, 123.4, 110, 98, 0], wave: 'sawtooth' },
+            panic:    { tempo: 105, notes: [110, 220, 130.8, 261.6, 146.8, 293.6, 164.8, 329.6, 110, 220, 146.8, 293.6, 130.8, 261.6, 98, 196], wave: 'sawtooth' }
+        };
+        const cfg = patterns[mode] || patterns.map;
+        this.bgmTimer = setInterval(() => {
+            if (this.isMuted || !this.ctx) return;
+            const note = cfg.notes[this.step % cfg.notes.length];
+            if (note > 0) this.tone(note, cfg.wave, 0.16, mode === 'panic' ? 0.14 : 0.08);
+            this.step++;
+        }, cfg.tempo);
+    },
+    stopBGM() {
+        if (this.bgmTimer) { clearInterval(this.bgmTimer); this.bgmTimer = null; }
+    }
+};
+
+let splash1Timer = null, splash2Timer = null, splash3Timer = null;
+
+window.skipSplash1 = function() {
+    clearTimeout(splash1Timer);
+    AudioEngine.sfx('splash');
+    const s1 = document.getElementById('screen-splash-1');
+    const s2 = document.getElementById('screen-splash-2');
+    if (s1) s1.classList.add('hidden');
+    if (s2) { s2.classList.remove('hidden'); s2.classList.add('flex'); }
+    splash2Timer = setTimeout(() => window.skipSplash2(), 1900);
+};
+
+window.skipSplash2 = function() {
+    clearTimeout(splash2Timer);
+    AudioEngine.sfx('google');
+    const s2 = document.getElementById('screen-splash-2');
+    const s3 = document.getElementById('screen-splash-3');
+    if (s2) { s2.classList.add('hidden'); s2.classList.remove('flex'); }
+    if (s3) { s3.classList.remove('hidden'); s3.classList.add('flex'); }
+    splash3Timer = setTimeout(() => window.skipSplash3(), 2000);
+};
+
+window.skipSplash3 = function() {
+    clearTimeout(splash3Timer);
+    AudioEngine.sfx('click');
+    const s3 = document.getElementById('screen-splash-3');
+    if (s3) { s3.classList.add('hidden'); s3.classList.remove('flex'); }
+    // Если аккаунт уже сохранен на устройстве, сразу входим в Главное Меню без сброса!
+    if (AppState.username && !AppState.isGuest) {
+        window.showScreen('hub');
+        broadcastPresence(true);
+    } else if (AppState.isGuest && AppState.username === 'guest_offline') {
+        window.showScreen('hub');
+    } else {
+        window.showScreen('auth');
+    }
+};
+
+splash1Timer = setTimeout(() => window.skipSplash1(), 2200);
+
+/* =========================================================================
+   2. НАДЕЖНОЕ ПОДКЛЮЧЕНИЕ К БД BOMNA5 + СОХРАНЕНИЕ СЕССИИ И РАБОЧИЙ ЧАТ
+   ========================================================================= */
+const APP_SIGNATURE = "DIAMOND_PLAN_OFFICIAL_CLIENT";
+const BOMNA5_CONFIG = {
+    apiKey: "AIzaSyA0HAp51DHziKXNuEZDYb9XXwssWQWeFmY",
+    authDomain: "bomna5.firebaseapp.com",
+    databaseURL: "https://bomna5-default-rtdb.firebaseio.com",
+    projectId: "bomna5",
+    storageBucket: "bomna5.firebasestorage.app",
+    messagingSenderId: "78086485758",
+    appId: "1:78086485758:web:6d897029698952775bd7af"
+};
+
+const AVATARS = ["🕵️", "🥷", "😎", "🤖", "👽", "🦊", "👻", "🥶", "🤠", "🦄"];
+let authAvatarIdx = 0;
+let authTabMode = 'login';
+
+const AppState = {
+    isGuest: false,
+    uid: "AGENT_" + Math.random().toString(36).slice(2, 8).toUpperCase(),
+    username: "",
+    accountName: "АГЕНТ СПЕКТР",
+    accountAvatar: "🕵️",
+    bio: "Мастер скрытных операций",
+    activeSlotId: 1,
+    slots: {
+        1: { id: 1, unlockedLevel: 1, diamonds: 0, completed: {} },
+        2: { id: 2, unlockedLevel: 1, diamonds: 0, completed: {} },
+        3: { id: 3, unlockedLevel: 1, diamonds: 0, completed: {} }
+    },
+    friends: [],
+    customLevel: null,
+    registeredUsernames: {},
+    accountsMap: {},
+    onlinePlayers: {},
+    activeRooms: {},
+    chatMessages: [],
+    mpChatMessages: [],
+    selectedChatFriend: null,
+    cloudMaps: []
+};
+
+// Надежное хранилище сессии в IndexedDB + Cookie (чтобы аккаунт НЕ сбрасывался при перезагрузке или выходе с сайта)
+const SessionPersistence = {
+    dbPromise: null,
+    initDB() {
+        if (this.dbPromise) return this.dbPromise;
+        this.dbPromise = new Promise((resolve) => {
+            if (!('indexedDB' in window)) return resolve(null);
+            try {
+                const req = indexedDB.open('DiamondPlanSessionDB_v2', 1);
+                req.onupgradeneeded = (e) => {
+                    const db = e.target.result;
+                    if (!db.objectStoreNames.contains('session')) {
+                        db.createObjectStore('session');
+                    }
+                };
+                req.onsuccess = (e) => resolve(e.target.result);
+                req.onerror = () => resolve(null);
+            } catch (e) { resolve(null); }
+        });
+        return this.dbPromise;
+    },
+    async saveSession(sessionData) {
+        try {
+            const str = JSON.stringify(sessionData);
+            document.cookie = "dp_saved_session=" + encodeURIComponent(str) + "; path=/; max-age=31536000; SameSite=Lax";
+            window.name = "DP_SESSION:" + str;
+            const db = await this.initDB();
+            if (db) {
+                const tx = db.transaction('session', 'readwrite');
+                tx.objectStore('session').put(sessionData, 'currentAccount');
+            }
+        } catch (e) {}
+    },
+    async loadSession() {
+        try {
+            const db = await this.initDB();
+            if (db) {
+                const fromIdb = await new Promise((resolve) => {
+                    const tx = db.transaction('session', 'readonly');
+                    const req = tx.objectStore('session').get('currentAccount');
+                    req.onsuccess = () => resolve(req.result || null);
+                    req.onerror = () => resolve(null);
+                });
+                if (fromIdb && fromIdb.username) return fromIdb;
+            }
+        } catch (e) {}
+        try {
+            const match = document.cookie.match(/(?:^|;\s*)dp_saved_session=([^;]*)/);
+            if (match && match[1]) {
+                return JSON.parse(decodeURIComponent(match[1]));
+            }
+        } catch (e) {}
+        try {
+            if (window.name && window.name.startsWith("DP_SESSION:")) {
+                return JSON.parse(window.name.slice("DP_SESSION:".length));
+            }
+        } catch (e) {}
+        return null;
+    },
+    async clearSession() {
+        try {
+            document.cookie = "dp_saved_session=; path=/; max-age=0";
+            window.name = "";
+            const db = await this.initDB();
+            if (db) {
+                const tx = db.transaction('session', 'readwrite');
+                tx.objectStore('session').delete('currentAccount');
+            }
+        } catch (e) {}
+    }
+};
+
+async function restoreSavedAccountOnStartup() {
+    const saved = await SessionPersistence.loadSession();
+    if (!saved || !saved.username) return;
+    AppState.isGuest = !!saved.isGuest;
+    AppState.uid = saved.uid || AppState.uid;
+    AppState.username = saved.username;
+    AppState.accountName = saved.accountName || saved.username.toUpperCase();
+    AppState.accountAvatar = saved.accountAvatar || "🕵️";
+    AppState.bio = saved.bio || "Мастер скрытных операций";
+    AppState.activeSlotId = saved.activeSlotId || 1;
+    if (saved.slots) AppState.slots = saved.slots;
+    if (saved.friends) AppState.friends = saved.friends;
+    if (saved.customLevel) AppState.customLevel = saved.customLevel;
+
+    // Заполняем поля входа на случай, если пользователь зайдет в окно авторизации
+    const uInput = document.getElementById('authUsernameInput');
+    if (uInput && !AppState.isGuest) uInput.value = AppState.username;
+    refreshHubHeader();
+}
+restoreSavedAccountOnStartup();
+
+let rtdb = null, rtdbRef = null, rtdbSet = null, rtdbGet = null, rtdbPush = null, rtdbOnDisconnect = null;
+let fsDb = null, fsDoc = null, fsSetDoc = null;
+let currentUser = null;
+const envAppId = typeof __app_id !== 'undefined' ? __app_id : 'diamond-plan-bomna5';
+
+// Локальный BroadcastChannel для мгновенной синхронизации между вкладками одного браузера
+const localSyncChannel = ('BroadcastChannel' in window) ? new BroadcastChannel('diamond_plan_bomna5_sync') : null;
+if (localSyncChannel) {
+    localSyncChannel.onmessage = (ev) => {
+        const data = ev.data || {};
+        if (data.type === 'ACCOUNT_SYNC' && data.username && data.payload) {
+            AppState.registeredUsernames[data.username] = data.payload.uid;
+            AppState.accountsMap[data.username] = data.payload;
+            window.onUsernameInput();
+            renderFriendsList();
+        } else if (data.type === 'PRESENCE_SYNC' && data.username && data.presence) {
+            AppState.onlinePlayers[data.username] = data.presence;
+            renderMultiplayerLobby();
+            renderFriendsList();
+            updateHubOnlineCounter();
+        } else if (data.type === 'FRIEND_CHAT' && data.msg) {
+            if (!AppState.chatMessages.some(m => m.id === data.msg.id)) {
+                AppState.chatMessages.push(data.msg);
+                renderChatMessages();
+            }
+        } else if (data.type === 'MP_CHAT' && data.msg) {
+            if (!AppState.mpChatMessages.some(m => m.id === data.msg.id)) {
+                AppState.mpChatMessages.push(data.msg);
+                renderMpChatMessages();
+                if (data.msg.from && data.msg.text) {
+                    playerChatBubbles[data.msg.from] = { text: data.msg.text, timer: 260 };
+                }
+            }
+        } else if (data.type === 'ROOM_SYNC' && data.roomCode && data.roomData) {
+            AppState.activeRooms[data.roomCode] = data.roomData;
+            syncRoomStateFromCloud();
+            renderMultiplayerLobby();
+        }
+    };
+}
+
+function simpleHash(str) {
+    let h = 2166136261;
+    for (let i = 0; i < str.length; i++) {
+        h ^= str.charCodeAt(i);
+        h = Math.imul(h, 16777619);
+    }
+    return (h >>> 0).toString(16);
+}
+
+// REST-фоллбэк к Realtime Database bomna5 (работает даже если WebSockets или Auth закрыты)
+async function restRtdbFetch(path, method = 'GET', bodyObj = null) {
+    try {
+        const cleanPath = path ? `/${path}` : '';
+        const url = `${BOMNA5_CONFIG.databaseURL}/diamond_plan_v2${cleanPath}.json`;
+        const opts = { method, headers: { 'Content-Type': 'application/json' } };
+        if (bodyObj !== null) opts.body = JSON.stringify(bodyObj);
+        const res = await fetch(url, opts);
+        if (!res.ok) return null;
+        return await res.json();
+    } catch (e) {
+        return null;
+    }
+}
+
+function applyCloudSnapshotData(initData) {
+    if (!initData) return;
+    if (initData.usernames) {
+        AppState.registeredUsernames = { ...AppState.registeredUsernames, ...initData.usernames };
+    }
+    if (initData.accounts) {
+        AppState.accountsMap = { ...AppState.accountsMap, ...initData.accounts };
+        Object.keys(initData.accounts).forEach(u => {
+            AppState.registeredUsernames[u] = initData.accounts[u].uid || true;
+        });
+        // Если мы уже авторизованы, подтягиваем актуальные данные своего аккаунта из БД
+        if (!AppState.isGuest && AppState.username && initData.accounts[AppState.username]) {
+            const myAcc = initData.accounts[AppState.username];
+            AppState.accountName = myAcc.accountName || AppState.accountName;
+            AppState.accountAvatar = myAcc.accountAvatar || AppState.accountAvatar;
+            AppState.bio = myAcc.bio || AppState.bio;
+            if (myAcc.slotsJson) { try { AppState.slots = JSON.parse(myAcc.slotsJson); } catch(e) {} }
+            if (myAcc.friendsJson) { try { AppState.friends = JSON.parse(myAcc.friendsJson); } catch(e) {} }
+            refreshHubHeader();
+        }
+    }
+    if (initData.presence) {
+        const now = Date.now();
+        const active = {};
+        Object.values(initData.presence).forEach(p => {
+            if (p && p.username && (now - (p.updatedAt || 0) < 60000)) {
+                active[p.username] = p;
+            }
+        });
+        if (!AppState.isGuest && AppState.username && AppState.onlinePlayers[AppState.username]) {
+            active[AppState.username] = AppState.onlinePlayers[AppState.username];
+        }
+        AppState.onlinePlayers = active;
+    }
+    if (initData.rooms) {
+        AppState.activeRooms = initData.rooms;
+        syncRoomStateFromCloud();
+    }
+    if (initData.chat) {
+        AppState.chatMessages = Object.values(initData.chat)
+            .filter(m => m && m.text)
+            .sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0))
+            .slice(-60);
+        renderChatMessages();
+    }
+    if (initData.mp_chat) {
+        const list = Object.values(initData.mp_chat)
+            .filter(m => m && m.text)
+            .sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0))
+            .slice(-50);
+        AppState.mpChatMessages = list;
+        const latest = list[list.length - 1];
+        if (latest && latest.from && (Date.now() - (latest.timestamp || 0) < 5000)) {
+            playerChatBubbles[latest.from] = { text: latest.text, timer: 240 };
+        }
+        renderMpChatMessages();
+    }
+    if (initData.maps) {
+        AppState.cloudMaps = Object.values(initData.maps).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+        renderCloudMaps();
+    }
+    window.onUsernameInput();
+    renderMultiplayerLobby();
+    renderFriendsList();
+    updateHubOnlineCounter();
+}
+
+async function connectFirebase() {
+    // 1. Мгновенная синхронизация через REST из bomna5
+    try {
+        const initData = await restRtdbFetch('');
+        applyCloudSnapshotData(initData);
+    } catch(e) {}
+
+    // 2. Подключаем реальные WebSocket-подписки Firebase RTDB и Firestore
+    try {
+        const fbAppMod = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js");
+        const fbAuthMod = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js");
+        const fbRtdbMod = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js");
+        const fbFsMod = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js");
+
+        const bomnaApp = fbAppMod.initializeApp(BOMNA5_CONFIG, "bomna5Client");
+        rtdb = fbRtdbMod.getDatabase(bomnaApp);
+        rtdbRef = fbRtdbMod.ref;
+        rtdbSet = fbRtdbMod.set;
+        rtdbGet = fbRtdbMod.get;
+        rtdbPush = fbRtdbMod.push;
+        rtdbOnDisconnect = fbRtdbMod.onDisconnect;
+
+        const statusEl = document.getElementById('authCloudStatus');
+        if (statusEl) statusEl.innerText = "СЕРВЕР BOMNA5 ПОДКЛЮЧЕН ONLINE";
+
+        fbRtdbMod.onValue(rtdbRef(rtdb, 'diamond_plan_v2/usernames'), (snap) => {
+            const val = snap.val() || {};
+            AppState.registeredUsernames = { ...AppState.registeredUsernames, ...val };
+            window.onUsernameInput();
+        }, () => {});
+
+        fbRtdbMod.onValue(rtdbRef(rtdb, 'diamond_plan_v2/accounts'), (snap) => {
+            const val = snap.val() || {};
+            AppState.accountsMap = { ...AppState.accountsMap, ...val };
+            Object.keys(val).forEach(u => { AppState.registeredUsernames[u] = val[u].uid || true; });
+            window.onUsernameInput();
+            renderFriendsList();
+        }, () => {});
+
+        fbRtdbMod.onValue(rtdbRef(rtdb, 'diamond_plan_v2/presence'), (snap) => {
+            const raw = snap.val() || {};
+            const now = Date.now();
+            const active = {};
+            Object.values(raw).forEach(p => {
+                if (p && p.username && (now - (p.updatedAt || 0) < 60000)) {
+                    active[p.username] = p;
+                }
+            });
+            if (!AppState.isGuest && AppState.username && AppState.onlinePlayers[AppState.username]) {
+                active[AppState.username] = AppState.onlinePlayers[AppState.username];
+            }
+            AppState.onlinePlayers = active;
+            renderMultiplayerLobby();
+            renderFriendsList();
+            updateHubOnlineCounter();
+        }, () => {});
+
+        fbRtdbMod.onValue(rtdbRef(rtdb, 'diamond_plan_v2/rooms'), (snap) => {
+            AppState.activeRooms = snap.val() || {};
+            syncRoomStateFromCloud();
+            renderMultiplayerLobby();
+        }, () => {});
+
+        fbRtdbMod.onValue(rtdbRef(rtdb, 'diamond_plan_v2/chat'), (snap) => {
+            const raw = snap.val() || {};
+            AppState.chatMessages = Object.values(raw)
+                .filter(m => m && m.text)
+                .sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0))
+                .slice(-60);
+            renderChatMessages();
+        }, () => {});
+
+        fbRtdbMod.onValue(rtdbRef(rtdb, 'diamond_plan_v2/mp_chat'), (snap) => {
+            const raw = snap.val() || {};
+            const list = Object.values(raw)
+                .filter(m => m && m.text)
+                .sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0))
+                .slice(-50);
+            AppState.mpChatMessages = list;
+            const latest = list[list.length - 1];
+            if (latest && latest.from && (Date.now() - (latest.timestamp || 0) < 5000)) {
+                playerChatBubbles[latest.from] = { text: latest.text, timer: 240 };
+            }
+            renderMpChatMessages();
+        }, () => {});
+
+        fbRtdbMod.onValue(rtdbRef(rtdb, 'diamond_plan_v2/maps'), (snap) => {
+            const raw = snap.val() || {};
+            AppState.cloudMaps = Object.values(raw).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+            renderCloudMaps();
+        }, () => {});
+
+        try {
+            const bomnaAuth = fbAuthMod.getAuth(bomnaApp);
+            await fbAuthMod.signInAnonymously(bomnaAuth);
+        } catch(authIgnore) {}
+
+        try {
+            const primaryConfig = (typeof __firebase_config !== 'undefined' && __firebase_config)
+                ? JSON.parse(__firebase_config)
+                : BOMNA5_CONFIG;
+            const mainApp = fbAppMod.initializeApp(primaryConfig);
+            const auth = fbAuthMod.getAuth(mainApp);
+            fsDb = fbFsMod.getFirestore(mainApp);
+            fsDoc = fbFsMod.doc;
+            fsSetDoc = fbFsMod.setDoc;
+            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                await fbAuthMod.signInWithCustomToken(auth, __initial_auth_token);
+            } else {
+                await fbAuthMod.signInAnonymously(auth);
+            }
+            currentUser = auth.currentUser;
+            if (currentUser) AppState.uid = currentUser.uid;
+        } catch(fsIgnore) {}
+
+    } catch (e) {
+        const statusEl = document.getElementById('authCloudStatus');
+        if (statusEl) statusEl.innerText = "BOMNA5 REST РЕЖИМ АКТИВЕН";
+    }
+}
+connectFirebase();
+
+// Периодический пульс присутствия и синхронизация чатов/комнат каждые 3 секунды
+setInterval(async () => {
+    if (!AppState.isGuest && AppState.username) {
+        broadcastPresence(true);
+    }
+    const snap = await restRtdbFetch('');
+    if (snap) applyCloudSnapshotData(snap);
+}, 3000);
+
+function updateHubOnlineCounter() {
+    const el = document.getElementById('hubOnlineCounter');
+    if (!el) return;
+    const count = Math.max(1, Object.keys(AppState.onlinePlayers).length);
+    el.innerText = `🟢 В СЕТИ: ${count}`;
+}
+
+/* =========================================================================
+   3. АВТОРИЗАЦИЯ, СОХРАНЕНИЕ АККАУНТА И СТРОГАЯ ПРОВЕРКА @USERNAME
+   ========================================================================= */
+window.switchAuthTab = function(mode) {
+    AudioEngine.sfx('click');
+    authTabMode = mode;
+    const btnLogin = document.getElementById('tabBtnLogin');
+    const btnReg = document.getElementById('tabBtnRegister');
+    const dispGroup = document.getElementById('authDisplayNameGroup');
+    const submitBtn = document.getElementById('authSubmitBtn');
+    document.getElementById('authErrorBox').classList.add('hidden');
+
+    if (mode === 'register') {
+        btnReg.className = "font-pixel text-xs py-3.5 rounded-xl bg-cyan-600 text-white transition-all";
+        btnLogin.className = "font-pixel text-xs py-3.5 rounded-xl text-slate-400 hover:text-white transition-all";
+        dispGroup.classList.remove('hidden');
+        if (submitBtn) submitBtn.innerText = "ЗАРЕГИСТРИРОВАТЬСЯ ▶";
+    } else {
+        btnLogin.className = "font-pixel text-xs py-3.5 rounded-xl bg-cyan-600 text-white transition-all";
+        btnReg.className = "font-pixel text-xs py-3.5 rounded-xl text-slate-400 hover:text-white transition-all";
+        dispGroup.classList.add('hidden');
+        if (submitBtn) submitBtn.innerText = "ВОЙТИ В ИГРУ ▶";
+    }
+    window.onUsernameInput();
+};
+
+window.cycleAuthAvatar = function(dir) {
+    AudioEngine.sfx('click');
+    authAvatarIdx = (authAvatarIdx + dir + AVATARS.length) % AVATARS.length;
+    document.getElementById('authAvatarPreview').innerText = AVATARS[authAvatarIdx];
+};
+
+function isUsernameTaken(uname) {
+    if (!uname) return false;
+    return !!(AppState.registeredUsernames[uname] || AppState.accountsMap[uname]);
+}
+
+window.onUsernameInput = function() {
+    const input = document.getElementById('authUsernameInput');
+    const badge = document.getElementById('usernameCheckBadge');
+    if (!input || !badge) return;
+    const clean = input.value.toLowerCase().replace(/[^a-z0-9_]/g, '');
+    if (input.value !== clean) input.value = clean;
+
+    if (clean.length < 3) {
+        badge.innerText = "МИН. 3 СИМВОЛА";
+        badge.className = "font-pixel text-[10px] text-amber-400";
+        return;
+    }
+    const exists = isUsernameTaken(clean);
+    if (authTabMode === 'register') {
+        badge.innerText = exists ? "❌ ЗАНЯТ ДРУГИМ ИГРОКОМ" : "✅ СВОБОДЕН";
+        badge.className = exists ? "font-pixel text-[10px] text-rose-400" : "font-pixel text-[10px] text-emerald-400";
+    } else {
+        badge.innerText = exists ? "✅ АККАУНТ НАЙДЕН" : "❓ НЕ ЗАРЕГИСТРИРОВАН";
+        badge.className = exists ? "font-pixel text-[10px] text-emerald-400" : "font-pixel text-[10px] text-amber-400";
+    }
+};
+
+function showAuthError(msg) {
+    const box = document.getElementById('authErrorBox');
+    if (!box) return;
+    box.innerText = msg;
+    box.classList.remove('hidden');
+    AudioEngine.sfx('lose');
+}
+
+window.handleAuthSubmit = async function() {
+    const uname = document.getElementById('authUsernameInput').value.trim().toLowerCase().replace(/[^a-z0-9_]/g, '');
+    const pass = document.getElementById('authPasswordInput').value;
+    const dispName = document.getElementById('authDisplayNameInput').value.trim() || uname.toUpperCase();
+
+    if (uname.length < 3) return showAuthError("ВВЕДИТЕ @USERNAME (МИНИМУМ 3 СИМВОЛА)!");
+    if (pass.length < 3) return showAuthError("ВВЕДИТЕ ПАРОЛЬ (МИНИМУМ 3 СИМВОЛА)!");
+
+    const remoteAcc = await restRtdbFetch(`accounts/${uname}`);
+    if (remoteAcc) {
+        AppState.accountsMap[uname] = remoteAcc;
+        AppState.registeredUsernames[uname] = remoteAcc.uid || true;
+    }
+
+    const passHash = simpleHash(pass + "_dp_salt");
+
+    if (authTabMode === 'register') {
+        if (isUsernameTaken(uname)) {
+            window.onUsernameInput();
+            return showAuthError(`ОШИБКА: @${uname} УЖЕ ЗАНЯТ! ВЫБЕРИТЕ ДРУГОЙ @USERNAME ИЛИ ПЕРЕЙДИТЕ ВО ВКЛАДКУ «ВХОД»!`);
+        }
+        AppState.isGuest = false;
+        AppState.username = uname;
+        AppState.accountName = dispName;
+        AppState.accountAvatar = document.getElementById('authAvatarPreview').innerText || "🕵️";
+        await syncCurrentAccount(passHash);
+        await broadcastPresence(true);
+        AudioEngine.sfx('login');
+        window.showScreen('hub');
+    } else {
+        const existing = AppState.accountsMap[uname];
+        if (!existing) {
+            return showAuthError(`АККАУНТ @${uname} НЕ НАЙДЕН! ПЕРЕКЛЮЧИТЕСЬ НА «РЕГИСТРАЦИЯ» ДЛЯ СОЗДАНИЯ.`);
+        }
+        if (existing.passHash && existing.passHash !== passHash) {
+            return showAuthError(`НЕВЕРНЫЙ ПАРОЛЬ ДЛЯ АККАУНТА @${uname}!`);
+        }
+        AppState.isGuest = false;
+        AppState.username = uname;
+        AppState.uid = existing.uid || AppState.uid;
+        AppState.accountName = existing.accountName || uname.toUpperCase();
+        AppState.accountAvatar = existing.accountAvatar || document.getElementById('authAvatarPreview').innerText || "🕵️";
+        AppState.bio = existing.bio || "Мастер скрытных операций";
+        AppState.activeSlotId = existing.activeSlotId || 1;
+        if (existing.slotsJson) {
+            try { AppState.slots = JSON.parse(existing.slotsJson); } catch(e) {}
+        }
+        if (existing.friendsJson) {
+            try { AppState.friends = JSON.parse(existing.friendsJson); } catch(e) {}
+        }
+        if (existing.customLevelJson) {
+            try { AppState.customLevel = JSON.parse(existing.customLevelJson); } catch(e) {}
+        }
+        await syncCurrentAccount(existing.passHash || passHash);
+        await broadcastPresence(true);
+        AudioEngine.sfx('login');
+        window.showScreen('hub');
+    }
+};
+
+window.loginAsGuest = async function() {
+    AppState.isGuest = true;
+    AppState.username = "guest_offline";
+    AppState.accountName = "ГОСТЬ (ОФЛАЙН)";
+    AppState.accountAvatar = document.getElementById('authAvatarPreview').innerText || "🕵️";
+    await SessionPersistence.saveSession({
+        isGuest: true,
+        uid: AppState.uid,
+        username: AppState.username,
+        accountName: AppState.accountName,
+        accountAvatar: AppState.accountAvatar,
+        bio: AppState.bio,
+        activeSlotId: AppState.activeSlotId,
+        slots: AppState.slots,
+        friends: AppState.friends,
+        customLevel: AppState.customLevel
+    });
+    AudioEngine.sfx('login');
+    window.showScreen('hub');
+};
+
+window.logoutAccount = async function() {
+    AudioEngine.sfx('click');
+    AppState.username = "";
+    AppState.isGuest = false;
+    await SessionPersistence.clearSession();
+    window.showScreen('auth');
+    window.onUsernameInput();
+};
+
+async function syncCurrentAccount(optionalPassHash) {
+    // Всегда сохраняем локальную сессию в браузере (IndexedDB + Cookie), чтобы при перезагрузке страницы аккаунт не сбрасывался
+    await SessionPersistence.saveSession({
+        isGuest: AppState.isGuest,
+        uid: AppState.uid,
+        username: AppState.username,
+        accountName: AppState.accountName,
+        accountAvatar: AppState.accountAvatar,
+        bio: AppState.bio,
+        activeSlotId: AppState.activeSlotId,
+        slots: AppState.slots,
+        friends: AppState.friends,
+        customLevel: AppState.customLevel
+    });
+
+    if (AppState.isGuest || !AppState.username) return;
+    const prev = AppState.accountsMap[AppState.username] || {};
+    const payload = {
+        ...prev,
+        appSignature: APP_SIGNATURE,
+        uid: AppState.uid,
+        username: AppState.username,
+        accountName: AppState.accountName,
+        accountAvatar: AppState.accountAvatar,
+        bio: AppState.bio,
+        passHash: optionalPassHash || prev.passHash || simpleHash("default"),
+        activeSlotId: AppState.activeSlotId,
+        slotsJson: JSON.stringify(AppState.slots),
+        friendsJson: JSON.stringify(AppState.friends),
+        customLevelJson: AppState.customLevel ? JSON.stringify(AppState.customLevel) : "",
+        updatedAt: Date.now()
+    };
+
+    // Мгновенно обновляем локальный кэш, чтобы @username сразу числился занятым
+    AppState.accountsMap[AppState.username] = payload;
+    AppState.registeredUsernames[AppState.username] = AppState.uid;
+    window.onUsernameInput();
+
+    if (localSyncChannel) {
+        localSyncChannel.postMessage({ type: 'ACCOUNT_SYNC', username: AppState.username, payload });
+    }
+
+    // Записываем в RTDB через SDK + дублируем через REST для 100% гарантии записи в bomna5
+    if (rtdb && rtdbSet && rtdbRef) {
+        try {
+            rtdbSet(rtdbRef(rtdb, `diamond_plan_v2/usernames/${AppState.username}`), AppState.uid);
+            rtdbSet(rtdbRef(rtdb, `diamond_plan_v2/accounts/${AppState.username}`), payload);
+        } catch(e) {}
+    }
+    restRtdbFetch(`usernames/${AppState.username}`, 'PUT', AppState.uid);
+    restRtdbFetch(`accounts/${AppState.username}`, 'PUT', payload);
+
+    if (fsDb && currentUser && fsSetDoc && fsDoc) {
+        try {
+            await fsSetDoc(fsDoc(fsDb, 'artifacts', envAppId, 'public', 'data', 'dp_accounts', AppState.username), payload, { merge: true });
+        } catch(e) {}
+    }
+}
+
+let lastPresenceTime = 0;
+async function broadcastPresence(force = false) {
+    if (AppState.isGuest || !AppState.username) return;
+    const now = Date.now();
+    if (!force && now - lastPresenceTime < 250) return;
+    lastPresenceTime = now;
+
+    const sessionType = (gameMode === 'PLAY' || gameMode === 'TUTORIAL' || gameMode === 'INTRO')
+        ? (isMultiplayerSession ? 'MULTIPLAYER' : 'SINGLEPLAYER')
+        : 'HUB';
+
+    const presenceData = {
+        appSignature: APP_SIGNATURE,
+        uid: AppState.uid,
+        username: AppState.username,
+        name: AppState.accountName,
+        avatar: AppState.accountAvatar,
+        sessionType: sessionType,
+        mpMode: isMultiplayerSession ? mpCurrentMode : 'none',
+        roomCode: isMultiplayerSession ? mpRoomCode : '',
+        arenaId: isMultiplayerSession ? mpArenaId : '',
+        levelId: activeNodeId,
+        x: Number(player.x.toFixed(2)),
+        y: Number(player.y.toFixed(2)),
+        disguised: !!player.disguised,
+        mpRole: player.mpRole || 'agent',
+        hasDiamond: !!diamond.taken,
+        updatedAt: now
+    };
+
+    // Сразу добавляем себя в список онлайн-игроков
+    AppState.onlinePlayers[AppState.username] = presenceData;
+    updateHubOnlineCounter();
+
+    if (localSyncChannel) {
+        localSyncChannel.postMessage({ type: 'PRESENCE_SYNC', username: AppState.username, presence: presenceData });
+    }
+
+    if (rtdb && rtdbSet && rtdbRef) {
+        try {
+            const pRef = rtdbRef(rtdb, `diamond_plan_v2/presence/${AppState.username}`);
+            rtdbSet(pRef, presenceData);
+            if (rtdbOnDisconnect) rtdbOnDisconnect(pRef).remove().catch(() => {});
+        } catch(e) {}
+    } else {
+        restRtdbFetch(`presence/${AppState.username}`, 'PUT', presenceData);
+    }
+}
+
+/* =========================================================================
+   4. ПРОФИЛЬ, ДРУЗЬЯ И ЧАТ
+   ========================================================================= */
+function showCustomDialog({ title = "СИСТЕМА", message = "", showInput = false, defaultValue = "", onConfirm = null, showCancel = false }) {
+    const modal = document.getElementById('modal-custom-prompt');
+    document.getElementById('cpTitle').innerText = title;
+    document.getElementById('cpMessage').innerText = message;
+    const inputEl = document.getElementById('cpInput');
+    const okBtn = document.getElementById('cpOkBtn');
+    const cancelBtn = document.getElementById('cpCancelBtn');
+
+    if (showInput) {
+        inputEl.classList.remove('hidden');
+        inputEl.value = defaultValue;
+        setTimeout(() => inputEl.focus(), 50);
+    } else inputEl.classList.add('hidden');
+
+    if (showCancel) cancelBtn.classList.remove('hidden');
+    else cancelBtn.classList.add('hidden');
+
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+
+    okBtn.onclick = () => {
+        AudioEngine.sfx('click');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        if (onConfirm) onConfirm(showInput ? inputEl.value : true);
+    };
+    cancelBtn.onclick = () => {
+        AudioEngine.sfx('click');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    };
+}
+
+window.openProfileModal = function() {
+    AudioEngine.sfx('click');
+    document.getElementById('profAvatarBox').innerText = AppState.accountAvatar;
+    document.getElementById('profDisplayName').value = AppState.accountName;
+    document.getElementById('profUsername').value = AppState.username;
+    document.getElementById('profBio').value = AppState.bio || "";
+    document.getElementById('profStatusMsg').classList.add('hidden');
+    const m = document.getElementById('modal-profile');
+    m.classList.remove('hidden'); m.classList.add('flex');
+};
+
+window.closeProfileModal = function() {
+    document.getElementById('modal-profile').classList.add('hidden');
+    document.getElementById('modal-profile').classList.remove('flex');
+};
+
+window.cycleProfileAvatar = function(dir) {
+    AudioEngine.sfx('click');
+    const cur = document.getElementById('profAvatarBox').innerText;
+    const idx = (AVATARS.indexOf(cur) + dir + AVATARS.length) % AVATARS.length;
+    document.getElementById('profAvatarBox').innerText = AVATARS[idx];
+};
+
+window.saveProfileChanges = async function() {
+    const newName = document.getElementById('profDisplayName').value.trim() || AppState.accountName;
+    const newUname = document.getElementById('profUsername').value.trim().toLowerCase().replace(/[^a-z0-9_]/g, '');
+    const newBio = document.getElementById('profBio').value.trim() || "Мастер скрытных операций";
+    const msgEl = document.getElementById('profStatusMsg');
+
+    if (!AppState.isGuest && newUname !== AppState.username && isUsernameTaken(newUname)) {
+        msgEl.innerText = `❌ @${newUname} УЖЕ ЗАНЯТ ДРУГИМ ИГРОКОМ!`;
+        msgEl.className = "text-center font-pixel text-xs text-rose-400 mb-4";
+        msgEl.classList.remove('hidden');
+        return;
+    }
+
+    AppState.accountAvatar = document.getElementById('profAvatarBox').innerText;
+    AppState.accountName = newName;
+    if (newUname.length >= 3) AppState.username = newUname;
+    AppState.bio = newBio;
+
+    await syncCurrentAccount();
+    await broadcastPresence(true);
+    refreshHubHeader();
+    msgEl.innerText = "✅ ПРОФИЛЬ СОХРАНЕН В BOMNA5!";
+    msgEl.className = "text-center font-pixel text-xs text-emerald-400 mb-4";
+    msgEl.classList.remove('hidden');
+    AudioEngine.sfx('login');
+};
+
+window.openFriendsModal = function() {
+    if (AppState.isGuest) {
+        return showCustomDialog({
+            title: "ГОСТЕВОЙ РЕЖИМ 🔒",
+            message: "В режиме Гостя друзья и онлайн-чат недоступны. Зарегистрируйте аккаунт для игры с друзьями!"
+        });
+    }
+    AudioEngine.sfx('click');
+    const m = document.getElementById('modal-friends');
+    m.classList.remove('hidden'); m.classList.add('flex');
+    renderFriendsList();
+    renderChatMessages();
+};
+
+window.closeFriendsModal = function() {
+    document.getElementById('modal-friends').classList.add('hidden');
+    document.getElementById('modal-friends').classList.remove('flex');
+};
+
+window.addFriendByUsername = async function() {
+    const input = document.getElementById('friendSearchInput');
+    const targetUname = input.value.trim().toLowerCase().replace(/^@/, '').replace(/[^a-z0-9_]/g, '');
+    if (!targetUname || targetUname === AppState.username) return;
+    if (!AppState.friends.includes(targetUname)) {
+        AppState.friends.push(targetUname);
+        await syncCurrentAccount();
+    }
+    input.value = '';
+    AudioEngine.sfx('login');
+    renderFriendsList();
+};
+
+function renderFriendsList() {
+    const box = document.getElementById('friendsListContainer');
+    const countLabel = document.getElementById('friendsCountLabel');
+    if (!box) return;
+    countLabel.innerText = String(AppState.friends.length);
+
+    if (AppState.friends.length === 0) {
+        box.innerHTML = `<div class="text-slate-400 text-center py-8 text-xs">Список друзей пуст. Введите @username друга выше!</div>`;
+        return;
+    }
+    box.innerHTML = '';
+    AppState.friends.forEach(fUname => {
+        const acc = AppState.accountsMap[fUname] || { username: fUname, accountName: fUname.toUpperCase(), accountAvatar: '🕵️' };
+        const pres = AppState.onlinePlayers[fUname];
+        let statusBadge = `<span class="text-slate-500 font-pixel text-[9px]">⚫ ОФЛАЙН</span>`;
+        let joinBtnHtml = '';
+
+        if (pres) {
+            if (pres.sessionType === 'SINGLEPLAYER') {
+                statusBadge = `<span class="text-amber-400 font-pixel text-[9px]">🔒 В ОДИНОЧНОЙ #${pres.levelId}</span>`;
+                joinBtnHtml = `<button disabled class="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-500 font-pixel text-[8px] cursor-not-allowed">🔒 ЗАКРЫТО</button>`;
+            } else if (pres.sessionType === 'MULTIPLAYER') {
+                statusBadge = `<span class="text-emerald-400 font-pixel text-[9px]">🎮 В МАТЧЕ (${pres.roomCode})</span>`;
+                joinBtnHtml = `<button onclick="window.joinFriendGame('${fUname}')" class="dp-btn dp-btn-emerald !py-1.5 !px-3 !text-[9px]">ВОЙТИ ▶</button>`;
+            } else {
+                statusBadge = `<span class="text-cyan-400 font-pixel text-[9px]">🟢 В ГЛАВНОМ МЕНЮ</span>`;
+            }
+        }
+
+        const card = document.createElement('div');
+        card.className = "bg-slate-900 border-2 border-slate-800 rounded-xl p-3 flex items-center justify-between gap-2";
+        card.innerHTML = `
+            <div class="flex items-center gap-3 cursor-pointer" onclick="window.selectFriendForChat('${fUname}')">
+                <span class="text-3xl">${acc.accountAvatar || '🕵️'}</span>
+                <div>
+                    <div class="font-pixel text-[10px] text-white">${acc.accountName} <span class="font-mono text-cyan-400">@${fUname}</span></div>
+                    <div class="mt-1">${statusBadge}</div>
+                </div>
+            </div>
+            <div class="flex items-center gap-1.5">
+                <button onclick="window.selectFriendForChat('${fUname}')" class="px-2.5 py-1.5 rounded-lg bg-purple-950 border border-purple-500 text-purple-200 font-pixel text-[9px]">💬</button>
+                ${joinBtnHtml}
+            </div>
+        `;
+        box.appendChild(card);
+    });
+}
+
+window.selectFriendForChat = function(fUname) {
+    AudioEngine.sfx('click');
+    AppState.selectedChatFriend = fUname;
+    document.getElementById('chatPartnerName').innerText = fUname ? `ЧАТ С @${fUname}` : "ОБЩИЙ КАНАЛ АГЕНТОВ";
+    renderChatMessages();
+};
+
+window.sendChatMessage = async function() {
+    if (AppState.isGuest) return;
+    const input = document.getElementById('chatMessageInput');
+    if (!input) return;
+    const text = input.value.trim();
+    if (!text) return;
+    input.value = '';
+
+    const msgId = `msg_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+    const msgObj = {
+        id: msgId,
+        appSignature: APP_SIGNATURE,
+        from: AppState.username || 'agent',
+        fromName: AppState.accountName || 'АГЕНТ',
+        fromAvatar: AppState.accountAvatar || '🕵️',
+        to: AppState.selectedChatFriend || "ALL",
+        text: text,
+        timestamp: Date.now()
+    };
+
+    AppState.chatMessages.push(msgObj);
+    renderChatMessages();
+    AudioEngine.sfx('click');
+
+    if (localSyncChannel) {
+        localSyncChannel.postMessage({ type: 'FRIEND_CHAT', msg: msgObj });
+    }
+
+    // Записываем одновременно через SDK и через прямой REST PUT, чтобы чат работал при любых настройках
+    if (rtdb && rtdbSet && rtdbRef) {
+        try { rtdbSet(rtdbRef(rtdb, `diamond_plan_v2/chat/${msgId}`), msgObj); } catch(e) {}
+    }
+    await restRtdbFetch(`chat/${msgId}`, 'PUT', msgObj);
+};
+
+function renderChatMessages() {
+    const box = document.getElementById('chatMessagesBox');
+    if (!box) return;
+    const partner = AppState.selectedChatFriend;
+    const filtered = AppState.chatMessages.filter(m => !partner ? (!m.to || m.to === "ALL") : ((m.from === AppState.username && m.to === partner) || (m.from === partner && m.to === AppState.username)));
+    if (filtered.length === 0) {
+        box.innerHTML = `<div class="text-slate-500 text-center py-8 text-xs">Сообщений пока нет. Напишите первым!</div>`;
+        return;
+    }
+    box.innerHTML = '';
+    filtered.forEach(m => {
+        const isMe = m.from === AppState.username;
+        const div = document.createElement('div');
+        div.className = `p-2.5 rounded-xl border ${isMe ? 'bg-blue-950/60 border-cyan-500/40 ml-6' : 'bg-slate-900 border-slate-800 mr-6'}`;
+        div.innerHTML = `<div class="font-pixel text-[9px] text-cyan-400 mb-1">${m.fromAvatar || '🕵️'} ${m.fromName} (@${m.from})</div><div class="text-white text-sm break-words">${m.text}</div>`;
+        box.appendChild(div);
+    });
+    box.scrollTop = box.scrollHeight;
+}
+
+/* =========================================================================
+   5. УЛУЧШЕННЫЙ МУЛЬТИПЛЕЕР: ОГРОМНЫЕ АРЕНЫ (36×24), РЕЖИМ «ГАЛЯ» И ЧАТ
+   ========================================================================= */
+const MAP_WIDTH = 36;
+const MAP_HEIGHT = 24;
+
+let isMultiplayerSession = false;
+let mpCurrentMode = 'normal';
+let mpRoomCode = 'ROOM_1';
+let mpArenaId = 'mp_citadel';
+let mpGalyaUsername = ''; // Кто сейчас «Галя» (Вода) в режиме догонялок или ведущий
+let mpTagCooldown = 0;
+let playerChatBubbles = {}; // { username: { text, timer } }
+
+// Генератор огромных мультиплеерных арен 36x24
+function buildHugeArena(type) {
+    const map = Array.from({ length: MAP_HEIGHT }, (_, y) =>
+        Array.from({ length: MAP_WIDTH }, (_, x) => (y === 0 || y === MAP_HEIGHT - 1 || x === 0 || x === MAP_WIDTH - 1) ? 1 : 0)
+    );
+    const enemies = [];
+    let playerStart = { x: 2.5, y: 2.5 };
+    let targetStart = { x: 32.5, y: 20.5 };
+
+    // Создаем симметричные залы, колонны и коридоры на карте 36x24
+    for (let y = 3; y < MAP_HEIGHT - 3; y++) {
+        for (let x = 4; x < MAP_WIDTH - 4; x++) {
+            if ((x === 10 || x === 25) && y % 4 !== 0) map[y][x] = 1;
+            if ((y === 7 || y === 16) && x % 5 !== 0) map[y][x] = 1;
+            if (x >= 15 && x <= 20 && (y === 10 || y === 13) && x !== 17 && x !== 18) map[y][x] = 1;
+        }
+    }
+
+    if (type === 'mp_citadel') {
+        map[11][17] = 6; map[11][18] = 6;
+        map[5][18] = 12; map[18][17] = 12;
+        map[3][32] = 9; map[20][25] = 10;
+        map[4][4] = 14; map[19][31] = 14;
+        targetStart = { x: 17.5, y: 11.5 };
+        enemies.push(
+            { x: 7.5, y: 5.5, axis: 'x', speed: 0.085, dir: 1 },
+            { x: 28.5, y: 18.5, axis: 'x', speed: 0.085, dir: -1 },
+            { x: 17.5, y: 4.5, axis: 'x', speed: 0.09, dir: 1 },
+            { x: 17.5, y: 19.5, axis: 'x', speed: 0.09, dir: -1 },
+            { x: 13.5, y: 11.5, axis: 'drone', speed: 0.065, dir: 1 }
+        );
+    } else if (type === 'mp_polygon') {
+        // Арена для режима «Догонялки (Галя)»: много порталов, ускорителей и сквозных проходов
+        map[2][33] = 7; map[21][2] = 7; map[12][17] = 7;
+        map[6][6] = 13; map[17][29] = 13; map[6][29] = 13; map[17][6] = 13;
+        map[11][8] = 14; map[11][27] = 14;
+        targetStart = { x: 18.5, y: 12.5 };
+        enemies.push(
+            { x: 17.5, y: 5.5, axis: 'x', speed: 0.08, dir: 1 },
+            { x: 17.5, y: 18.5, axis: 'x', speed: 0.08, dir: -1 }
+        );
+    } else if (type === 'mp_biolab') {
+        map[2][33] = 7; map[21][2] = 7;
+        map[4][8] = 13; map[19][27] = 13; map[12][14] = 13; map[12][21] = 13;
+        map[8][17] = 14; map[15][17] = 14;
+        enemies.push(
+            { x: 6.5, y: 11.5, axis: 'y', speed: 0.1, dir: 1 },
+            { x: 29.5, y: 11.5, axis: 'y', speed: 0.1, dir: -1 },
+            { x: 17.5, y: 5.5, axis: 'x', speed: 0.1, dir: 1 },
+            { x: 17.5, y: 18.5, axis: 'x', speed: 0.1, dir: -1 }
+        );
+    } else if (type === 'mp_warehouse') {
+        for (let y = 4; y < 20; y += 3) {
+            for (let x = 5; x < 31; x += 4) {
+                map[y][x] = 13;
+            }
+        }
+        enemies.push(
+            { x: 8.5, y: 5.5, axis: 'x', speed: 0.085, dir: 1 },
+            { x: 26.5, y: 18.5, axis: 'x', speed: 0.085, dir: -1 },
+            { x: 17.5, y: 11.5, axis: 'y', speed: 0.085, dir: 1 }
+        );
+    } else if (type === 'mp_reactor') {
+        map[3][17] = 12; map[20][17] = 12; map[12][5] = 12; map[12][30] = 12;
+        map[2][2] = 7; map[21][33] = 7;
+        map[11][16] = 6; map[11][19] = 6;
+        enemies.push(
+            { x: 17.5, y: 8.5, axis: 'x', speed: 0.11, dir: 1 },
+            { x: 17.5, y: 15.5, axis: 'x', speed: 0.11, dir: -1 },
+            { x: 8.5, y: 11.5, axis: 'drone', speed: 0.075, dir: 1 }
+        );
+    }
+
+    return { map, enemies, playerStart, targetStart, texts: [] };
+}
+
+const MP_ARENAS = {
+    mp_citadel:   { id: 'mp_citadel',   title: "🏦 МЕГА-БАНК «ЦИТАДЕЛЬ»",   duration: 150, mode: 'normal' },
+    mp_polygon:   { id: 'mp_polygon',   title: "🏃 КИБЕР-ПОЛИГОН «ГАЛЯ»",   duration: 120, mode: 'galya' },
+    mp_biolab:    { id: 'mp_biolab',    title: "🧪 БИО-КОМПЛЕКС «ОМЕГА»",   duration: 120, mode: 'infection' },
+    mp_warehouse: { id: 'mp_warehouse', title: "📦 ГРУЗОВОЙ ТЕРМИНАЛ",      duration: 120, mode: 'hideseek' },
+    mp_reactor:   { id: 'mp_reactor',   title: "☢️ РЕАКТОР ДЕТОНАЦИИ",      duration: 90,  mode: 'bomb' }
+};
+
+window.openMultiplayerModal = function() {
+    if (AppState.isGuest) {
+        return showCustomDialog({
+            title: "ОФЛАЙН РЕЖИМ 🔒",
+            message: "Гостевой профиль работает только в одиночной игре. Войдите в аккаунт для доступа к Мультиплееру!"
+        });
+    }
+    AudioEngine.sfx('click');
+    broadcastPresence(true);
+    const m = document.getElementById('modal-multiplayer');
+    m.classList.remove('hidden'); m.classList.add('flex');
+    updateGalyaUI();
+    renderMultiplayerLobby();
+    renderCloudMaps();
+    renderMpChatMessages();
+};
+
+window.closeMultiplayerModal = function() {
+    document.getElementById('modal-multiplayer').classList.add('hidden');
+    document.getElementById('modal-multiplayer').classList.remove('flex');
+};
+
+window.selectMpGameMode = function(mode) {
+    AudioEngine.sfx('click');
+    mpCurrentMode = mode;
+    const modeToArena = {
+        normal: 'mp_citadel',
+        galya: 'mp_polygon',
+        infection: 'mp_biolab',
+        hideseek: 'mp_warehouse',
+        bomb: 'mp_reactor'
+    };
+    if (modeToArena[mode]) {
+        mpArenaId = modeToArena[mode];
+        const sel = document.getElementById('mpArenaSelect');
+        if (sel) sel.value = mpArenaId;
+    }
+
+    ['normal', 'galya', 'infection', 'hideseek', 'bomb'].forEach(m => {
+        const el = document.getElementById(`mpModeCard-${m}`);
+        if (el) {
+            el.className = (m === mode)
+                ? "p-3.5 rounded-2xl bg-slate-950 border-2 border-sky-400 cursor-pointer transition-all"
+                : "p-3.5 rounded-2xl bg-slate-950 border-2 border-slate-700 cursor-pointer transition-all opacity-75";
+        }
+    });
+};
+
+// Выбор «Гали» (Воды / Ведущего) случайно или вручную
+window.rollRandomGalya = async function() {
+    AudioEngine.sfx('portal');
+    const onlineList = Object.values(AppState.onlinePlayers).map(p => p.username).filter(Boolean);
+    if (onlineList.length === 0 && AppState.username) onlineList.push(AppState.username);
+    const picked = onlineList[Math.floor(Math.random() * onlineList.length)] || AppState.username;
+    await window.setGalyaPlayer(picked, true);
+};
+
+window.makeMeGalya = async function() {
+    if (!AppState.username) return;
+    await window.setGalyaPlayer(AppState.username, true);
+};
+
+window.setGalyaPlayer = async function(targetUname, announce = false) {
+    mpGalyaUsername = targetUname;
+    updateGalyaUI();
+    const roomVal = (document.getElementById('mpRoomCodeInput')?.value || mpRoomCode || "ROOM_1").trim().toUpperCase();
+    const existingRoom = AppState.activeRooms[roomVal] || {};
+    const updatedRoom = {
+        ...existingRoom,
+        roomCode: roomVal,
+        arenaId: mpArenaId,
+        mode: mpCurrentMode,
+        host: existingRoom.host || AppState.username,
+        galya: mpGalyaUsername,
+        startedAt: existingRoom.startedAt || Date.now(),
+        duration: (MP_ARENAS[mpArenaId] && MP_ARENAS[mpArenaId].duration) || 120,
+        updatedAt: Date.now()
+    };
+    AppState.activeRooms[roomVal] = updatedRoom;
+    if (localSyncChannel) {
+        localSyncChannel.postMessage({ type: 'ROOM_SYNC', roomCode: roomVal, roomData: updatedRoom });
+    }
+    if (rtdb && rtdbSet && rtdbRef) {
+        try { rtdbSet(rtdbRef(rtdb, `diamond_plan_v2/rooms/${roomVal}`), updatedRoom); } catch(e) {}
+    }
+    restRtdbFetch(`rooms/${roomVal}`, 'PUT', updatedRoom);
+
+    if (announce) {
+        spawnAlert(player.x, player.y, `👑 ГАЛЯ ТЕПЕРЬ @${mpGalyaUsername}!`, "#fbbf24");
+    }
+    renderMultiplayerLobby();
+};
+
+function updateGalyaUI() {
+    const lbl = document.getElementById('mpCurrentGalyaLabel');
+    if (lbl) lbl.innerText = mpGalyaUsername ? `@${mpGalyaUsername}` : (AppState.username ? `@${AppState.username}` : 'АВТО');
+    const hudBox = document.getElementById('hudGalyaBox');
+    const hudTxt = document.getElementById('hudGalyaText');
+    if (hudBox && hudTxt) {
+        if (isMultiplayerSession && (mpCurrentMode === 'galya' || mpCurrentMode === 'infection' || mpCurrentMode === 'bomb')) {
+            hudBox.classList.remove('hidden');
+            const roleTitle = mpCurrentMode === 'galya' ? '👑 ГАЛЯ' : (mpCurrentMode === 'bomb' ? '💣 БОМБА' : '🧟 ЗОМБИ');
+            hudTxt.innerText = `${roleTitle}: @${mpGalyaUsername || AppState.username} (🎲)`;
+        } else {
+            hudBox.classList.add('hidden');
+        }
+    }
+}
+
+window.startMultiplayerMatch = async function() {
+    const roomVal = (document.getElementById('mpRoomCodeInput').value || "ROOM_1").trim().toUpperCase().replace(/[^A-Z0-9_]/g, '');
+    const arenaVal = document.getElementById('mpArenaSelect').value || 'mp_citadel';
+    if (!mpGalyaUsername) mpGalyaUsername = AppState.username;
+    window.closeMultiplayerModal();
+    await launchMultiplayerArena(arenaVal, mpCurrentMode, roomVal);
+};
+
+window.joinRoomDirect = async function(roomCode, arenaId, mode) {
+    window.closeMultiplayerModal();
+    document.getElementById('mpRoomCodeInput').value = roomCode;
+    await launchMultiplayerArena(arenaId || 'mp_citadel', mode || 'normal', roomCode);
+};
+
+window.joinFriendGame = function(fUname) {
+    const pres = AppState.onlinePlayers[fUname];
+    if (!pres) return;
+    if (pres.sessionType === 'SINGLEPLAYER') {
+        return showCustomDialog({ title: "ЗАКРЫТО 🔒", message: "В одиночную кампанию друга войти нельзя!" });
+    }
+    window.closeFriendsModal();
+    window.closeMultiplayerModal();
+    launchMultiplayerArena(pres.arenaId || 'mp_citadel', pres.mpMode || 'normal', pres.roomCode || 'ROOM_1');
+};
+
+async function launchMultiplayerArena(arenaId, mode, roomCode) {
+    isMultiplayerSession = true;
+    isPlayingCustom = false;
+    mpCurrentMode = mode;
+    mpRoomCode = roomCode;
+    mpArenaId = arenaId;
+
+    const arenaMeta = MP_ARENAS[arenaId] || MP_ARENAS.mp_citadel;
+    const levelData = buildHugeArena(arenaId);
+
+    activeModifiers = {
+        darkness: mode === 'hideseek',
+        timer: true,
+        turbo: mode === 'infection' || mode === 'galya',
+        ghost: mode === 'galya'
+    };
+
+    if (!mpGalyaUsername) mpGalyaUsername = AppState.username;
+    setupLevelSession(levelData, `🌐 ${arenaMeta.title} [${roomCode}]`, arenaMeta.duration);
+
+    if (mode === 'hideseek') {
+        document.getElementById('actionSkillIcon').innerText = "📦";
+        document.getElementById('actionSkillLabel').innerText = "МАСКА";
+    } else if (mode === 'galya') {
+        document.getElementById('actionSkillIcon').innerText = "✋";
+        document.getElementById('actionSkillLabel').innerText = "ТАГ";
+        document.getElementById('hudObjective').innerText = (mpGalyaUsername === AppState.username)
+            ? "ВЫ ГАЛЯ 👑! ДОГОНИТЕ ИГРОКА!"
+            : `УБЕГАЙТЕ ОТ ГАЛИ (@${mpGalyaUsername}) ИЛИ СОБЕРИТЕ 💎!`;
+        spawnAlert(player.x, player.y, `👑 ГАЛЯ: @${mpGalyaUsername}`, "#fbbf24");
+    } else if (mode === 'bomb') {
+        player.mpRole = 'bomb_carrier';
+        spawnAlert(player.x, player.y, "💣 ПЕРЕДАЙТЕ ИЛИ ОБЕЗВРЕДЬТЕ БОМБУ!", "#f43f5e");
+    } else if (mode === 'infection') {
+        player.mpRole = 'survivor';
+    }
+
+    updateGalyaUI();
+
+    const roomPayload = {
+        roomCode,
+        arenaId,
+        mode,
+        host: AppState.username,
+        galya: mpGalyaUsername,
+        startedAt: Date.now(),
+        duration: arenaMeta.duration,
+        updatedAt: Date.now()
+    };
+    AppState.activeRooms[roomCode] = roomPayload;
+    if (rtdb && rtdbSet && rtdbRef) {
+        try { rtdbSet(rtdbRef(rtdb, `diamond_plan_v2/rooms/${roomCode}`), roomPayload); } catch(e) {}
+    } else {
+        restRtdbFetch(`rooms/${roomCode}`, 'PUT', roomPayload);
+    }
+
+    document.getElementById('hudMpChatToggleBtn').classList.remove('hidden');
+    gameMode = 'PLAY';
+    AudioEngine.startBGM(mode === 'bomb' || mode === 'infection' || mode === 'galya' ? 'panic' : 'stealth');
+    await broadcastPresence(true);
+}
+
+function syncRoomStateFromCloud() {
+    if (!mpRoomCode) return;
+    const room = AppState.activeRooms[mpRoomCode];
+    if (!room) return;
+    if (room.galya && room.galya !== mpGalyaUsername) {
+        mpGalyaUsername = room.galya;
+        updateGalyaUI();
+        if (isMultiplayerSession && mpCurrentMode === 'galya') {
+            document.getElementById('hudObjective').innerText = (mpGalyaUsername === AppState.username)
+                ? "ВЫ ГАЛЯ 👑! ДОГОНИТЕ ИГРОКА!"
+                : `УБЕГАЙТЕ ОТ ГАЛИ (@${mpGalyaUsername})!`;
+        }
+    }
+    if (isMultiplayerSession && room.startedAt && room.duration) {
+        const elapsed = (Date.now() - room.startedAt) / 1000;
+        const remaining = Math.max(0, room.duration - elapsed);
+        if (remaining > 0 && Math.abs(levelTimeLeft - remaining) > 2) {
+            levelTimeLeft = remaining;
+        }
+    }
+}
+
+function renderMultiplayerLobby() {
+    const box = document.getElementById('mpPlayersList');
+    if (!box) return;
+    const realPlayers = Object.values(AppState.onlinePlayers);
+    const badge = document.getElementById('mpOnlineBadge');
+    if (badge) badge.innerText = `${Math.max(1, realPlayers.length)} В СЕТИ`;
+
+    box.innerHTML = '';
+
+    const rooms = Object.values(AppState.activeRooms || {}).filter(r => r && (Date.now() - (r.updatedAt || 0) < 300000));
+    rooms.forEach(r => {
+        const arenaTitle = (MP_ARENAS[r.arenaId] && MP_ARENAS[r.arenaId].title) || r.arenaId;
+        const galyaBadge = r.galya ? ` • 👑 Галя: @${r.galya}` : '';
+        const row = document.createElement('div');
+        row.className = "bg-emerald-950/40 border border-emerald-600/50 rounded-xl p-2.5 flex items-center justify-between gap-2";
+        row.innerHTML = `
+            <div>
+                <div class="font-pixel text-[9px] text-emerald-300">КОМНАТА: ${r.roomCode} (${(r.mode || 'normal').toUpperCase()})</div>
+                <div class="text-[11px] text-slate-300">${arenaTitle}${galyaBadge}</div>
+            </div>
+            <button onclick="window.joinRoomDirect('${r.roomCode}', '${r.arenaId}', '${r.mode}')" class="dp-btn dp-btn-emerald !py-1.5 !px-3 !text-[9px]">ВОЙТИ ▶</button>
+        `;
+        box.appendChild(row);
+    });
+
+    realPlayers.forEach(p => {
+        const row = document.createElement('div');
+        row.className = "bg-slate-900 border border-slate-800 rounded-xl p-2.5 flex items-center justify-between gap-2";
+        const isGalya = (mpGalyaUsername === p.username);
+        let stateText = '🟢 В МЕНЮ';
+        if (p.sessionType === 'SINGLEPLAYER') stateText = `🔒 МИССИЯ #${p.levelId}`;
+        else if (p.sessionType === 'MULTIPLAYER') stateText = `🎮 ${p.roomCode}`;
+
+        row.innerHTML = `
+            <div class="font-pixel text-[9px] text-white">
+                ${p.avatar || '🕵️'} ${p.name} <span class="text-sky-400 font-mono">@${p.username}</span>
+                ${isGalya ? '<span class="text-amber-400">👑 ГАЛЯ</span>' : ''}
+                <span class="text-slate-400 block mt-0.5">${stateText}</span>
+            </div>
+            <div class="flex gap-1">
+                <button onclick="window.setGalyaPlayer('${p.username}', true)" class="px-2 py-1 rounded bg-amber-950 border border-amber-500 text-amber-300 font-pixel text-[8px]" title="Назначить Галей">👑 ГАЛЯ</button>
+                ${(p.sessionType === 'MULTIPLAYER' && p.username !== AppState.username) ? `<button onclick="window.joinRoomDirect('${p.roomCode}', '${p.arenaId || 'mp_citadel'}', '${p.mpMode || 'normal'}')" class="dp-btn dp-btn-emerald !py-1 !px-2 !text-[8px]">▶</button>` : ''}
+            </div>
+        `;
+        box.appendChild(row);
+    });
+}
+
+// Отправка сообщения в чат Мультиплеера (работает и в лобби, и прямо во время матча + показывает облачко над головой!)
+window.sendMpChatMessage = async function(source = 'lobby') {
+    if (AppState.isGuest) return;
+    const inputId = source === 'ingame' ? 'inGameMpChatInput' : 'mpLobbyChatInput';
+    const input = document.getElementById(inputId);
+    if (!input) return;
+    const text = input.value.trim();
+    if (!text) return;
+    input.value = '';
+
+    const msgId = `mpmsg_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+    const msgObj = {
+        id: msgId,
+        appSignature: APP_SIGNATURE,
+        roomCode: isMultiplayerSession ? mpRoomCode : 'LOBBY',
+        from: AppState.username || 'agent',
+        fromName: AppState.accountName || 'АГЕНТ',
+        fromAvatar: AppState.accountAvatar || '🕵️',
+        text: text,
+        timestamp: Date.now()
+    };
+
+    AppState.mpChatMessages.push(msgObj);
+    playerChatBubbles[AppState.username] = { text: text, timer: 260 };
+    renderMpChatMessages();
+    AudioEngine.sfx('click');
+
+    if (localSyncChannel) {
+        localSyncChannel.postMessage({ type: 'MP_CHAT', msg: msgObj });
+    }
+
+    // Записываем одновременно через Firebase SDK и REST PUT, чтобы сообщения доставлялись на 100%
+    if (rtdb && rtdbSet && rtdbRef) {
+        try { rtdbSet(rtdbRef(rtdb, `diamond_plan_v2/mp_chat/${msgId}`), msgObj); } catch(e) {}
+    }
+    await restRtdbFetch(`mp_chat/${msgId}`, 'PUT', msgObj);
+};
+
+function renderMpChatMessages() {
+    const boxes = [
+        document.getElementById('mpLobbyChatBox'),
+        document.getElementById('inGameMpChatMessages')
+    ];
+    boxes.forEach(box => {
+        if (!box) return;
+        if (AppState.mpChatMessages.length === 0) {
+            box.innerHTML = `<div class="text-slate-500 text-center py-4 text-xs">Чат мультиплеера готов. Напишите сообщение!</div>`;
+            return;
+        }
+        box.innerHTML = '';
+        AppState.mpChatMessages.slice(-30).forEach(m => {
+            const div = document.createElement('div');
+            div.className = "p-2 rounded-lg bg-slate-950/90 border border-slate-800 text-xs";
+            div.innerHTML = `<span class="font-pixel text-[8px] text-emerald-400">[${m.roomCode || 'LOBBY'}] ${m.fromAvatar || '🕵️'} @${m.from}:</span> <span class="text-white">${m.text}</span>`;
+            box.appendChild(div);
+        });
+        box.scrollTop = box.scrollHeight;
+    });
+}
+
+window.toggleInGameMpChat = function() {
+    const panel = document.getElementById('inGameMpChatPanel');
+    if (!panel) return;
+    panel.classList.toggle('hidden');
+    renderMpChatMessages();
+};
+
+function renderCloudMaps() {
+    const box = document.getElementById('mpCloudMapsList');
+    if (!box) return;
+    if (AppState.cloudMaps.length === 0) {
+        box.innerHTML = `<div class="text-slate-500 text-center py-2">Нет опубликованных карт.</div>`;
+        return;
+    }
+    box.innerHTML = '';
+    AppState.cloudMaps.forEach((m, idx) => {
+        const d = document.createElement('div');
+        d.className = "bg-slate-900 border border-slate-800 rounded-lg p-2 flex items-center justify-between";
+        d.innerHTML = `<span class="font-pixel text-[9px] text-amber-300">${m.title} (@${m.authorUsername})</span><button onclick="window.playCloudMap(${idx})" class="dp-btn dp-btn-gold !py-1 !px-2.5 !text-[8px]">▶</button>`;
+        box.appendChild(d);
+    });
+}
+
+window.playCloudMap = function(idx) {
+    const item = AppState.cloudMaps[idx];
+    if (!item || !item.levelJson) return;
+    try {
+        const parsed = JSON.parse(item.levelJson);
+        window.closeMultiplayerModal();
+        isPlayingCustom = true;
+        isMultiplayerSession = true;
+        activeModifiers = { darkness: false, timer: true, turbo: false, ghost: false };
+        setupLevelSession(parsed, `🌐 КАРТА: ${item.title}`, 90);
+        document.getElementById('hudMpChatToggleBtn').classList.remove('hidden');
+        gameMode = 'PLAY';
+        AudioEngine.startBGM('stealth');
+    } catch(e) {}
+};
+
+window.openSettingsModal = function() {
+    AudioEngine.sfx('click');
+    const m = document.getElementById('modal-settings');
+    m.classList.remove('hidden'); m.classList.add('flex');
+};
+window.closeSettingsModal = function() {
+    document.getElementById('modal-settings').classList.add('hidden');
+    document.getElementById('modal-settings').classList.remove('flex');
+};
+
+/* =========================================================================
+   6. КАМПАНИЯ ИЗ 20 ОГРОМНЫХ УРОВНЕЙ (36×24 С МНОГОКОМНАТНОЙ АРХИТЕКТУРОЙ)
+   ========================================================================= */
+const CAMPAIGN_NODES = [
+    { id: 1,  title: "ТИХИЙ ВХОД (ОБУЧЕНИЕ)", difficulty: "★☆☆☆☆ ОБУЧЕНИЕ", shape: "diamond", x: 50, y: 95, parents: [], features: ["Высадка 🚁", "Визуальный Гид", "ЭМИ 🔋", "Терминал 💻"] },
+    { id: 2,  title: "ЛАЗЕРНЫЙ РУБЕЖ",        difficulty: "★☆☆☆☆ ЛЕГКО",    shape: "circle",  x: 30, y: 90, parents: [1], features: ["Лазерные шлюзы 🟥", "Терминал 💻"] },
+    { id: 3,  title: "КВАНТОВЫЙ СДВИГ",       difficulty: "★★☆☆☆ НОРМА",    shape: "hex",     x: 70, y: 90, parents: [1], features: ["Порталы 🌀", "4 сектора"] },
+    { id: 4,  title: "СЕКРЕТНЫЙ ДОПУСК",      difficulty: "★★☆☆☆ НОРМА",    shape: "diamond", x: 50, y: 84, parents: [2,3], features: ["Ключ-карта 💳", "Бронедверь 🔒"] },
+    { id: 5,  title: "ОКО НАБЛЮДЕНИЯ",        difficulty: "★★☆☆☆ НОРМА",    shape: "circle",  x: 25, y: 78, parents: [4], features: ["Камеры 📹", "Вентиляция 🕳️"] },
+    { id: 6,  title: "АНГАР ДРОНОВ",          difficulty: "★★★☆☆ СЛОЖНО",   shape: "hex",     x: 75, y: 78, parents: [4], features: ["Дроны 🛸", "Батареи ЭМИ 🔋"] },
+    { id: 7,  title: "БАНКОВСКИЙ БУНКЕР",     difficulty: "★★★☆☆ СЛОЖНО",   shape: "diamond", x: 50, y: 72, parents: [5,6], features: ["Лазеры 🟥", "Шипы ⚙️"] },
+    { id: 8,  title: "ДВОЙНОЙ СЕЙФ",          difficulty: "★★★☆☆ СЛОЖНО",   shape: "circle",  x: 30, y: 66, parents: [7], features: ["2 Ключа 💳", "2 Бронедвери 🔒"] },
+    { id: 9,  title: "ТЕЛЕПОРТ-ЛАБОРАТОРИЯ",  difficulty: "★★★☆☆ СЛОЖНО",   shape: "hex",     x: 70, y: 66, parents: [7], features: ["Сеть порталов 🌀", "Камеры 📹"] },
+    { id: 10, title: "КРАСНЫЙ ПЕРИМЕТР",      difficulty: "★★★★☆ ОПАСНО",   shape: "diamond", x: 50, y: 60, parents: [8,9], features: ["Терминал 💻", "Лазерная сеть"] },
+    { id: 11, title: "ВЕНТИЛЯЦИОННАЯ СЕТЬ",   difficulty: "★★★★☆ ОПАСНО",   shape: "circle",  x: 25, y: 53, parents: [10], features: ["Стелс в шахтах 🕳️", "Дроны 🛸"] },
+    { id: 12, title: "МЕХАНИЧЕСКИЙ ШЛЮЗ",     difficulty: "★★★★☆ ОПАСНО",   shape: "hex",     x: 75, y: 53, parents: [10], features: ["Ловушки-шипы ⚙️", "Патрули"] },
+    { id: 13, title: "КИБЕР-БАСТИОН",         difficulty: "★★★★☆ ОПАСНО",   shape: "diamond", x: 50, y: 46, parents: [11,12], features: ["Камеры 📹", "Ключ-карты 💳"] },
+    { id: 14, title: "КОЛЬЦО ТЕССЕРАКТА",     difficulty: "★★★★☆ ОПАСНО",   shape: "circle",  x: 30, y: 39, parents: [13], features: ["Порталы 🌀", "Дроны 🛸"] },
+    { id: 15, title: "ЛАЗЕРНАЯ ЦИТАДЕЛЬ",     difficulty: "★★★★★ ЭКСТРИМ",  shape: "hex",     x: 70, y: 39, parents: [13], features: ["Лазеры 🟥", "Терминалы 💻"] },
+    { id: 16, title: "КАЗАРМЫ ОХРАНЫ",        difficulty: "★★★★★ ЭКСТРИМ",  shape: "diamond", x: 50, y: 32, parents: [14,15], features: ["Усиленный патруль", "ЭМИ 🔋"] },
+    { id: 17, title: "КРИО-СЕКТОР",           difficulty: "★★★★★ ЭКСТРИМ",  shape: "circle",  x: 25, y: 24, parents: [16], features: ["Шипы ⚙️", "Бронедвери 🔒"] },
+    { id: 18, title: "ЯДРО «АРГУС»",          difficulty: "★★★★★ ЭКСТРИМ",  shape: "hex",     x: 75, y: 24, parents: [16], features: ["Камеры 📹", "Дроны 🛸"] },
+    { id: 19, title: "ПРЕДБАННИК ХРАНИЛИЩА",  difficulty: "★★★★★ ЭКСТРИМ",  shape: "diamond", x: 50, y: 16, parents: [17,18], features: ["Полная защита"] },
+    { id: 20, title: "СЕРДЦЕ АЛМАЗА (ФИНАЛ)", difficulty: "★★★★★ БОСС-МИССИЯ", shape:"diamond", x: 50, y: 7,  parents: [19], features: ["Главный Алмаз 💎"] }
+];
+
+function buildNodeLevelData(node) {
+    const id = node.id;
+    const map = Array.from({ length: MAP_HEIGHT }, (_, y) =>
+        Array.from({ length: MAP_WIDTH }, (_, x) => (y === 0 || y === MAP_HEIGHT - 1 || x === 0 || x === MAP_WIDTH - 1) ? 1 : 0)
+    );
+    let playerStart = { x: 2.5, y: 2.5 };
+    let targetStart = { x: 32.5, y: 20.5 };
+    const enemies = [];
+
+    if (id === 1) {
+        // Огромный тренировочный комплекс 36x24 для 1-го уровня
+        for (let y = 1; y < 18; y++) if (y !== 9 && y !== 10) map[y][10] = 1;
+        for (let y = 6; y < 23; y++) if (y !== 14 && y !== 15) map[y][22] = 1;
+        for (let x = 10; x < 22; x++) if (x !== 15 && x !== 16) map[12][x] = 1;
+
+        map[6][4] = 13;    // Вентиляция 🕳️
+        map[14][5] = 14;   // Батарея ЭМИ 🔋 (Шаг 1 обучения)
+        map[14][22] = 6;   // Лазерные ворота 🟥
+        map[15][22] = 6;
+        map[19][16] = 12;  // Терминал отключения лазеров 💻 (Шаг 2 обучения)
+        playerStart = { x: 3.5, y: 3.5 };
+        targetStart = { x: 30.5, y: 5.5 }; // Алмаз 💎 (Шаг 3 обучения)
+
+        enemies.push(
+            { x: 15.5, y: 6.5, axis: 'y', speed: 0.06, dir: 1, stunTimer: 0 },
+            { x: 27.5, y: 12.5, axis: 'y', speed: 0.065, dir: -1, stunTimer: 0 }
+        );
+    } else {
+        // Генератор огромных многокомнатных комплексов 36x24 для миссий 2..20
+        const vWalls = [8, 17, 26];
+        const hWalls = [7, 16];
+
+        vWalls.forEach((vx, idx) => {
+            const shift = ((id + idx) % 3) - 1;
+            const wx = vx + shift;
+            for (let y = 1; y < MAP_HEIGHT - 1; y++) {
+                // Оставляем широкие коридорные проходы
+                if (y === 3 || y === 4 || y === 11 || y === 12 || y === 19 || y === 20) continue;
+                map[y][wx] = 1;
+            }
+        });
+
+        hWalls.forEach((hy, idx) => {
+            for (let x = 1; x < MAP_WIDTH - 1; x++) {
+                if (x === 4 || x === 5 || x === 12 || x === 13 || x === 21 || x === 22 || x === 30 || x === 31) continue;
+                map[hy][x] = 1;
+            }
+        });
+
+        playerStart = { x: 2.5, y: 2.5 };
+        targetStart = { x: 32.5, y: 20.5 };
+        map[2][2] = 0; map[20][32] = 0;
+
+        // Специальное оснащение секторов
+        map[7][21] = 6; map[7][22] = 6;
+        map[16][12] = 6; map[16][13] = 6;
+        map[4][14] = 12; // Терминал взлома лазеров
+        map[19][6] = 9;  // Ключ-карта 💳
+        map[19][26] = 10; map[20][26] = 10; // Бронедвери 🔒
+        map[2][32] = 7; map[21][2] = 7; // Квантовые порталы 🌀
+        map[5][5] = 13; map[12][18] = 13; map[18][30] = 13; // Шахты вентиляции 🕳️
+        map[10][4] = 14; map[14][29] = 14; // Батареи ЭМИ 🔋
+        if (id >= 5) { map[5][22] = 11; map[18][13] = 11; }
+        if (id >= 7) { map[11][17] = 16; map[12][17] = 16; }
+
+        const patrolZones = [
+            { x: 6.5,  y: 4.5,  axis: 'x' },
+            { x: 14.5, y: 10.5, axis: 'x' },
+            { x: 22.5, y: 5.5,  axis: 'y' },
+            { x: 29.5, y: 13.5, axis: 'y' },
+            { x: 14.5, y: 19.5, axis: 'x' },
+            { x: 23.5, y: 19.5, axis: 'x' },
+            { x: 18.5, y: 11.5, axis: 'drone' }
+        ];
+        const guardCount = Math.min(patrolZones.length, 3 + Math.floor(id / 3));
+        for (let i = 0; i < guardCount; i++) {
+            const pz = patrolZones[i];
+            map[Math.floor(pz.y)][Math.floor(pz.x)] = 0;
+            enemies.push({
+                x: pz.x,
+                y: pz.y,
+                axis: (pz.axis === 'drone' && id < 6) ? 'x' : pz.axis,
+                speed: 0.065 + (id * 0.0025),
+                dir: i % 2 === 0 ? 1 : -1,
+                stunTimer: 0
+            });
+        }
+    }
+    return { map, enemies, playerStart, targetStart, texts: [] };
+}
+
+/* =========================================================================
+   7. НАВИГАЦИЯ ПО ЭКРАНАМ И РЕНДЕР КАРТЫ МИССИЙ
+   ========================================================================= */
+function refreshHubHeader() {
+    const slot = AppState.slots[AppState.activeSlotId] || AppState.slots[1];
+    const setTxt = (id, val) => { const el = document.getElementById(id); if (el) el.innerText = val; };
+    setTxt('hubSlotBadge', String(AppState.activeSlotId));
+    setTxt('cardSlotNum', String(AppState.activeSlotId));
+    setTxt('podiumSlotNum', String(AppState.activeSlotId));
+    setTxt('hubDiamondsCount', String(slot.diamonds || 0));
+    setTxt('hubAvatar', AppState.accountAvatar || "🕵️");
+    setTxt('hubAgentName', AppState.accountName || "АГЕНТ СПЕКТР");
+    setTxt('hubUsernameTag', `@${AppState.username || 'agent'}`);
+    setTxt('hubBioText', `«${AppState.bio || 'Мастер скрытных операций'}»`);
+
+    const modeBadge = document.getElementById('hubModeBadge');
+    if (modeBadge) {
+        if (AppState.isGuest) {
+            modeBadge.innerText = "ГОСТЬ (ОФЛАЙН)";
+            modeBadge.className = "px-3 py-1.5 text-[10px] font-pixel rounded-lg bg-amber-950 text-amber-300 border border-amber-600";
+        } else {
+            modeBadge.innerText = "В СЕТИ (BOMNA5)";
+            modeBadge.className = "px-3 py-1.5 text-[10px] font-pixel rounded-lg bg-emerald-950 text-emerald-300 border border-emerald-600";
+        }
+    }
+    updateHubOnlineCounter();
+}
+
+window.showScreen = function(screenName) {
+    ['auth', 'hub', 'slots', 'map', 'game'].forEach(s => {
+        const el = document.getElementById(`screen-${s}`);
+        if (el) {
+            el.classList.add('hidden');
+            el.classList.remove('flex');
+        }
+    });
+
+    const target = document.getElementById(`screen-${screenName}`);
+    if (target) {
+        target.classList.remove('hidden');
+        target.classList.add('flex');
+    }
+
+    if (screenName !== 'game') {
+        document.body.classList.remove('in-game');
+        gameMode = 'NONE';
+    }
+
+    if (screenName === 'hub') {
+        refreshHubHeader();
+        AudioEngine.startBGM('map');
+        broadcastPresence(true);
+    } else if (screenName === 'slots') {
+        renderSlots();
+    } else if (screenName === 'map') {
+        renderWorldMap();
+        AudioEngine.startBGM('map');
+    }
+};
+
+/* =========================================================================
+   8. ИГРОВОЙ ДВИЖОК (ОГРОМНЫЕ КАРТЫ 36×24, ПЛАВНАЯ КАМЕРА И МИНИКАРТА)
+   ========================================================================= */
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+let TILE_SIZE = 42;
+let cameraZoomMode = 'FOLLOW'; // 'FOLLOW' (крупный план с плавной камерой) | 'FULL' (вся карта 36x24 целиком)
+let camX = 0, camY = 0;
+
+let gameMode = 'NONE'; // 'NONE' | 'INTRO' | 'TUTORIAL' | 'PLAY' | 'PAUSED' | 'EDITOR'
+let activeNodeId = 1;
+let isPlayingCustom = false;
+let visualStyle = 'CYBER';
+let touchMode = 0;
+
+let activeModifiers = { darkness: false, timer: false, turbo: false, ghost: false };
+let levelTimeLeft = 90.0;
+let levelGrid = [];
+let enemies = [];
+let portals = [];
+let customTexts = [];
+let player = { x: 3.5, y: 3.5, speed: 0.135, tpCooldown: 0, keys: 0, empCharges: 1, inVent: false, disguised: false, mpRole: 'agent' };
+let diamond = { x: 30.5, y: 5.5, taken: false };
+let exitPoint = { x: 3, y: 3 };
+
+let introDropProgress = 0;
+let introScannerRadius = 0;
+let introSparks = [];
+let tutorialStep = 0;
+
+let editorSelectedTool = 1;
+let editorGrid = [];
+let editorEnemies = [];
+let editorTexts = [];
+let editorPlayerPos = { x: 2.5, y: 2.5 };
+let editorDiamondPos = { x: 32.5, y: 20.5 };
+let isPointerDown = false;
+let pointerX = 0, pointerY = 0;
+let lastEditedCell = { x: -1, y: -1 };
+
+const keysPressed = {};
+let joyVec = { x: 0, y: 0 };
+let isSprinting = false;
+let stamina = 100;
+let animTick = 0;
+let lastFrameTime = performance.now();
+let floatAlerts = [];
+
+function resizeGameCanvas() {
+    const maxW = Math.min(window.innerWidth - 16, 1440);
+    const maxH = Math.min(window.innerHeight - 76, 920);
+    if (gameMode === 'EDITOR' || cameraZoomMode === 'FULL') {
+        TILE_SIZE = Math.max(16, Math.floor(Math.min(maxW / MAP_WIDTH, maxH / MAP_HEIGHT)));
+        canvas.width = TILE_SIZE * MAP_WIDTH;
+        canvas.height = TILE_SIZE * MAP_HEIGHT;
+    } else {
+        TILE_SIZE = Math.max(36, Math.min(48, Math.floor(Math.min(maxW / 18, maxH / 12))));
+        canvas.width = maxW;
+        canvas.height = maxH;
+    }
+    applyTouchVisibility();
+}
+window.addEventListener('resize', resizeGameCanvas);
+
+window.toggleCameraZoom = function() {
+    AudioEngine.sfx('click');
+    cameraZoomMode = (cameraZoomMode === 'FOLLOW') ? 'FULL' : 'FOLLOW';
+    const btn = document.getElementById('cameraModeSettingBtn');
+    if (btn) btn.innerText = `КАМЕРА: ${cameraZoomMode === 'FOLLOW' ? 'СЛЕЖЕНИЕ 📷' : 'ВСЯ КАРТА 🗺️'}`;
+    resizeGameCanvas();
+};
+
+function renderSlots() {
+    document.getElementById('slotHeaderAvatar').innerText = AppState.accountAvatar;
+    document.getElementById('slotHeaderName').innerText = `${AppState.accountName} (@${AppState.username})`;
+    const container = document.getElementById('slotsContainer');
+    container.innerHTML = '';
+
+    [1, 2, 3].forEach(slotNum => {
+        const slot = AppState.slots[slotNum];
+        const completedCount = Object.keys(slot.completed || {}).length;
+        const isCurrent = AppState.activeSlotId === slotNum;
+        const card = document.createElement('div');
+        card.className = `bg-slate-950/90 border-2 ${isCurrent ? 'border-sky-400' : 'border-slate-700'} rounded-2xl p-6 flex flex-col justify-between`;
+        card.innerHTML = `
+            <div>
+                <div class="flex items-center justify-between mb-4">
+                    <span class="font-pixel text-sm text-sky-400">СЛОТ #${slotNum}</span>
+                    <span class="px-2.5 py-1 rounded-lg bg-blue-950 text-blue-300 border border-blue-700 font-pixel text-[9px]">${completedCount}/20 МИССИЙ</span>
+                </div>
+                <div class="my-5 text-center">
+                    <div class="text-5xl mb-2">💎 ${slot.diamonds}</div>
+                    <div class="font-pixel text-[10px] text-slate-400">ОТКРЫТ УРОВЕНЬ: ${slot.unlockedLevel}</div>
+                </div>
+            </div>
+            <div class="flex flex-col gap-2.5 mt-2">
+                <button onclick="window.selectSaveSlot(${slotNum})" class="dp-btn w-full !py-3.5 !text-xs">
+                    ${isCurrent ? '✅ АКТИВЕН (НА КАРТУ)' : 'ВЫБРАТЬ СЛОТ ' + slotNum}
+                </button>
+                <button onclick="window.resetSaveSlot(${slotNum})" class="dp-btn dp-btn-dark w-full !py-2.5 !text-[10px] text-rose-400">СБРОСИТЬ</button>
+            </div>
+        `;
+        container.appendChild(card);
+    });
+}
+
+window.selectSaveSlot = function(slotNum) {
+    AppState.activeSlotId = slotNum;
+    AudioEngine.sfx('login');
+    syncCurrentAccount();
+    window.showScreen('map');
+};
+
+window.resetSaveSlot = function(slotNum) {
+    showCustomDialog({
+        title: `СБРОС СЛОТА #${slotNum}`,
+        message: "Очистить весь прогресс в этом слоте сохранения?",
+        showCancel: true,
+        onConfirm: () => {
+            AppState.slots[slotNum] = { id: slotNum, unlockedLevel: 1, diamonds: 0, completed: {} };
+            syncCurrentAccount();
+            renderSlots();
+        }
+    });
+};
+
+function renderWorldMap() {
+    const slot = AppState.slots[AppState.activeSlotId] || AppState.slots[1];
+    document.getElementById('mapSlotInfo').innerText = `СЛОТ #${slot.id} • АЛМАЗОВ: ${slot.diamonds} 💎`;
+    const svg = document.getElementById('mapSvgConnections');
+    const nodesContainer = document.getElementById('mapNodesContainer');
+    svg.innerHTML = '';
+    nodesContainer.innerHTML = '';
+
+    CAMPAIGN_NODES.forEach(node => {
+        node.parents.forEach(parentId => {
+            const parent = CAMPAIGN_NODES.find(n => n.id === parentId);
+            if (!parent) return;
+            const isUnlocked = slot.unlockedLevel >= node.id;
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line.setAttribute('x1', `${parent.x}%`);
+            line.setAttribute('y1', `${parent.y}%`);
+            line.setAttribute('x2', `${node.x}%`);
+            line.setAttribute('y2', `${node.y}%`);
+            line.setAttribute('stroke', isUnlocked ? '#38bdf8' : '#334155');
+            line.setAttribute('stroke-width', isUnlocked ? '5' : '3');
+            if (!isUnlocked) line.setAttribute('stroke-dasharray', '6,6');
+            svg.appendChild(line);
+        });
+    });
+
+    CAMPAIGN_NODES.forEach(node => {
+        const isCompleted = !!slot.completed[node.id];
+        const isUnlocked = slot.unlockedLevel >= node.id;
+        const btn = document.createElement('div');
+        const shapeClass = node.shape === 'diamond' ? 'node-diamond' : (node.shape === 'hex' ? 'node-hex' : 'node-circle');
+        const stateClass = isCompleted ? 'node-completed' : (isUnlocked ? 'node-unlocked' : 'node-locked');
+        btn.className = `map-node ${shapeClass} ${stateClass}`;
+        btn.style.left = `${node.x}%`;
+        btn.style.top = `${node.y}%`;
+        btn.innerHTML = `<span>${isCompleted ? '★' : node.id}</span>`;
+        btn.onclick = () => window.openBriefing(node.id);
+        nodesContainer.appendChild(btn);
+    });
+
+    const scrollArea = document.getElementById('mapScrollArea');
+    setTimeout(() => { scrollArea.scrollTop = scrollArea.scrollHeight; }, 60);
+}
+
+function applyTouchVisibility() {
+    const hasTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    document.body.classList.remove('show-touch');
+    if (touchMode === 1 || (touchMode === 0 && hasTouch)) {
+        document.body.classList.add('show-touch');
+    }
+}
+
+window.openBriefing = function(nodeId) {
+    const slot = AppState.slots[AppState.activeSlotId] || AppState.slots[1];
+    if (nodeId > slot.unlockedLevel) {
+        AudioEngine.sfx('lose');
+        return showCustomDialog({ title: "ЗАБЛОКИРОВАНО 🔒", message: "Сначала пройдите предыдущие операции на карте!" });
+    }
+    AudioEngine.sfx('click');
+    activeNodeId = nodeId;
+    const node = CAMPAIGN_NODES.find(n => n.id === nodeId);
+    document.getElementById('briefLevelNum').innerText = `ОПЕРАЦИЯ #${String(node.id).padStart(2, '0')}`;
+    document.getElementById('briefLevelTitle').innerText = node.title;
+    document.getElementById('briefDifficulty').innerText = node.difficulty;
+
+    const tagsBox = document.getElementById('briefBuiltInTags');
+    tagsBox.innerHTML = '';
+    node.features.forEach(f => {
+        const span = document.createElement('span');
+        span.className = "px-3 py-1.5 rounded-xl bg-blue-950/90 border border-cyan-500/50 font-pixel text-[10px] text-cyan-300";
+        span.innerText = f;
+        tagsBox.appendChild(span);
+    });
+
+    const m = document.getElementById('modal-briefing');
+    m.classList.remove('hidden'); m.classList.add('flex');
+};
+
+window.closeBriefing = function() {
+    document.getElementById('modal-briefing').classList.add('hidden');
+    document.getElementById('modal-briefing').classList.remove('flex');
+};
+
+window.launchSelectedLevel = function() {
+    window.closeBriefing();
+    isPlayingCustom = false;
+    isMultiplayerSession = false;
+    document.getElementById('hudMpChatToggleBtn').classList.add('hidden');
+    document.getElementById('inGameMpChatPanel').classList.add('hidden');
+
+    activeModifiers = {
+        darkness: document.getElementById('mod-darkness').checked,
+        timer: document.getElementById('mod-timer').checked,
+        turbo: document.getElementById('mod-turbo').checked,
+        ghost: document.getElementById('mod-ghost').checked
+    };
+    const node = CAMPAIGN_NODES.find(n => n.id === activeNodeId) || CAMPAIGN_NODES[0];
+    const levelData = buildNodeLevelData(node);
+    setupLevelSession(levelData, `МИССИЯ #${node.id}: ${node.title}`, 90.0);
+
+    if (activeNodeId === 1) {
+        gameMode = 'INTRO';
+        introDropProgress = 0;
+        introScannerRadius = 0;
+        introSparks = [];
+        AudioEngine.startBGM('tutorial');
+    } else {
+        gameMode = 'PLAY';
+        AudioEngine.startBGM('stealth');
+    }
+    broadcastPresence(true);
+};
+
+function setupLevelSession(data, titleText, customDuration = 90.0) {
+    window.showScreen('game');
+    document.body.classList.add('in-game');
+    document.getElementById('editorHud').classList.add('hidden');
+    document.getElementById('gameTopHud').classList.remove('hidden');
+    document.getElementById('staminaContainer').classList.remove('hidden');
+    document.getElementById('tutorialBanner').classList.add('hidden');
+    document.getElementById('actionSkillIcon').innerText = "🛜";
+    document.getElementById('actionSkillLabel').innerText = "ЭМИ";
+
+    levelGrid = JSON.parse(JSON.stringify(data.map));
+    const speedFactor = activeModifiers.turbo ? 1.3 : 1.0;
+    enemies = (data.enemies || []).map(e => ({ ...e, speed: (e.speed || 0.08) * speedFactor, dir: e.dir || 1, stunTimer: 0 }));
+    customTexts = JSON.parse(JSON.stringify(data.texts || []));
+
+    player = {
+        x: data.playerStart.x,
+        y: data.playerStart.y,
+        speed: 0.14,
+        tpCooldown: 0,
+        keys: 0,
+        empCharges: activeModifiers.ghost ? 3 : 1,
+        inVent: false,
+        disguised: false,
+        mpRole: 'agent'
+    };
+    diamond = { x: data.targetStart.x, y: data.targetStart.y, taken: false };
+    exitPoint = { x: Math.floor(data.playerStart.x), y: Math.floor(data.playerStart.y) };
+
+    resizeGameCanvas();
+    camX = player.x * TILE_SIZE - canvas.width / 2;
+    camY = player.y * TILE_SIZE - canvas.height / 2;
+
+    portals = [];
+    for (let y = 0; y < MAP_HEIGHT; y++) {
+        for (let x = 0; x < MAP_WIDTH; x++) {
+            if (levelGrid[y] && levelGrid[y][x] === 7) portals.push({ x, y });
+        }
+    }
+
+    stamina = 100;
+    levelTimeLeft = customDuration;
+    document.getElementById('hudLevelName').innerText = titleText;
+    document.getElementById('hudObjective').innerText = "ЦЕЛЬ: АЛМАЗ 💎";
+    updateInventoryHud();
+    updateGalyaUI();
+
+    const timerBox = document.getElementById('hudTimerBox');
+    if (activeModifiers.timer) timerBox.classList.remove('hidden');
+    else timerBox.classList.add('hidden');
+
+    spawnAlert(player.x, player.y, titleText, "#38bdf8");
+    canvas.focus();
+}
+
+function updateInventoryHud() {
+    const el = document.getElementById('hudInventoryText');
+    if (el) el.innerText = `💳:${player.keys} | 🛜ЭМИ(E):${player.empCharges}`;
+}
+
+window.triggerActionSkill = function() {
+    if (gameMode !== 'PLAY' && gameMode !== 'TUTORIAL') return;
+    if (isMultiplayerSession && mpCurrentMode === 'hideseek') {
+        player.disguised = !player.disguised;
+        AudioEngine.sfx('portal');
+        spawnAlert(player.x, player.y, player.disguised ? "МАСКИРОВКА 📦" : "АГЕНТ", "#fbbf24");
+        return;
+    }
+    if (isMultiplayerSession && mpCurrentMode === 'galya') {
+        window.rollRandomGalya();
+        return;
+    }
+    if (player.empCharges <= 0) {
+        spawnAlert(player.x, player.y, "НЕТ ЗАРЯДОВ ЭМИ 🔋!", "#f43f5e");
+        return;
+    }
+    player.empCharges--;
+    updateInventoryHud();
+    AudioEngine.sfx('emp');
+    spawnAlert(player.x, player.y, "🛜 ЭМИ-ИМПУЛЬС!", "#a855f7");
+    enemies.forEach(e => { e.stunTimer = 240; });
+};
+
+function isWallTile(x, y) {
+    const tx = Math.floor(x), ty = Math.floor(y);
+    if (ty < 0 || ty >= MAP_HEIGHT || tx < 0 || tx >= MAP_WIDTH) return true;
+    const cell = levelGrid[ty][tx];
+    if (cell === 1) return true;
+    if (cell === 10) {
+        if (player.keys > 0) {
+            player.keys--;
+            levelGrid[ty][tx] = 0;
+            AudioEngine.sfx('hack');
+            updateInventoryHud();
+            spawnAlert(tx + 0.5, ty + 0.5, "БРОНЕДВЕРЬ ОТКРЫТА 🔓", "#34d399");
+            return false;
+        }
+        return true;
+    }
+    return false;
+}
+
+function canPlayerMoveTo(nx, ny) {
+    const r = 0.22;
+    return !isWallTile(nx - r, ny - r) && !isWallTile(nx + r, ny - r) && !isWallTile(nx - r, ny + r) && !isWallTile(nx + r, ny + r);
+}
+
+function updateGameLogic(dt) {
+    animTick += dt;
+    if (mpTagCooldown > 0) mpTagCooldown -= dt;
+
+    if (gameMode === 'INTRO') {
+        if (introDropProgress < 1) {
+            introDropProgress = Math.min(1, introDropProgress + 0.022 * dt);
+            if (Math.random() < 0.5) {
+                introSparks.push({
+                    x: player.x * TILE_SIZE + (Math.random() - 0.5) * 16,
+                    y: (player.y * introDropProgress) * TILE_SIZE,
+                    vx: (Math.random() - 0.5) * 3,
+                    vy: -1 - Math.random() * 2,
+                    life: 20
+                });
+            }
+            if (introDropProgress >= 1) {
+                AudioEngine.sfx('emp');
+                spawnAlert(player.x, player.y, "СКАНИРОВАНИЕ ОБЪЕКТА...", "#38bdf8");
+            }
+        } else {
+            introScannerRadius += 18 * dt;
+            if (introScannerRadius >= TILE_SIZE * 14) {
+                gameMode = 'TUTORIAL';
+                tutorialStep = 1;
+                const banner = document.getElementById('tutorialBanner');
+                banner.classList.remove('hidden');
+                document.getElementById('tutorialStepText').innerText = "ШАГ 1: ДВИГАЙТЕСЬ ПО ЛИНИИ К БАТАРЕЕ ЭМИ 🔋";
+                spawnAlert(player.x, player.y, "ВПЕРЕД К 🔋!", "#34d399");
+            }
+        }
+        return;
+    }
+
+    if (gameMode === 'EDITOR') {
+        handleEditorPointer();
+        return;
+    }
+
+    if (gameMode !== 'PLAY' && gameMode !== 'TUTORIAL') return;
+
+    if (activeModifiers.timer) {
+        levelTimeLeft -= (dt / 60);
+        const timerText = document.getElementById('hudTimerText');
+        if (timerText) timerText.innerText = `⏱️ ${Math.max(0, levelTimeLeft).toFixed(1)}с`;
+        if (levelTimeLeft <= 0) {
+            if (isMultiplayerSession && mpCurrentMode === 'galya') {
+                if (mpGalyaUsername === AppState.username) {
+                    return triggerGameOver("ВРЕМЯ ВЫШЛО! ВЫ ОСТАЛИСЬ «ГАЛЕЙ» 👑!");
+                } else {
+                    return triggerLevelWin();
+                }
+            }
+            return triggerGameOver(isMultiplayerSession && mpCurrentMode === 'bomb' ? "💣 БОМБА ДЕТОНИРОВАЛА!" : "⏱️ ВРЕМЯ РАУНДА ИСТЕКЛО!");
+        }
+    }
+
+    if (player.tpCooldown > 0) player.tpCooldown -= dt;
+
+    let speedMult = 1;
+    // Если игрок «Галя» в режиме догонялок, он бегает на 15% быстрее
+    if (isMultiplayerSession && mpCurrentMode === 'galya' && mpGalyaUsername === AppState.username) {
+        speedMult = 1.15;
+    }
+    const sprintActive = keysPressed['ShiftLeft'] || keysPressed['ShiftRight'] || isSprinting;
+    if (sprintActive && (stamina > 0 || activeModifiers.ghost)) {
+        speedMult *= 1.55;
+        if (!activeModifiers.ghost) stamina = Math.max(0, stamina - 1.4 * dt);
+    } else if (stamina < 100) {
+        stamina = Math.min(100, stamina + 0.65 * dt);
+    }
+    document.getElementById('staminaFill').style.width = `${stamina}%`;
+
+    let vx = joyVec.x;
+    let vy = joyVec.y;
+    if (keysPressed['ArrowUp'] || keysPressed['KeyW']) vy -= 1;
+    if (keysPressed['ArrowDown'] || keysPressed['KeyS']) vy += 1;
+    if (keysPressed['ArrowLeft'] || keysPressed['KeyA']) vx -= 1;
+    if (keysPressed['ArrowRight'] || keysPressed['KeyD']) vx += 1;
+
+    if (navigator.getGamepads) {
+        const gps = navigator.getGamepads();
+        if (gps && gps[0]) {
+            const gp = gps[0];
+            document.getElementById('gamepadHudBadge')?.classList.remove('hidden');
+            if (Math.abs(gp.axes[0]) > 0.2) vx += gp.axes[0];
+            if (Math.abs(gp.axes[1]) > 0.2) vy += gp.axes[1];
+            if (gp.buttons[0]?.pressed) isSprinting = true;
+        }
+    }
+
+    const len = Math.hypot(vx, vy);
+    if (len > 1) { vx /= len; vy /= len; }
+
+    const stepX = vx * player.speed * speedMult * dt;
+    const stepY = vy * player.speed * speedMult * dt;
+
+    if (canPlayerMoveTo(player.x + stepX, player.y)) player.x += stepX;
+    if (canPlayerMoveTo(player.x, player.y + stepY)) player.y += stepY;
+
+    // Проверка касания между игроками в режиме «Догонялки (Галя)» и «Бомба»
+    if (isMultiplayerSession && (mpCurrentMode === 'galya' || mpCurrentMode === 'bomb') && mpTagCooldown <= 0) {
+        if (mpGalyaUsername === AppState.username) {
+            Object.values(AppState.onlinePlayers).forEach(other => {
+                if (other.username !== AppState.username && other.sessionType === 'MULTIPLAYER' && other.roomCode === mpRoomCode) {
+                    if (Math.hypot(player.x - other.x, player.y - other.y) < 1.1) {
+                        mpTagCooldown = 180; // 3 секунды защиты от обратного касания
+                        AudioEngine.sfx('portal');
+                        window.setGalyaPlayer(other.username, true);
+                    }
+                }
+            });
+        }
+    }
+
+    const cx = Math.floor(player.x), cy = Math.floor(player.y);
+    const tile = (levelGrid[cy] && levelGrid[cy][cx]) || 0;
+
+    player.inVent = (tile === 13);
+
+    if (tile === 9) {
+        levelGrid[cy][cx] = 0;
+        player.keys++;
+        AudioEngine.sfx('pickup');
+        updateInventoryHud();
+        spawnAlert(player.x, player.y, "+1 КЛЮЧ 💳", "#fbbf24");
+    }
+    if (tile === 14) {
+        levelGrid[cy][cx] = 0;
+        player.empCharges++;
+        AudioEngine.sfx('pickup');
+        updateInventoryHud();
+        spawnAlert(player.x, player.y, "+1 ЭМИ 🔋", "#a855f7");
+        if (gameMode === 'TUTORIAL' && tutorialStep === 1) {
+            tutorialStep = 2;
+            document.getElementById('tutorialStepText').innerText = "ШАГ 2: ИДИТЕ ПО ЛИНИИ К ТЕРМИНАЛУ 💻 ДЛЯ ОТКЛЮЧЕНИЯ ЛАЗЕРОВ";
+        }
+    }
+    if (tile === 12) {
+        levelGrid[cy][cx] = 0;
+        for (let y = 0; y < MAP_HEIGHT; y++) {
+            for (let x = 0; x < MAP_WIDTH; x++) {
+                if (levelGrid[y][x] === 6) levelGrid[y][x] = 0;
+            }
+        }
+        if (isMultiplayerSession && mpCurrentMode === 'bomb') {
+            levelTimeLeft += 20;
+            spawnAlert(player.x, player.y, "+20 СЕК ДО ВЗРЫВА 💻!", "#34d399");
+        } else {
+            spawnAlert(player.x, player.y, "ЛАЗЕРЫ ОТКЛЮЧЕНЫ 💻!", "#38bdf8");
+        }
+        AudioEngine.sfx('hack');
+        if (gameMode === 'TUTORIAL' && tutorialStep <= 2) {
+            tutorialStep = 3;
+            document.getElementById('tutorialStepText').innerText = "ШАГ 3: ЗАБЕРИТЕ АЛМАЗ 💎 В ВОСТОЧНОМ КРЫЛЕ И ВЕРНИТЕСЬ НА ВЫХОД 🟢!";
+        }
+    }
+    if (tile === 6 && ((Math.floor(animTick / 45) % 2) === 0)) {
+        return triggerGameOver("ВЫ ПОПАЛИ В ЛАЗЕРНЫЙ ЛУЧ 🟥!");
+    }
+    if (tile === 16 && ((Math.floor(animTick / 40) % 2) === 0)) {
+        return triggerGameOver("ВЫ НАСТУПИЛИ НА МЕХАНИЧЕСКИЕ ШИПЫ ⚙️!");
+    }
+
+    if (tile === 7 && player.tpCooldown <= 0 && portals.length > 1) {
+        const others = portals.filter(p => p.x !== cx || p.y !== cy);
+        if (others.length > 0) {
+            const dest = others[Math.floor(Math.random() * others.length)];
+            player.x = dest.x + 0.5;
+            player.y = dest.y + 0.5;
+            player.tpCooldown = 45;
+            AudioEngine.sfx('portal');
+        }
+    }
+
+    for (const e of enemies) {
+        if (e.stunTimer > 0) { e.stunTimer -= dt; continue; }
+        if (e.axis === 'drone') {
+            if (!player.inVent && !player.disguised) {
+                const ang = Math.atan2(player.y - e.y, player.x - e.x);
+                const nx = e.x + Math.cos(ang) * e.speed * 0.75 * dt;
+                const ny = e.y + Math.sin(ang) * e.speed * 0.75 * dt;
+                if (!isWallTile(nx, e.y)) e.x = nx;
+                if (!isWallTile(e.x, ny)) e.y = ny;
+            }
+        } else if (e.axis === 'x') {
+            const nx = e.x + e.speed * e.dir * dt;
+            if (isWallTile(nx + e.dir * 0.35, e.y)) e.dir *= -1;
+            else e.x = nx;
+        } else {
+            const ny = e.y + e.speed * e.dir * dt;
+            if (isWallTile(e.x, ny + e.dir * 0.35)) e.dir *= -1;
+            else e.y = ny;
+        }
+
+        if (!player.inVent && !player.disguised && Math.hypot(player.x - e.x, player.y - e.y) < 0.65) {
+            if (isMultiplayerSession && mpCurrentMode === 'galya') {
+                // В режиме «Галя» столкновение с патрулем делает вас Галей!
+                if (mpGalyaUsername !== AppState.username && mpTagCooldown <= 0) {
+                    mpTagCooldown = 120;
+                    window.setGalyaPlayer(AppState.username, true);
+                }
+            } else {
+                return triggerGameOver(isMultiplayerSession && mpCurrentMode === 'infection' ? "ВАС ЗАРАЗИЛ МУТАНТ 🧟!" : (e.axis === 'drone' ? "ВАС ПЕРЕХВАТИЛ ДРОН 🛸!" : "ВАС ЗАДЕРЖАЛА ОХРАНА 👮!"));
+            }
+        }
+    }
+
+    if (!diamond.taken) {
+        if (Math.hypot(player.x - diamond.x, player.y - diamond.y) < 0.8) {
+            diamond.taken = true;
+            AudioEngine.sfx('pickup');
+            AudioEngine.startBGM('panic');
+            document.getElementById('hudObjective').innerText = "ЦЕЛЬ: ЭВАКУАЦИЯ 🟢!";
+            spawnAlert(player.x, player.y, "ИДИТЕ К ТОЧКЕ ЭВАКУАЦИИ 🟢!", "#34d399");
+            enemies.forEach(e => e.speed *= 1.15);
+        }
+    } else {
+        if (Math.hypot(player.x - (exitPoint.x + 0.5), player.y - (exitPoint.y + 0.5)) < 0.9) {
+            return triggerLevelWin();
+        }
+    }
+
+    broadcastPresence(false);
+}
+
+function triggerGameOver(reason) {
+    gameMode = 'PAUSED';
+    AudioEngine.sfx('lose');
+    AudioEngine.stopBGM();
+    document.getElementById('gameOverReason').innerText = reason;
+    const m = document.getElementById('modal-gameover');
+    m.classList.remove('hidden'); m.classList.add('flex');
+}
+
+function triggerLevelWin() {
+    gameMode = 'PAUSED';
+    AudioEngine.sfx('win');
+    AudioEngine.stopBGM();
+    document.getElementById('tutorialBanner').classList.add('hidden');
+
+    if (!isPlayingCustom && !isMultiplayerSession) {
+        const slot = AppState.slots[AppState.activeSlotId];
+        slot.diamonds += 1;
+        slot.completed[activeNodeId] = true;
+        if (activeNodeId >= slot.unlockedLevel && activeNodeId < 20) {
+            slot.unlockedLevel = activeNodeId + 1;
+        }
+        syncCurrentAccount();
+        document.getElementById('winStatsText').innerText = `МИССИЯ #${activeNodeId} ПРОЙДЕНА! ВСЕГО АЛМАЗОВ: ${slot.diamonds} 💎`;
+    } else if (isMultiplayerSession) {
+        const slot = AppState.slots[AppState.activeSlotId];
+        slot.diamonds += 2;
+        syncCurrentAccount();
+        document.getElementById('winStatsText').innerText = `МАТЧ ЗАВЕРШЕН ПОБЕДОЙ! +2 АЛМАЗА 💎 В СЛОТ #${slot.id}!`;
+    }
+    const m = document.getElementById('modal-win');
+    m.classList.remove('hidden'); m.classList.add('flex');
+}
+
+/* =========================================================================
+   9. ОТРИСОВКА ОГРОМНОЙ КАРТЫ, ПЛАВНОЙ КАМЕРЫ И МИНИКАРТЫ-РАДАРА
+   ========================================================================= */
+function drawGameScene() {
+    if (gameMode === 'NONE') return;
+    ctx.fillStyle = visualStyle === 'ARCADE' ? '#0f172a' : '#070b14';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    const grid = (gameMode === 'EDITOR') ? editorGrid : levelGrid;
+    const guards = (gameMode === 'EDITOR') ? editorEnemies : enemies;
+    const texts = (gameMode === 'EDITOR') ? editorTexts : customTexts;
+    const laserActive = ((Math.floor(animTick / 45) % 2) === 0);
+    const spikesActive = ((Math.floor(animTick / 40) % 2) === 0);
+
+    // Плавное следование камеры за игроком на огромных картах 36x24
+    const worldW = MAP_WIDTH * TILE_SIZE;
+    const worldH = MAP_HEIGHT * TILE_SIZE;
+    if (gameMode === 'EDITOR' || cameraZoomMode === 'FULL') {
+        camX = 0;
+        camY = 0;
+    } else {
+        const targetCamX = player.x * TILE_SIZE - canvas.width / 2;
+        const targetCamY = player.y * TILE_SIZE - canvas.height / 2;
+        camX += (targetCamX - camX) * 0.14;
+        camY += (targetCamY - camY) * 0.14;
+        camX = Math.max(0, Math.min(Math.max(0, worldW - canvas.width), camX));
+        camY = Math.max(0, Math.min(Math.max(0, worldH - canvas.height), camY));
+    }
+
+    ctx.save();
+    ctx.translate(-Math.floor(camX), -Math.floor(camY));
+
+    const startCol = Math.max(0, Math.floor(camX / TILE_SIZE));
+    const endCol = Math.min(MAP_WIDTH - 1, Math.ceil((camX + canvas.width) / TILE_SIZE));
+    const startRow = Math.max(0, Math.floor(camY / TILE_SIZE));
+    const endRow = Math.min(MAP_HEIGHT - 1, Math.ceil((camY + canvas.height) / TILE_SIZE));
+
+    for (let y = startRow; y <= endRow; y++) {
+        for (let x = startCol; x <= endCol; x++) {
+            const px = x * TILE_SIZE, py = y * TILE_SIZE;
+            const cell = (grid[y] && grid[y][x]) || 0;
+
+            ctx.fillStyle = (x + y) % 2 === 0 ? '#0b111e' : '#0f172a';
+            ctx.fillRect(px, py, TILE_SIZE, TILE_SIZE);
+
+            if (cell === 1) {
+                // Спокойные цвета стен без резкого мигания
+                ctx.fillStyle = diamond.taken ? '#1e3a8a' : (visualStyle === 'TACTICAL' ? '#1e293b' : '#1d4ed8');
+                ctx.fillRect(px, py, TILE_SIZE, TILE_SIZE);
+                ctx.strokeStyle = diamond.taken ? '#f59e0b' : '#3b82f6';
+                ctx.lineWidth = 1;
+                ctx.strokeRect(px + 1.5, py + 1.5, TILE_SIZE - 3, TILE_SIZE - 3);
+            } else if (cell === 6) {
+                ctx.fillStyle = laserActive ? 'rgba(244, 63, 94, 0.7)' : 'rgba(244, 63, 94, 0.15)';
+                ctx.fillRect(px, py, TILE_SIZE, TILE_SIZE);
+            } else if (cell === 7) {
+                drawEmoji("🌀", x + 0.5, y + 0.5, 0.75);
+            } else if (cell === 9) {
+                drawEmoji("💳", x + 0.5, y + 0.5, 0.75);
+            } else if (cell === 10) {
+                ctx.fillStyle = '#b45309'; ctx.fillRect(px, py, TILE_SIZE, TILE_SIZE);
+                drawEmoji("🔒", x + 0.5, y + 0.5, 0.7);
+            } else if (cell === 11) {
+                drawEmoji("📹", x + 0.5, y + 0.5, 0.7);
+            } else if (cell === 12) {
+                drawEmoji("💻", x + 0.5, y + 0.5, 0.75);
+            } else if (cell === 13) {
+                ctx.fillStyle = '#1e293b'; ctx.fillRect(px + 2, py + 2, TILE_SIZE - 4, TILE_SIZE - 4);
+                drawEmoji("🕳️", x + 0.5, y + 0.5, 0.65);
+            } else if (cell === 14) {
+                drawEmoji("🔋", x + 0.5, y + 0.5, 0.75);
+            } else if (cell === 16) {
+                ctx.fillStyle = spikesActive ? '#be123c' : '#334155';
+                ctx.fillRect(px + 3, py + 3, TILE_SIZE - 6, TILE_SIZE - 6);
+                drawEmoji("⚙️", x + 0.5, y + 0.5, 0.65);
+            }
+
+            if (gameMode !== 'EDITOR' && x === exitPoint.x && y === exitPoint.y) {
+                ctx.fillStyle = diamond.taken ? 'rgba(16, 185, 129, 0.5)' : 'rgba(56, 189, 248, 0.2)';
+                ctx.fillRect(px, py, TILE_SIZE, TILE_SIZE);
+            }
+        }
+    }
+
+    // Визуальные указатели для 1-го уровня
+    if (gameMode === 'TUTORIAL') {
+        let targetX = diamond.x, targetY = diamond.y;
+        if (tutorialStep === 1) { targetX = 5.5; targetY = 14.5; }
+        else if (tutorialStep === 2) { targetX = 16.5; targetY = 19.5; }
+        else if (diamond.taken) { targetX = exitPoint.x + 0.5; targetY = exitPoint.y + 0.5; }
+
+        ctx.save();
+        ctx.strokeStyle = '#10b981';
+        ctx.lineWidth = 3;
+        ctx.setLineDash([8, 6]);
+        ctx.lineDashOffset = -(animTick * 1.2);
+        ctx.beginPath();
+        ctx.moveTo(player.x * TILE_SIZE, player.y * TILE_SIZE);
+        ctx.lineTo(targetX * TILE_SIZE, targetY * TILE_SIZE);
+        ctx.stroke();
+
+        const ringR = TILE_SIZE * 0.6;
+        ctx.setLineDash([]);
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        ctx.arc(targetX * TILE_SIZE, targetY * TILE_SIZE, ringR, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.restore();
+    }
+
+    texts.forEach(t => {
+        ctx.font = `bold ${Math.floor(TILE_SIZE * 0.36)}px 'Press Start 2P', monospace`;
+        ctx.textAlign = 'center';
+        ctx.fillStyle = '#fde047';
+        ctx.fillText(t.text, (t.x + 0.5) * TILE_SIZE, (t.y + 0.5) * TILE_SIZE);
+    });
+
+    if (gameMode === 'EDITOR') {
+        drawEmoji(AppState.accountAvatar, editorPlayerPos.x, editorPlayerPos.y, 0.8);
+        drawEmoji("💎", editorDiamondPos.x, editorDiamondPos.y, 0.85);
+    } else {
+        if (!diamond.taken) {
+            drawEmoji("💎", diamond.x, diamond.y, 0.85);
+        }
+
+        if (isMultiplayerSession) {
+            Object.values(AppState.onlinePlayers).forEach(p => {
+                if (p.username !== AppState.username && p.sessionType === 'MULTIPLAYER' && p.roomCode === mpRoomCode) {
+                    const isOtherGalya = (mpCurrentMode === 'galya' && mpGalyaUsername === p.username);
+                    if (isOtherGalya) {
+                        ctx.strokeStyle = '#fbbf24';
+                        ctx.lineWidth = 3;
+                        ctx.beginPath();
+                        ctx.arc(p.x * TILE_SIZE, p.y * TILE_SIZE, TILE_SIZE * 0.52, 0, Math.PI * 2);
+                        ctx.stroke();
+                    }
+                    drawEmoji(p.disguised ? "📦" : (p.avatar || "🥷"), p.x, p.y, 0.82);
+                    const tagLabel = isOtherGalya ? `👑 ГАЛЯ @${p.username}` : `@${p.username}`;
+                    drawPlayerTagAndChat(p.x, p.y, tagLabel, playerChatBubbles[p.username]);
+                }
+            });
+        }
+
+        if (gameMode === 'INTRO') {
+            const curY = player.y * introDropProgress;
+            ctx.strokeStyle = '#38bdf8';
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            ctx.moveTo(player.x * TILE_SIZE, 0);
+            ctx.lineTo(player.x * TILE_SIZE, curY * TILE_SIZE);
+            ctx.stroke();
+
+            introSparks.forEach((sp, i) => {
+                sp.x += sp.vx; sp.y += sp.vy; sp.life--;
+                ctx.fillStyle = '#fde047';
+                ctx.fillRect(sp.x, sp.y, 3, 3);
+                if (sp.life <= 0) introSparks.splice(i, 1);
+            });
+
+            drawEmoji(AppState.accountAvatar, player.x, curY, 0.85);
+
+            if (introScannerRadius > 0) {
+                ctx.strokeStyle = 'rgba(56, 189, 248, 0.7)';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.arc(player.x * TILE_SIZE, player.y * TILE_SIZE, introScannerRadius, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+        } else {
+            ctx.save();
+            if (player.inVent) ctx.globalAlpha = 0.45;
+            const amIGalya = (isMultiplayerSession && mpCurrentMode === 'galya' && mpGalyaUsername === AppState.username);
+            if (amIGalya) {
+                ctx.strokeStyle = '#f59e0b';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.arc(player.x * TILE_SIZE, player.y * TILE_SIZE, TILE_SIZE * 0.54, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+            drawEmoji(player.disguised ? "📦" : AppState.accountAvatar, player.x, player.y, 0.85);
+            if (isMultiplayerSession && mpCurrentMode === 'bomb') {
+                drawEmoji("💣", player.x + 0.35, player.y - 0.35, 0.45);
+            } else if (amIGalya) {
+                drawEmoji("👑", player.x, player.y - 0.5, 0.42);
+            }
+            ctx.restore();
+            const myTag = (isMultiplayerSession && mpCurrentMode === 'galya' && mpGalyaUsername === AppState.username)
+                ? `👑 ГАЛЯ @${AppState.username}`
+                : `@${AppState.username || 'agent'}`;
+            drawPlayerTagAndChat(player.x, player.y, myTag, playerChatBubbles[AppState.username]);
+        }
+    }
+
+    guards.forEach(e => {
+        const icon = e.stunTimer > 0 ? "💫" : (isMultiplayerSession && mpCurrentMode === 'infection' ? "🧟" : (e.axis === 'drone' ? "🛸" : "👮"));
+        drawEmoji(icon, e.x, e.y, 0.82);
+    });
+
+    if (gameMode !== 'EDITOR' && activeModifiers.darkness) {
+        const px = player.x * TILE_SIZE, py = player.y * TILE_SIZE;
+        const grad = ctx.createRadialGradient(px, py, TILE_SIZE * 1.8, px, py, TILE_SIZE * 5.2);
+        grad.addColorStop(0, 'rgba(0,0,0,0)');
+        grad.addColorStop(1, 'rgba(0,0,0,0.92)');
+        ctx.fillStyle = grad;
+        ctx.fillRect(camX, camY, canvas.width, canvas.height);
+    }
+
+    floatAlerts.forEach((fa, idx) => {
+        fa.y -= 0.7; fa.life--;
+        ctx.font = `bold ${Math.max(11, Math.floor(TILE_SIZE * 0.34))}px 'Press Start 2P', monospace`;
+        ctx.textAlign = 'center';
+        ctx.fillStyle = fa.color;
+        ctx.fillText(fa.text, fa.x, fa.y);
+        if (fa.life <= 0) floatAlerts.splice(idx, 1);
+    });
+
+    ctx.restore();
+
+    // Отрисовка тактического радара (миникарты) в углу для навигации по огромным уровням 36x24
+    if (gameMode === 'PLAY' || gameMode === 'TUTORIAL') {
+        drawMinimapRadar(grid, guards);
+    }
+}
+
+function drawMinimapRadar(grid, guards) {
+    const scale = 4;
+    const mw = MAP_WIDTH * scale;
+    const mh = MAP_HEIGHT * scale;
+    const mx = canvas.width - mw - 14;
+    const my = 56;
+
+    ctx.save();
+    ctx.fillStyle = 'rgba(15, 23, 42, 0.88)';
+    ctx.strokeStyle = '#475569';
+    ctx.lineWidth = 2;
+    ctx.fillRect(mx - 2, my - 2, mw + 4, mh + 4);
+    ctx.strokeRect(mx - 2, my - 2, mw + 4, mh + 4);
+
+    for (let y = 0; y < MAP_HEIGHT; y++) {
+        for (let x = 0; x < MAP_WIDTH; x++) {
+            const c = (grid[y] && grid[y][x]) || 0;
+            if (c === 1) {
+                ctx.fillStyle = '#334155';
+                ctx.fillRect(mx + x * scale, my + y * scale, scale, scale);
+            } else if (c === 6) {
+                ctx.fillStyle = '#f43f5e';
+                ctx.fillRect(mx + x * scale, my + y * scale, scale, scale);
+            }
+        }
+    }
+
+    if (!diamond.taken) {
+        ctx.fillStyle = '#38bdf8';
+        ctx.fillRect(mx + diamond.x * scale - 2, my + diamond.y * scale - 2, 5, 5);
+    }
+    ctx.fillStyle = '#10b981';
+    ctx.fillRect(mx + exitPoint.x * scale, my + exitPoint.y * scale, 4, 4);
+
+    guards.forEach(e => {
+        ctx.fillStyle = '#ef4444';
+        ctx.fillRect(mx + e.x * scale - 1.5, my + e.y * scale - 1.5, 3, 3);
+    });
+
+    if (isMultiplayerSession) {
+        Object.values(AppState.onlinePlayers).forEach(p => {
+            if (p.username !== AppState.username && p.sessionType === 'MULTIPLAYER' && p.roomCode === mpRoomCode) {
+                ctx.fillStyle = (mpGalyaUsername === p.username) ? '#f59e0b' : '#a855f7';
+                ctx.fillRect(mx + p.x * scale - 2, my + p.y * scale - 2, 4, 4);
+            }
+        });
+    }
+
+    ctx.fillStyle = '#fde047';
+    ctx.fillRect(mx + player.x * scale - 2, my + player.y * scale - 2, 5, 5);
+    ctx.restore();
+}
+
+function drawEmoji(char, gx, gy, scale = 0.8) {
+    ctx.font = `${Math.floor(TILE_SIZE * scale)}px Arial, sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText(char, gx * TILE_SIZE, gy * TILE_SIZE);
+}
+
+function drawPlayerTagAndChat(gx, gy, tagText, bubble) {
+    const px = gx * TILE_SIZE;
+    const py = gy * TILE_SIZE - TILE_SIZE * 0.62;
+    ctx.save();
+    ctx.font = `bold ${Math.max(9, Math.floor(TILE_SIZE * 0.24))}px 'Press Start 2P', monospace`;
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#0f172a';
+    const tw = ctx.measureText(tagText).width + 10;
+    ctx.fillRect(px - tw / 2, py - 11, tw, 15);
+    ctx.fillStyle = tagText.includes('ГАЛЯ') ? '#fbbf24' : '#38bdf8';
+    ctx.fillText(tagText, px, py);
+
+    if (bubble && bubble.timer > 0) {
+        bubble.timer -= 1;
+        const by = py - 22;
+        ctx.font = `bold 11px 'Inter', sans-serif`;
+        const bw = Math.min(220, ctx.measureText(bubble.text).width + 16);
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.95)';
+        ctx.strokeStyle = '#34d399';
+        ctx.lineWidth = 1.5;
+        ctx.fillRect(px - bw / 2, by - 16, bw, 20);
+        ctx.strokeRect(px - bw / 2, by - 16, bw, 20);
+        ctx.fillStyle = '#ffffff';
+        ctx.fillText(bubble.text.slice(0, 28), px, by - 3);
+    }
+    ctx.restore();
+}
+
+function spawnAlert(gx, gy, text, color = "#ffffff") {
+    floatAlerts.push({ x: gx * TILE_SIZE, y: gy * TILE_SIZE, text, color, life: 55 });
+}
+
+// Спокойный тактический фон Главного Меню без резких вспышек
+const bgCanvas = document.getElementById('menuBgCanvas');
+const bgCtx = bgCanvas.getContext('2d');
+const bgParticles = Array.from({ length: 24 }, () => ({
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * window.innerHeight,
+    s: 1.5 + Math.random() * 2.5,
+    vy: 0.25 + Math.random() * 0.5
+}));
+
+function drawMenuBackground() {
+    if (gameMode !== 'NONE') return;
+    if (bgCanvas.width !== window.innerWidth || bgCanvas.height !== window.innerHeight) {
+        bgCanvas.width = window.innerWidth;
+        bgCanvas.height = window.innerHeight;
+    }
+    const w = bgCanvas.width, h = bgCanvas.height;
+
+    bgCtx.fillStyle = '#0b1120';
+    bgCtx.fillRect(0, 0, w, h);
+
+    bgCtx.strokeStyle = 'rgba(56, 189, 248, 0.05)';
+    bgCtx.lineWidth = 1;
+    const step = 64;
+    for (let x = 0; x < w; x += step) {
+        bgCtx.beginPath(); bgCtx.moveTo(x, 0); bgCtx.lineTo(x, h); bgCtx.stroke();
+    }
+    for (let y = 0; y < h; y += step) {
+        bgCtx.beginPath(); bgCtx.moveTo(0, y); bgCtx.lineTo(w, y); bgCtx.stroke();
+    }
+
+    bgCtx.fillStyle = 'rgba(56, 189, 248, 0.25)';
+    bgParticles.forEach(p => {
+        p.y -= p.vy;
+        if (p.y < -10) { p.y = h + 10; p.x = Math.random() * w; }
+        bgCtx.fillRect(p.x, p.y, p.s * 2, p.s * 2);
+    });
+}
+
+function mainLoop(now) {
+    let dt = (now - lastFrameTime) / 16.666;
+    if (dt > 3 || dt <= 0 || isNaN(dt)) dt = 1;
+    lastFrameTime = now;
+
+    if (gameMode === 'NONE') {
+        drawMenuBackground();
+    } else {
+        updateGameLogic(dt);
+        drawGameScene();
+    }
+    requestAnimationFrame(mainLoop);
+}
+requestAnimationFrame(mainLoop);
+
+/* =========================================================================
+   10. РЕДАКТОР КАРТ И УПРАВЛЕНИЕ
+   ========================================================================= */
+window.openEditor = function() {
+    AudioEngine.sfx('click');
+    AudioEngine.stopBGM();
+    window.showScreen('game');
+    document.getElementById('gameTopHud').classList.add('hidden');
+    document.getElementById('staminaContainer').classList.add('hidden');
+    document.getElementById('editorHud').classList.remove('hidden');
+    gameMode = 'EDITOR';
+    resizeGameCanvas();
+    if (AppState.customLevel) {
+        editorGrid = JSON.parse(JSON.stringify(AppState.customLevel.map));
+        editorEnemies = JSON.parse(JSON.stringify(AppState.customLevel.enemies || []));
+        editorTexts = JSON.parse(JSON.stringify(AppState.customLevel.texts || []));
+        editorPlayerPos = { ...AppState.customLevel.playerStart };
+        editorDiamondPos = { ...AppState.customLevel.targetStart };
+    } else {
+        resetEditorGrid();
+    }
+};
+
+function resetEditorGrid() {
+    editorGrid = Array.from({ length: MAP_HEIGHT }, (_, y) =>
+        Array.from({ length: MAP_WIDTH }, (_, x) => (y === 0 || y === MAP_HEIGHT - 1 || x === 0 || x === MAP_WIDTH - 1) ? 1 : 0)
+    );
+    editorEnemies = [];
+    editorTexts = [];
+    editorPlayerPos = { x: 2.5, y: 2.5 };
+    editorDiamondPos = { x: 32.5, y: 20.5 };
+}
+
+window.selectEditorTool = function(toolId, label, btnEl) {
+    editorSelectedTool = toolId;
+    document.getElementById('editorActiveToolName').innerText = label;
+    document.querySelectorAll('.ed-tool').forEach(b => b.classList.remove('border-emerald-400'));
+    if (btnEl) btnEl.classList.add('border-emerald-400');
+};
+
+function handleEditorPointer() {
+    if (!isPointerDown) { lastEditedCell = { x: -1, y: -1 }; return; }
+    const gx = Math.floor((pointerX + camX) / TILE_SIZE), gy = Math.floor((pointerY + camY) / TILE_SIZE);
+    if (gx <= 0 || gx >= MAP_WIDTH - 1 || gy <= 0 || gy >= MAP_HEIGHT - 1) return;
+    if (gx === lastEditedCell.x && gy === lastEditedCell.y) return;
+    lastEditedCell = { x: gx, y: gy };
+
+    editorEnemies = editorEnemies.filter(e => Math.floor(e.x) !== gx || Math.floor(e.y) !== gy);
+    editorTexts = editorTexts.filter(t => Math.floor(t.x) !== gx || Math.floor(t.y) !== gy);
+
+    if ([0, 1, 6, 7, 9, 10, 11, 12, 13, 14, 16].includes(editorSelectedTool)) {
+        editorGrid[gy][gx] = editorSelectedTool;
+    } else if (editorSelectedTool === 2) {
+        editorGrid[gy][gx] = 0; editorEnemies.push({ x: gx + 0.5, y: gy + 0.5, axis: 'x', speed: 0.09, dir: 1 });
+    } else if (editorSelectedTool === 3) {
+        editorGrid[gy][gx] = 0; editorEnemies.push({ x: gx + 0.5, y: gy + 0.5, axis: 'y', speed: 0.09, dir: 1 });
+    } else if (editorSelectedTool === 15) {
+        editorGrid[gy][gx] = 0; editorEnemies.push({ x: gx + 0.5, y: gy + 0.5, axis: 'drone', speed: 0.08, dir: 1 });
+    } else if (editorSelectedTool === 4) {
+        editorGrid[gy][gx] = 0; editorPlayerPos = { x: gx + 0.5, y: gy + 0.5 };
+    } else if (editorSelectedTool === 5) {
+        editorGrid[gy][gx] = 0; editorDiamondPos = { x: gx + 0.5, y: gy + 0.5 };
+    } else if (editorSelectedTool === 8) {
+        isPointerDown = false;
+        showCustomDialog({
+            title: "ТЕКСТ НА КАРТЕ 📝",
+            message: "Введите надпись:",
+            showInput: true,
+            showCancel: true,
+            onConfirm: (val) => { if (val) editorTexts.push({ x: gx, y: gy, text: val.trim() }); }
+        });
+    }
+}
+
+window.testEditorMap = function() {
+    AppState.customLevel = { map: editorGrid, enemies: editorEnemies, texts: editorTexts, playerStart: editorPlayerPos, targetStart: editorDiamondPos };
+    isPlayingCustom = true;
+    setupLevelSession(AppState.customLevel, "ТЕСТ КАРТЫ");
+    gameMode = 'PLAY';
+    AudioEngine.startBGM('stealth');
+};
+
+window.saveCustomMap = function() {
+    AppState.customLevel = { map: editorGrid, enemies: editorEnemies, texts: editorTexts, playerStart: editorPlayerPos, targetStart: editorDiamondPos };
+    syncCurrentAccount();
+    showCustomDialog({ title: "СОХРАНЕНО 💾", message: "Ваша карта сохранена в профиле!" });
+};
+
+window.publishCustomMapToCloud = function() {
+    if (AppState.isGuest) return showCustomDialog({ title: "ГОСТЬ 🔒", message: "Войдите в аккаунт для публикации карт в БД!" });
+    AppState.customLevel = { map: editorGrid, enemies: editorEnemies, texts: editorTexts, playerStart: editorPlayerPos, targetStart: editorDiamondPos };
+    showCustomDialog({
+        title: "ПУБЛИКАЦИЯ В БД ☁️",
+        message: "Введите название вашей карты:",
+        showInput: true,
+        defaultValue: `БАЗА @${AppState.username}`,
+        showCancel: true,
+        onConfirm: async (titleVal) => {
+            const mapDoc = {
+                appSignature: APP_SIGNATURE,
+                title: (titleVal || "СЕКРЕТНАЯ БАЗА").trim().toUpperCase(),
+                authorUsername: AppState.username,
+                levelJson: JSON.stringify(AppState.customLevel),
+                createdAt: Date.now()
+            };
+            if (rtdb && rtdbPush && rtdbRef) {
+                try { await rtdbPush(rtdbRef(rtdb, 'diamond_plan_v2/maps'), mapDoc); } catch(e) {}
+            } else {
+                restRtdbFetch('maps', 'POST', mapDoc);
+            }
+            showCustomDialog({ title: "ОПУБЛИКОВАНО 🚀", message: "Карта доступна всем игрокам в Мультиплеере!" });
+        }
+    });
+};
+
+window.clearCustomMap = function() { resetEditorGrid(); };
+
+window.togglePauseGame = function() {
+    const m = document.getElementById('modal-pause');
+    if (gameMode === 'PLAY' || gameMode === 'TUTORIAL') {
+        gameMode = 'PAUSED';
+        m.classList.remove('hidden'); m.classList.add('flex');
+    } else if (gameMode === 'PAUSED') {
+        gameMode = 'PLAY';
+        m.classList.add('hidden'); m.classList.remove('flex');
+        lastFrameTime = performance.now();
+    }
+};
+
+window.restartActiveLevel = function() {
+    ['modal-pause', 'modal-gameover', 'modal-win'].forEach(id => {
+        document.getElementById(id).classList.add('hidden');
+        document.getElementById(id).classList.remove('flex');
+    });
+    if (isMultiplayerSession) {
+        launchMultiplayerArena(mpArenaId, mpCurrentMode, mpRoomCode);
+    } else if (isPlayingCustom && AppState.customLevel) {
+        setupLevelSession(AppState.customLevel, "КАСТОМНАЯ МИССИЯ");
+        gameMode = 'PLAY';
+        AudioEngine.startBGM('stealth');
+    } else {
+        window.launchSelectedLevel();
+    }
+};
+
+window.playNextLevel = function() {
+    document.getElementById('modal-win').classList.add('hidden');
+    document.getElementById('modal-win').classList.remove('flex');
+    if (isMultiplayerSession) {
+        window.openMultiplayerModal();
+        window.showScreen('hub');
+        return;
+    }
+    if (activeNodeId < 20) {
+        activeNodeId++;
+        window.launchSelectedLevel();
+    } else {
+        window.exitToMap();
+    }
+};
+
+window.exitToMap = function() {
+    ['modal-pause', 'modal-gameover', 'modal-win'].forEach(id => {
+        document.getElementById(id).classList.add('hidden');
+        document.getElementById(id).classList.remove('flex');
+    });
+    window.showScreen('map');
+};
+
+window.exitToHub = function() {
+    ['modal-pause', 'modal-gameover', 'modal-win'].forEach(id => {
+        document.getElementById(id).classList.add('hidden');
+        document.getElementById(id).classList.remove('flex');
+    });
+    window.showScreen('hub');
+};
+
+window.changeVisualStyle = function(st) { visualStyle = st; AudioEngine.sfx('click'); };
+window.toggleAudioMute = function() {
+    AudioEngine.isMuted = !AudioEngine.isMuted;
+    if (AudioEngine.isMuted) AudioEngine.stopBGM();
+    document.getElementById('muteBtnToggle').innerText = `ЗВУК: ${AudioEngine.isMuted ? 'ВЫКЛ 🔇' : 'ВКЛ 🔊'}`;
+};
+window.cycleTouchMode = function() {
+    touchMode = (touchMode + 1) % 3;
+    const labels = ["АВТО 📱", "ВКЛ ✅", "ВЫКЛ ❌"];
+    document.getElementById('touchModeBtn').innerText = `ДЖОЙСТИК: ${labels[touchMode]}`;
+    applyTouchVisibility();
+};
+window.setSprint = function(val) { isSprinting = val; };
+
+window.addEventListener('keydown', e => {
+    if (document.activeElement && ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) return;
+    keysPressed[e.code] = true;
+    if (e.code === 'Escape') window.togglePauseGame();
+    if (e.code === 'KeyE') window.triggerActionSkill();
+    if (e.code === 'KeyZ') window.toggleCameraZoom();
+});
+window.addEventListener('keyup', e => { keysPressed[e.code] = false; });
+
+canvas.addEventListener('mousedown', e => {
+    isPointerDown = true;
+    const r = canvas.getBoundingClientRect();
+    pointerX = e.clientX - r.left; pointerY = e.clientY - r.top;
+});
+window.addEventListener('mouseup', () => { isPointerDown = false; });
+canvas.addEventListener('mousemove', e => {
+    const r = canvas.getBoundingClientRect();
+    pointerX = e.clientX - r.left; pointerY = e.clientY - r.top;
+});
+
+const joyBase = document.getElementById('joystickBase');
+const joyStick = document.getElementById('joystickStick');
+let joyActive = false;
+
+function handleJoystickTouch(e) {
+    if (!joyActive) return;
+    const touch = e.touches[0];
+    if (!touch) return;
+    const rect = joyBase.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const maxR = rect.width / 2 - 14;
+    let dx = touch.clientX - cx;
+    let dy = touch.clientY - cy;
+    const dist = Math.hypot(dx, dy);
+    if (dist > maxR) { dx = (dx / dist) * maxR; dy = (dy / dist) * maxR; }
+    joyStick.style.transform = `translate(${dx}px, ${dy}px)`;
+    joyVec.x = dx / maxR;
+    joyVec.y = dy / maxR;
+}
+
+if (joyBase) {
+    joyBase.addEventListener('touchstart', e => { joyActive = true; handleJoystickTouch(e); e.preventDefault(); }, { passive: false });
+    joyBase.addEventListener('touchmove', e => { handleJoystickTouch(e); e.preventDefault(); }, { passive: false });
+    const resetJoy = () => { joyActive = false; joyVec.x = 0; joyVec.y = 0; joyStick.style.transform = 'translate(0px, 0px)'; };
+    joyBase.addEventListener('touchend', resetJoy);
+    joyBase.addEventListener('touchcancel', resetJoy);
+}
+</script>
+</body>
+</html>
