@@ -6,17 +6,17 @@
     <title>Diamond Plan</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rubik+Glitch&family=Orbitron:wght@600;800;900&family=Inter:wght@500;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@600;800;900&family=Inter:wght@500;600;700;800&display=swap');
 
         :root {
-            --neon-cyan: #00f3ff;
-            --neon-blue: #2563eb;
-            --neon-gold: #fbbf24;
-            --neon-emerald: #10b981;
+            --accent-cyan: #38bdf8;
+            --accent-blue: #2563eb;
+            --accent-gold: #f59e0b;
+            --accent-emerald: #10b981;
         }
 
         body, html {
-            background-color: #000000;
+            background-color: #0b1120;
             color: #f8fafc;
             font-family: 'Inter', sans-serif;
             margin: 0;
@@ -32,173 +32,143 @@
 
         .font-pixel { font-family: 'Press Start 2P', monospace; }
         .font-orbitron { font-family: 'Orbitron', sans-serif; }
-        .font-glitch { font-family: 'Rubik Glitch', cursive; }
 
-        .scanlines {
-            position: fixed;
-            inset: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.32) 50%);
-            background-size: 100% 4px;
-            z-index: 999;
-            pointer-events: none;
-            opacity: 0.2;
-        }
-
-        @keyframes diamondPulse {
-            0%, 100% { transform: scale(1) rotate(0deg); filter: drop-shadow(0 0 30px rgba(0, 243, 255, 0.9)); }
-            50% { transform: scale(1.1) rotate(4deg); filter: drop-shadow(0 0 55px rgba(59, 130, 246, 1)); }
-        }
-        .diamond-anim { animation: diamondPulse 2.4s ease-in-out infinite; }
-
-        @keyframes floatSlow {
+        @keyframes subtleFloat {
             0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+            50% { transform: translateY(-5px); }
         }
-        .float-anim { animation: floatSlow 2.6s ease-in-out infinite; }
+        .float-anim { animation: subtleFloat 3.5s ease-in-out infinite; }
+        .diamond-anim { animation: subtleFloat 3s ease-in-out infinite; }
 
-        @keyframes holoRing {
-            0%, 100% { box-shadow: 0 0 30px rgba(0, 243, 255, 0.55), inset 0 0 30px rgba(0, 243, 255, 0.3); transform: scale(1); }
-            50% { box-shadow: 0 0 60px rgba(0, 243, 255, 0.95), inset 0 0 45px rgba(59, 130, 246, 0.65); transform: scale(1.02); }
+        .holo-pedestal {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
         }
-        .holo-pedestal { animation: holoRing 3s ease-in-out infinite; }
 
-        /* Крупные аркадные кнопки главного меню */
+        /* Спокойные современные кнопки главного меню */
         .game-menu-btn {
             position: relative;
-            background: linear-gradient(90deg, rgba(15, 23, 42, 0.96) 0%, rgba(30, 58, 138, 0.92) 100%);
-            border: 3px solid #38bdf8;
-            border-left: 12px solid #00f3ff;
-            color: #ffffff;
+            background: linear-gradient(90deg, #0f172a 0%, #1e293b 100%);
+            border: 2px solid #334155;
+            border-left: 8px solid #38bdf8;
+            color: #f8fafc;
             font-family: 'Press Start 2P', monospace;
-            font-size: clamp(0.8rem, 2.2vw, 1.05rem);
-            padding: 20px 26px;
-            border-radius: 10px 22px 22px 10px;
+            font-size: clamp(0.75rem, 1.9vw, 0.98rem);
+            padding: 18px 24px;
+            border-radius: 12px;
             cursor: pointer;
-            transition: all 0.16s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: transform 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
             display: flex;
             align-items: center;
             justify-content: space-between;
             width: 100%;
-            box-shadow: 0 8px 0 #0369a1, 0 0 25px rgba(0, 243, 255, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
             text-transform: uppercase;
         }
         .game-menu-btn:hover {
-            transform: translateX(14px) scale(1.03);
-            background: linear-gradient(90deg, #0284c7 0%, #2563eb 100%);
-            border-color: #ffffff;
-            box-shadow: 0 8px 0 #1e3a8a, 0 0 40px rgba(0, 243, 255, 0.85);
+            transform: translateX(6px);
+            background: linear-gradient(90deg, #1e293b 0%, #1d4ed8 100%);
+            border-color: #60a5fa;
         }
         .game-menu-btn:active {
-            transform: translateX(8px) translateY(5px);
-            box-shadow: 0 2px 0 #1e3a8a;
+            transform: translateX(3px) translateY(2px);
         }
 
         .game-menu-btn.btn-mp {
-            border-color: #34d399;
             border-left-color: #10b981;
-            background: linear-gradient(90deg, rgba(6, 78, 59, 0.96) 0%, rgba(5, 150, 105, 0.9) 100%);
-            box-shadow: 0 8px 0 #065f46, 0 0 25px rgba(16, 185, 129, 0.35);
         }
         .game-menu-btn.btn-mp:hover {
-            background: linear-gradient(90deg, #059669 0%, #10b981 100%);
-            box-shadow: 0 8px 0 #064e3b, 0 0 40px rgba(52, 211, 153, 0.85);
+            background: linear-gradient(90deg, #064e3b 0%, #059669 100%);
+            border-color: #34d399;
         }
 
         .game-menu-btn.btn-friends {
-            border-color: #c084fc;
             border-left-color: #a855f7;
-            background: linear-gradient(90deg, rgba(59, 7, 100, 0.96) 0%, rgba(126, 34, 206, 0.9) 100%);
-            box-shadow: 0 8px 0 #581c87, 0 0 25px rgba(168, 85, 247, 0.35);
         }
         .game-menu-btn.btn-friends:hover {
-            background: linear-gradient(90deg, #7e22ce 0%, #9333ea 100%);
+            background: linear-gradient(90deg, #3b0764 0%, #7e22ce 100%);
+            border-color: #c084fc;
         }
 
         .game-menu-btn.btn-editor {
-            border-color: #fbbf24;
             border-left-color: #f59e0b;
-            background: linear-gradient(90deg, rgba(120, 53, 15, 0.96) 0%, rgba(217, 119, 6, 0.9) 100%);
-            box-shadow: 0 8px 0 #78350f, 0 0 25px rgba(245, 158, 11, 0.35);
         }
         .game-menu-btn.btn-editor:hover {
-            background: linear-gradient(90deg, #d97706 0%, #f59e0b 100%);
+            background: linear-gradient(90deg, #451a03 0%, #d97706 100%);
+            border-color: #fbbf24;
         }
 
-        /* Увеличенные кнопки внутри модальных окон */
+        /* Стандартные кнопки интерфейса */
         .dp-btn {
-            background: linear-gradient(135deg, #0284c7, #2563eb);
-            border: 2px solid #38bdf8;
-            box-shadow: 0 5px 0 #1e3a8a, 0 0 18px rgba(56, 189, 248, 0.4);
+            background: #2563eb;
+            border: 2px solid #60a5fa;
             color: #fff;
             font-family: 'Press Start 2P', monospace;
-            font-size: 0.8rem;
-            padding: 15px 20px;
-            border-radius: 12px;
+            font-size: 0.75rem;
+            padding: 13px 18px;
+            border-radius: 10px;
             cursor: pointer;
-            transition: all 0.12s ease;
+            transition: background-color 0.15s ease, transform 0.1s ease;
             text-transform: uppercase;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
             text-align: center;
         }
-        .dp-btn:hover { filter: brightness(1.15); transform: translateY(-2px); }
-        .dp-btn:active { transform: translateY(3px); box-shadow: 0 1px 0 #1e3a8a; }
-        .dp-btn-gold { background: linear-gradient(135deg, #d97706, #f59e0b); border-color: #fde047; box-shadow: 0 5px 0 #78350f; }
-        .dp-btn-emerald { background: linear-gradient(135deg, #059669, #10b981); border-color: #6ee7b7; box-shadow: 0 5px 0 #064e3b; }
-        .dp-btn-purple { background: linear-gradient(135deg, #7c3aed, #6366f1); border-color: #c4b5fd; box-shadow: 0 5px 0 #4c1d95; }
-        .dp-btn-dark { background: linear-gradient(135deg, #1e293b, #0f172a); border-color: #475569; box-shadow: 0 5px 0 #020617; }
-        .dp-btn-danger { background: linear-gradient(135deg, #be123c, #e11d48); border-color: #fda4af; box-shadow: 0 5px 0 #881337; }
+        .dp-btn:hover { background: #1d4ed8; }
+        .dp-btn:active { transform: translateY(2px); }
+        .dp-btn-gold { background: #d97706; border-color: #fbbf24; }
+        .dp-btn-gold:hover { background: #b45309; }
+        .dp-btn-emerald { background: #059669; border-color: #34d399; }
+        .dp-btn-emerald:hover { background: #047857; }
+        .dp-btn-purple { background: #7c3aed; border-color: #a78bfa; }
+        .dp-btn-purple:hover { background: #6d28d9; }
+        .dp-btn-dark { background: #1e293b; border-color: #475569; }
+        .dp-btn-dark:hover { background: #334155; }
+        .dp-btn-danger { background: #e11d48; border-color: #fb7185; }
+        .dp-btn-danger:hover { background: #be123c; }
 
-        /* Крупные узлы карты в стиле Fireboy & Watergirl */
+        /* Узлы карты */
         .map-node {
             position: absolute;
             transform: translate(-50%, -50%);
-            width: 64px;
-            height: 64px;
+            width: 60px;
+            height: 60px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-family: 'Press Start 2P', monospace;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             cursor: pointer;
-            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: transform 0.2s ease;
             z-index: 10;
         }
-        .map-node:hover { transform: translate(-50%, -50%) scale(1.22); }
-        .node-diamond { border-radius: 12px; transform: translate(-50%, -50%) rotate(45deg); }
+        .map-node:hover { transform: translate(-50%, -50%) scale(1.15); }
+        .node-diamond { border-radius: 10px; transform: translate(-50%, -50%) rotate(45deg); }
         .node-diamond span { transform: rotate(-45deg); display: block; }
-        .node-diamond:hover { transform: translate(-50%, -50%) rotate(45deg) scale(1.22); }
+        .node-diamond:hover { transform: translate(-50%, -50%) rotate(45deg) scale(1.15); }
         .node-circle { border-radius: 9999px; }
-        .node-hex { clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%); width: 70px; height: 64px; }
+        .node-hex { clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%); width: 66px; height: 60px; }
 
-        .node-locked { background: #1e293b; border: 3px solid #475569; color: #64748b; filter: grayscale(0.9); }
+        .node-locked { background: #1e293b; border: 3px solid #475569; color: #64748b; }
         .node-unlocked {
-            background: radial-gradient(circle, #0284c7, #1e3a8a);
-            border: 4px solid #00f3ff;
+            background: #1d4ed8;
+            border: 3px solid #38bdf8;
             color: #ffffff;
-            box-shadow: 0 0 30px rgba(0, 243, 255, 0.9);
-            animation: nodePulse 2s infinite;
+            box-shadow: 0 4px 14px rgba(56, 189, 248, 0.35);
         }
         .node-completed {
-            background: radial-gradient(circle, #059669, #064e3b);
-            border: 4px solid #34d399;
+            background: #059669;
+            border: 3px solid #34d399;
             color: #ecfdf5;
-            box-shadow: 0 0 22px rgba(52, 211, 153, 0.7);
-        }
-
-        @keyframes nodePulse {
-            0%, 100% { box-shadow: 0 0 18px rgba(0, 243, 255, 0.65); }
-            50% { box-shadow: 0 0 38px rgba(0, 243, 255, 1), 0 0 55px rgba(59, 130, 246, 0.85); }
         }
 
         #gameCanvas {
             image-rendering: pixelated;
             outline: none;
-            border: 4px solid #1d4ed8;
-            box-shadow: 0 0 45px rgba(0, 243, 255, 0.3);
+            border: 3px solid #334155;
             border-radius: 10px;
+            background-color: #090d16;
         }
 
         /* Мобильное управление только внутри игры */
@@ -232,62 +202,61 @@
         }
 
         ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: #020617; }
-        ::-webkit-scrollbar-thumb { background: #1d4ed8; border-radius: 4px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
     </style>
 </head>
 <body>
-    <div class="scanlines"></div>
 
-    <!-- Анимированный фоновый холст для Главного Меню -->
+    <!-- Спокойный фоновый холст для Главного Меню -->
     <canvas id="menuBgCanvas" class="fixed inset-0 w-full h-full pointer-events-none z-0"></canvas>
 
-    <!-- ==================== 1. ЧЕРНАЯ ЗАСТАВКА 1: DIAMOND PLAN ==================== -->
+    <!-- ==================== 1. ЗАСТАВКА 1: DIAMOND PLAN ==================== -->
     <div id="screen-splash-1" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black cursor-pointer" onclick="window.skipSplash1()">
         <div class="relative flex flex-col items-center">
-            <svg class="w-40 h-40 sm:w-52 sm:h-52 diamond-anim mb-8" viewBox="0 0 100 100" fill="none">
-                <polygon points="50,5 90,32 50,95 10,32" fill="url(#diamGrad)" stroke="#00f3ff" stroke-width="3"/>
-                <polygon points="50,5 70,32 50,95 30,32" fill="rgba(255,255,255,0.18)" stroke="#38bdf8" stroke-width="1.5"/>
-                <line x1="10" y1="32" x2="90" y2="32" stroke="#00f3ff" stroke-width="2"/>
+            <svg class="w-36 h-36 sm:w-48 sm:h-48 diamond-anim mb-8" viewBox="0 0 100 100" fill="none">
+                <polygon points="50,5 90,32 50,95 10,32" fill="url(#diamGrad)" stroke="#38bdf8" stroke-width="3"/>
+                <polygon points="50,5 70,32 50,95 30,32" fill="rgba(255,255,255,0.14)" stroke="#60a5fa" stroke-width="1.5"/>
+                <line x1="10" y1="32" x2="90" y2="32" stroke="#38bdf8" stroke-width="2"/>
                 <defs>
                     <linearGradient id="diamGrad" x1="0" y1="0" x2="1" y2="1">
-                        <stop offset="0%" stop-color="#00f3ff"/>
+                        <stop offset="0%" stop-color="#38bdf8"/>
                         <stop offset="50%" stop-color="#2563eb"/>
                         <stop offset="100%" stop-color="#1e1b4b"/>
                     </linearGradient>
                 </defs>
             </svg>
-            <h1 class="font-pixel text-3xl sm:text-6xl text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-blue-400 to-indigo-400 tracking-wider text-center drop-shadow-[0_0_25px_rgba(0,243,255,0.7)]">
+            <h1 class="font-pixel text-3xl sm:text-5xl text-sky-400 tracking-wider text-center">
                 DIAMOND PLAN
             </h1>
-            <p class="font-orbitron text-sm sm:text-lg text-cyan-400/90 tracking-[0.35em] mt-4 uppercase">
+            <p class="font-orbitron text-sm sm:text-base text-slate-400 tracking-[0.3em] mt-4 uppercase">
                 Tactical Stealth Action
             </p>
         </div>
-        <p class="absolute bottom-12 font-pixel text-xs sm:text-sm text-cyan-400 animate-pulse">
-            [ НАЖМИТЕ В ЛЮБОМ МЕСТЕ ДЛЯ СТАРТА ]
+        <p class="absolute bottom-12 font-pixel text-xs text-slate-400">
+            [ НАЖМИТЕ ДЛЯ СТАРТА ]
         </p>
     </div>
 
-    <!-- ==================== 2. ЧЕРНАЯ ЗАСТАВКА 2: HTML5 LOGO ==================== -->
+    <!-- ==================== 2. ЗАСТАВКА 2: HTML5 LOGO ==================== -->
     <div id="screen-splash-2" class="fixed inset-0 z-50 hidden flex-col items-center justify-center bg-black cursor-pointer" onclick="window.skipSplash2()">
         <div class="flex flex-col items-center float-anim">
-            <svg class="w-36 h-36 sm:w-44 sm:h-44 mb-6 drop-shadow-[0_0_35px_rgba(227,79,38,0.85)]" viewBox="0 0 128 128">
+            <svg class="w-32 h-32 sm:w-40 sm:h-40 mb-6" viewBox="0 0 128 128">
                 <path fill="#E44D26" d="M19.037 113.876L9.032 1.661h109.936l-10.016 112.198-45.019 12.48z"/>
                 <path fill="#F16529" d="M64 116.8l36.378-10.086 8.559-95.878H64z"/>
                 <path fill="#EBEBEB" d="M64 52.455H45.788L44.53 38.361H64V24.599H29.489l.33 3.692 3.382 37.927H64zm0 35.743l-.061.017-15.327-4.14-.979-10.975H33.816l1.928 21.609 28.193 7.826.063-.017z"/>
                 <path fill="#FFF" d="M63.952 52.455v13.763h16.947l-1.597 17.849-15.35 4.143v14.319l28.215-7.82.207-2.325 3.234-36.233.335-3.696h-3.708zm0-27.856v13.762h33.244l.276-3.092.628-6.978.329-3.692z"/>
             </svg>
-            <h2 class="font-pixel text-xl sm:text-3xl text-white tracking-widest mb-3">POWERED BY HTML5</h2>
-            <p class="font-orbitron text-sm sm:text-base text-orange-400 tracking-[0.25em] uppercase">Canvas 2D • Gamepad • WebAudio</p>
+            <h2 class="font-pixel text-xl sm:text-2xl text-white tracking-widest mb-3">POWERED BY HTML5</h2>
+            <p class="font-orbitron text-sm text-orange-400 tracking-[0.2em] uppercase">Canvas 2D • Gamepad • WebAudio</p>
         </div>
-        <p class="absolute bottom-12 font-pixel text-xs text-slate-400 animate-pulse">НАЖМИТЕ ДЛЯ ПРОДОЛЖЕНИЯ...</p>
+        <p class="absolute bottom-12 font-pixel text-xs text-slate-500">НАЖМИТЕ ДЛЯ ПРОДОЛЖЕНИЯ...</p>
     </div>
 
-    <!-- ==================== 3. ЧЕРНАЯ ЗАСТАВКА 3: GOOGLE LOGO + СПАСИБО ВАМ! ==================== -->
+    <!-- ==================== 3. ЗАСТАВКА 3: GOOGLE LOGO + СПАСИБО ВАМ! ==================== -->
     <div id="screen-splash-3" class="fixed inset-0 z-50 hidden flex-col items-center justify-center bg-black cursor-pointer" onclick="window.skipSplash3()">
         <div class="flex flex-col items-center float-anim">
-            <svg class="w-36 h-36 sm:w-44 sm:h-44 mb-6 drop-shadow-[0_0_35px_rgba(66,133,244,0.8)]" viewBox="0 0 48 48">
+            <svg class="w-32 h-32 sm:w-40 sm:h-40 mb-6" viewBox="0 0 48 48">
                 <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
                 <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
                 <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
@@ -296,41 +265,38 @@
             <div class="flex items-center gap-1 font-bold text-3xl sm:text-5xl tracking-tight mb-4">
                 <span class="text-[#4285F4]">G</span><span class="text-[#EA4335]">o</span><span class="text-[#FBBC05]">o</span><span class="text-[#4285F4]">g</span><span class="text-[#34A853]">l</span><span class="text-[#EA4335]">e</span>
             </div>
-            <h2 class="font-pixel text-xl sm:text-3xl text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 via-cyan-300 to-blue-400 text-center px-4">
+            <h2 class="font-pixel text-xl sm:text-2xl text-emerald-400 text-center px-4">
                 СПАСИБО ВАМ!
             </h2>
-            <p class="font-orbitron text-sm text-slate-400 tracking-[0.2em] mt-3 uppercase">
-                Firebase BOMNA5 Cloud Connected
-            </p>
         </div>
-        <p class="absolute bottom-12 font-pixel text-xs text-slate-400 animate-pulse">ЗАПУСК ТЕРМИНАЛА...</p>
+        <p class="absolute bottom-12 font-pixel text-xs text-slate-500">ЗАПУСК ИГРЫ...</p>
     </div>
 
     <!-- ==================== 4. АВТОРИЗАЦИЯ: ВХОД / РЕГИСТРАЦИЯ / ГОСТЬ ==================== -->
-    <div id="screen-auth" class="fixed inset-0 z-40 hidden flex-col items-center justify-center p-4 bg-black/85 backdrop-blur-md overflow-y-auto">
-        <div class="w-full max-w-lg bg-slate-950/95 border-2 border-cyan-400 rounded-3xl p-7 sm:p-8 shadow-[0_0_70px_rgba(0,243,255,0.35)] flex flex-col items-center">
+    <div id="screen-auth" class="fixed inset-0 z-40 hidden flex-col items-center justify-center p-4 bg-slate-950/95 overflow-y-auto">
+        <div class="w-full max-w-lg bg-slate-900 border-2 border-slate-700 rounded-3xl p-7 sm:p-8 shadow-2xl flex flex-col items-center">
             <div class="flex items-center gap-2.5 text-emerald-400 font-pixel text-[10px] mb-4">
-                <span id="authCloudDot" class="w-3 h-3 rounded-full bg-emerald-400 animate-ping"></span>
-                <span id="authCloudStatus">ПОДКЛЮЧЕНИЕ К BOMNA5...</span>
+                <span id="authCloudDot" class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+                <span id="authCloudStatus">СЕРВЕР ОНЛАЙН ГОТОВ</span>
             </div>
 
-            <h2 class="font-pixel text-lg sm:text-2xl text-white text-center mb-5">ДОСТУП В ИГРУ</h2>
+            <h2 class="font-pixel text-lg sm:text-2xl text-white text-center mb-5">ВХОД В ИГРУ</h2>
 
-            <div class="grid grid-cols-2 gap-2.5 w-full bg-slate-900 p-2 rounded-2xl border border-slate-800 mb-5">
-                <button id="tabBtnLogin" onclick="window.switchAuthTab('login')" class="font-pixel text-xs py-3.5 rounded-xl bg-cyan-600 text-white transition-all">🔑 ВХОД</button>
+            <div class="grid grid-cols-2 gap-2.5 w-full bg-slate-950 p-2 rounded-2xl border border-slate-800 mb-5">
+                <button id="tabBtnLogin" onclick="window.switchAuthTab('login')" class="font-pixel text-xs py-3.5 rounded-xl bg-blue-600 text-white transition-all">🔑 ВХОД</button>
                 <button id="tabBtnRegister" onclick="window.switchAuthTab('register')" class="font-pixel text-xs py-3.5 rounded-xl text-slate-400 hover:text-white transition-all">📝 РЕГИСТРАЦИЯ</button>
             </div>
 
             <div class="flex items-center gap-5 mb-5">
-                <button onclick="window.cycleAuthAvatar(-1)" class="w-12 h-12 rounded-xl bg-slate-800 border-2 border-slate-600 hover:border-cyan-400 text-lg">◀</button>
-                <div id="authAvatarPreview" class="w-20 h-20 rounded-2xl bg-slate-900 border-2 border-cyan-400 flex items-center justify-center text-5xl shadow-[0_0_25px_rgba(0,243,255,0.35)]">🕵️</div>
-                <button onclick="window.cycleAuthAvatar(1)" class="w-12 h-12 rounded-xl bg-slate-800 border-2 border-slate-600 hover:border-cyan-400 text-lg">▶</button>
+                <button onclick="window.cycleAuthAvatar(-1)" class="w-12 h-12 rounded-xl bg-slate-800 border border-slate-600 hover:border-sky-400 text-lg">◀</button>
+                <div id="authAvatarPreview" class="w-20 h-20 rounded-2xl bg-slate-950 border-2 border-sky-400 flex items-center justify-center text-5xl">🕵️</div>
+                <button onclick="window.cycleAuthAvatar(1)" class="w-12 h-12 rounded-xl bg-slate-800 border border-slate-600 hover:border-sky-400 text-lg">▶</button>
             </div>
 
             <div id="authDisplayNameGroup" class="w-full mb-4 hidden">
-                <label class="block font-pixel text-[10px] text-cyan-300 mb-2 uppercase">Позывной агента (Отображаемое Имя)</label>
+                <label class="block font-pixel text-[10px] text-sky-300 mb-2 uppercase">Позывной агента</label>
                 <input id="authDisplayNameInput" type="text" maxlength="16" value="АГЕНТ СПЕКТР"
-                    class="w-full bg-slate-900 border-2 border-slate-700 focus:border-cyan-400 rounded-xl px-4 py-3.5 text-white font-pixel text-sm text-center outline-none">
+                    class="w-full bg-slate-950 border-2 border-slate-700 focus:border-sky-400 rounded-xl px-4 py-3.5 text-white font-pixel text-sm text-center outline-none">
             </div>
 
             <div class="w-full mb-4">
@@ -339,160 +305,154 @@
                     <span id="usernameCheckBadge" class="font-pixel text-[10px] text-slate-400">ЛАТИНИЦА/ЦИФРЫ</span>
                 </div>
                 <div class="relative flex items-center">
-                    <span class="absolute left-4 font-pixel text-base text-cyan-400">@</span>
+                    <span class="absolute left-4 font-pixel text-base text-sky-400">@</span>
                     <input id="authUsernameInput" type="text" maxlength="15" value="" oninput="window.onUsernameInput()"
-                        class="w-full bg-slate-900 border-2 border-slate-700 focus:border-cyan-400 rounded-xl pl-10 pr-4 py-3.5 text-white font-pixel text-sm lowercase outline-none"
+                        class="w-full bg-slate-950 border-2 border-slate-700 focus:border-sky-400 rounded-xl pl-10 pr-4 py-3.5 text-white font-pixel text-sm lowercase outline-none"
                         placeholder="agent_007">
                 </div>
             </div>
 
             <div class="w-full mb-4">
-                <label class="block font-pixel text-[10px] text-slate-300 mb-2 uppercase">Секретный пароль</label>
+                <label class="block font-pixel text-[10px] text-slate-300 mb-2 uppercase">Пароль</label>
                 <input id="authPasswordInput" type="password" maxlength="24" value=""
-                    class="w-full bg-slate-900 border-2 border-slate-700 focus:border-cyan-400 rounded-xl px-4 py-3.5 text-white font-pixel text-sm text-center outline-none"
+                    class="w-full bg-slate-950 border-2 border-slate-700 focus:border-sky-400 rounded-xl px-4 py-3.5 text-white font-pixel text-sm text-center outline-none"
                     placeholder="••••••••">
             </div>
 
-            <div id="authErrorBox" class="hidden w-full bg-rose-950/90 border-2 border-rose-500 text-rose-200 rounded-xl p-3.5 text-xs font-pixel text-center mb-4"></div>
+            <div id="authErrorBox" class="hidden w-full bg-rose-950/90 border border-rose-500 text-rose-200 rounded-xl p-3.5 text-xs font-pixel text-center mb-4"></div>
 
             <button id="authSubmitBtn" onclick="window.handleAuthSubmit()" class="dp-btn w-full py-4 text-sm mb-3">
                 ВОЙТИ В ИГРУ ▶
             </button>
 
-            <button onclick="window.loginAsGuest()" class="dp-btn dp-btn-dark w-full py-3.5 !text-xs mb-3">
+            <button onclick="window.loginAsGuest()" class="dp-btn dp-btn-dark w-full py-3.5 !text-xs">
                 🕵️ ИГРАТЬ КАК ГОСТЬ (ОФЛАЙН)
-            </button>
-
-            <button onclick="window.openSecurityRulesModal()" class="text-[10px] font-pixel text-cyan-400 underline hover:text-white">
-                📋 КАКИЕ ПРАВИЛА (RULES) НУЖНЫ ДЛЯ FIREBASE?
             </button>
         </div>
     </div>
 
-    <!-- ==================== 5. КРУПНОЕ ИГРОВОЕ ГЛАВНОЕ МЕНЮ ==================== -->
+    <!-- ==================== 5. ГЛАВНОЕ МЕНЮ ==================== -->
     <div id="screen-hub" class="fixed inset-0 z-30 hidden flex-col justify-between p-4 sm:p-8 overflow-y-auto">
         <!-- Верхний игровой статус-бар -->
         <div class="w-full max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4 z-10">
-            <div class="flex items-center gap-4 bg-slate-950/90 border-2 border-cyan-500/60 rounded-2xl px-5 py-3 backdrop-blur-md shadow-[0_0_25px_rgba(0,243,255,0.25)]">
-                <span class="text-4xl animate-bounce">💎</span>
+            <div class="flex items-center gap-4 bg-slate-900/95 border border-slate-700 rounded-2xl px-5 py-3">
+                <span class="text-3xl">💎</span>
                 <div>
-                    <div class="font-pixel text-[10px] text-cyan-400">АЛМАЗОВ В СЛОТЕ #<span id="hubSlotBadge">1</span></div>
+                    <div class="font-pixel text-[10px] text-sky-400">АЛМАЗОВ В СЛОТЕ #<span id="hubSlotBadge">1</span></div>
                     <div id="hubDiamondsCount" class="font-pixel text-xl text-amber-400 mt-1">0</div>
                 </div>
             </div>
 
             <div class="flex items-center gap-3">
-                <div id="gamepadHudBadge" class="hidden bg-indigo-950/90 border-2 border-indigo-400 rounded-xl px-4 py-2.5 items-center gap-2">
+                <div id="gamepadHudBadge" class="hidden bg-indigo-950 border border-indigo-500 rounded-xl px-4 py-2.5 items-center gap-2">
                     <span class="text-xl">🎮</span><span class="font-pixel text-[10px] text-indigo-200">ГЕЙМПАД АКТИВЕН</span>
                 </div>
-                <button onclick="window.openSecurityRulesModal()" class="dp-btn dp-btn-dark !py-3 !px-4 !text-xs">⚙️ ОПЦИИ И ЗАЩИТА</button>
+                <button onclick="window.openSettingsModal()" class="dp-btn dp-btn-dark !py-3 !px-4 !text-xs">⚙️ НАСТРОЙКИ</button>
                 <button onclick="window.logoutAccount()" class="dp-btn dp-btn-danger !py-3 !px-4 !text-xs">🚪 ВЫХОД</button>
             </div>
         </div>
 
         <!-- Центральная игровая сцена -->
         <div class="w-full max-w-7xl mx-auto my-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center z-10 py-4">
-            <!-- Левая колонка: Крупный логотип + Аркадные кнопки -->
+            <!-- Левая колонка: Логотип + Игровые кнопки -->
             <div class="lg:col-span-7 flex flex-col items-center lg:items-start">
                 <div class="mb-6 text-center lg:text-left">
-                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-lg bg-cyan-500/20 border border-cyan-400 font-pixel text-[10px] text-cyan-300 mb-3">
-                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
-                        <span>STEALTH ACTION • 20 МИССИЙ • LIVE MULTIPLAYER</span>
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-slate-800 border border-slate-600 font-pixel text-[10px] text-sky-300 mb-3">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                        <span>ОГРОМНЫЕ КАРТЫ 36×24 • 20 МИССИЙ • 5 РЕЖИМОВ ОНЛАЙН</span>
                     </div>
-                    <h1 class="font-glitch text-5xl sm:text-7xl xl:text-8xl text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 via-blue-400 to-indigo-300 tracking-wider drop-shadow-[0_6px_0_#1e3a8a]">
+                    <h1 class="font-pixel text-3xl sm:text-5xl xl:text-6xl text-white tracking-wider">
                         DIAMOND PLAN
                     </h1>
                 </div>
 
                 <!-- Стек крупных игровых кнопок -->
-                <div class="w-full max-w-xl flex flex-col gap-4">
+                <div class="w-full max-w-xl flex flex-col gap-3.5">
                     <button onclick="window.showScreen('map')" class="game-menu-btn">
-                        <span>▶ КАМПАНИЯ (20 ОПЕРАЦИЙ)</span>
-                        <span class="text-3xl">🗺️</span>
+                        <span>▶ КАМПАНИЯ (20 ОГРОМНЫХ КАРТ)</span>
+                        <span class="text-2xl">🗺️</span>
                     </button>
 
                     <button onclick="window.openMultiplayerModal()" class="game-menu-btn btn-mp">
-                        <span>🌐 МУЛЬТИПЛЕЕР (СПЕЦ-КАРТЫ + ЧАТ)</span>
-                        <span class="text-3xl">🧟💣</span>
+                        <span>🌐 МУЛЬТИПЛЕЕР (ГАЛЯ / БОМБА / ЗОМБИ)</span>
+                        <span class="text-2xl">🏃💣</span>
                     </button>
 
                     <button onclick="window.openFriendsModal()" class="game-menu-btn btn-friends">
                         <span>👥 ДРУЗЬЯ И ЧАТ В СЕТИ</span>
-                        <span class="text-3xl">💬</span>
+                        <span class="text-2xl">💬</span>
                     </button>
 
                     <button onclick="window.openEditor()" class="game-menu-btn btn-editor">
-                        <span>🛠️ КОНСТРУКТОР УРОВНЕЙ</span>
-                        <span class="text-3xl">⚡</span>
+                        <span>🛠️ КОНСТРУКТОР КАРТ (36×24)</span>
+                        <span class="text-2xl">⚡</span>
                     </button>
 
-                    <button onclick="window.showScreen('slots')" class="game-menu-btn !border-slate-500 !border-l-amber-400">
+                    <button onclick="window.showScreen('slots')" class="game-menu-btn !border-l-amber-400">
                         <span>💾 СЛОТЫ СОХРАНЕНИЯ (#<span id="cardSlotNum">1</span>)</span>
-                        <span class="text-3xl">💎</span>
+                        <span class="text-2xl">💎</span>
                     </button>
                 </div>
             </div>
 
-            <!-- Правая колонка: Крупный Голографический подиум оперативника -->
+            <!-- Правая колонка: Карточка оперативника -->
             <div class="lg:col-span-5 flex flex-col items-center">
-                <div class="w-full max-w-md bg-slate-950/90 border-2 border-cyan-400 rounded-3xl p-7 flex flex-col items-center relative holo-pedestal backdrop-blur-md">
+                <div class="w-full max-w-md bg-slate-900/95 border-2 border-slate-700 rounded-3xl p-7 flex flex-col items-center relative holo-pedestal">
                     <div class="w-full flex items-center justify-between border-b border-slate-800 pb-3 mb-5">
-                        <span id="hubModeBadge" class="px-3 py-1.5 text-[10px] font-pixel rounded-lg bg-emerald-950 text-emerald-300 border border-emerald-500">ONLINE • BOMNA5</span>
-                        <span id="hubOnlineCounter" class="font-pixel text-[10px] text-cyan-300">🟢 В СЕТИ: 1</span>
+                        <span id="hubModeBadge" class="px-3 py-1.5 text-[10px] font-pixel rounded-lg bg-emerald-950 text-emerald-300 border border-emerald-600">В СЕТИ</span>
+                        <span id="hubOnlineCounter" class="font-pixel text-[10px] text-sky-300">🟢 ОНЛАЙН: 1</span>
                     </div>
 
-                    <!-- Огромный анимированный спрайт агента на подиуме -->
-                    <div onclick="window.openProfileModal()" class="relative w-40 h-40 sm:w-44 sm:h-44 rounded-full bg-gradient-to-b from-cyan-500/25 to-blue-900/50 border-4 border-cyan-400 flex items-center justify-center cursor-pointer group my-2 shadow-[0_0_50px_rgba(0,243,255,0.5)]">
-                        <div id="hubAvatar" class="text-8xl sm:text-9xl float-anim group-hover:scale-110 transition-transform">🕵️</div>
-                        <div class="absolute -bottom-3 bg-amber-400 text-black font-pixel text-[10px] px-3.5 py-1.5 rounded-full shadow-lg border border-white">
+                    <div onclick="window.openProfileModal()" class="relative w-36 h-36 sm:w-40 sm:h-40 rounded-full bg-slate-800 border-4 border-sky-400 flex items-center justify-center cursor-pointer group my-2">
+                        <div id="hubAvatar" class="text-7xl sm:text-8xl float-anim group-hover:scale-105 transition-transform">🕵️</div>
+                        <div class="absolute -bottom-3 bg-amber-500 text-black font-pixel text-[9px] px-3 py-1 rounded-full border border-white">
                             СМЕНИТЬ СКИН
                         </div>
                     </div>
 
-                    <h3 id="hubAgentName" class="font-pixel text-lg sm:text-xl text-white mt-6 text-center">АГЕНТ СПЕКТР</h3>
-                    <div id="hubUsernameTag" class="font-mono text-base font-bold text-cyan-400 mt-1">@agent</div>
-                    <p id="hubBioText" class="text-sm text-slate-300 italic mt-2 text-center">«Мастер скрытных операций»</p>
+                    <h3 id="hubAgentName" class="font-pixel text-lg text-white mt-6 text-center">АГЕНТ СПЕКТР</h3>
+                    <div id="hubUsernameTag" class="font-mono text-base font-bold text-sky-400 mt-1">@agent</div>
+                    <p id="hubBioText" class="text-sm text-slate-400 mt-2 text-center">«Мастер скрытных операций»</p>
 
                     <div class="grid grid-cols-2 gap-3 w-full mt-6 pt-5 border-t border-slate-800">
-                        <button onclick="window.openProfileModal()" class="dp-btn !py-3.5 !text-xs w-full">✏️ ПРОФИЛЬ</button>
-                        <button onclick="window.showScreen('slots')" class="dp-btn dp-btn-gold !py-3.5 !text-xs w-full">💾 СЛОТ #<span id="podiumSlotNum">1</span></button>
+                        <button onclick="window.openProfileModal()" class="dp-btn !py-3 !text-xs w-full">✏️ ПРОФИЛЬ</button>
+                        <button onclick="window.showScreen('slots')" class="dp-btn dp-btn-gold !py-3 !text-xs w-full">💾 СЛОТ #<span id="podiumSlotNum">1</span></button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Нижняя строка подсказки -->
         <div class="w-full max-w-7xl mx-auto text-center z-10">
             <p class="font-pixel text-[10px] text-slate-400">
-                УПРАВЛЕНИЕ: WASD / СТРЕЛКИ • [SHIFT] РЫВОК • [E] ЭМИ-ГАДЖЕТ / МАСКИРОВКА • СЕНСОРНЫЙ ДЖОЙСТИК И ГЕЙМПАД
+                УПРАВЛЕНИЕ: WASD / СТРЕЛКИ • [SHIFT] РЫВОК • [E] ГАДЖЕТ / ПЕРЕДАЧА ГАЛИ • [Z] МАСШТАБ КАМЕРЫ
             </p>
         </div>
     </div>
 
     <!-- ==================== 6. МОДАЛКА ПРОФИЛЯ АГЕНТА ==================== -->
-    <div id="modal-profile" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/85 backdrop-blur-md">
-        <div class="w-full max-w-lg bg-slate-900 border-2 border-cyan-400 rounded-3xl p-7 shadow-2xl relative">
-            <button onclick="window.closeProfileModal()" class="absolute top-4 right-4 w-11 h-11 rounded-xl bg-slate-800 hover:bg-rose-600 text-white font-bold text-lg">✕</button>
-            <h2 class="font-pixel text-base sm:text-lg text-cyan-400 mb-5">НАСТРОЙКА ОПЕРАТИВНИКА</h2>
+    <div id="modal-profile" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80">
+        <div class="w-full max-w-lg bg-slate-900 border-2 border-slate-700 rounded-3xl p-7 shadow-2xl relative">
+            <button onclick="window.closeProfileModal()" class="absolute top-4 right-4 w-10 h-10 rounded-xl bg-slate-800 hover:bg-rose-600 text-white font-bold text-lg">✕</button>
+            <h2 class="font-pixel text-base text-sky-400 mb-5">ПРОФИЛЬ ОПЕРАТИВНИКА</h2>
 
             <div class="flex items-center justify-center gap-5 mb-5">
-                <button onclick="window.cycleProfileAvatar(-1)" class="w-12 h-12 rounded-xl bg-slate-800 border-2 border-slate-600 text-lg">◀</button>
-                <div id="profAvatarBox" class="w-24 h-24 rounded-2xl bg-slate-950 border-2 border-cyan-400 flex items-center justify-center text-6xl">🕵️</div>
-                <button onclick="window.cycleProfileAvatar(1)" class="w-12 h-12 rounded-xl bg-slate-800 border-2 border-slate-600 text-lg">▶</button>
+                <button onclick="window.cycleProfileAvatar(-1)" class="w-12 h-12 rounded-xl bg-slate-800 border border-slate-600 text-lg">◀</button>
+                <div id="profAvatarBox" class="w-24 h-24 rounded-2xl bg-slate-950 border-2 border-sky-400 flex items-center justify-center text-6xl">🕵️</div>
+                <button onclick="window.cycleProfileAvatar(1)" class="w-12 h-12 rounded-xl bg-slate-800 border border-slate-600 text-lg">▶</button>
             </div>
 
             <div class="space-y-4 mb-6">
                 <div>
                     <label class="font-pixel text-[10px] text-slate-300 block mb-1.5">ОТОБРАЖАЕМОЕ ИМЯ</label>
-                    <input id="profDisplayName" type="text" maxlength="16" class="w-full bg-slate-950 border-2 border-slate-700 rounded-xl px-4 py-3 text-white font-pixel text-sm text-center">
+                    <input id="profDisplayName" type="text" maxlength="16" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-white font-pixel text-sm text-center">
                 </div>
                 <div>
                     <label class="font-pixel text-[10px] text-amber-400 block mb-1.5">УНИКАЛЬНЫЙ @USERNAME</label>
-                    <input id="profUsername" type="text" maxlength="15" class="w-full bg-slate-950 border-2 border-slate-700 rounded-xl px-4 py-3 text-cyan-300 font-mono text-base text-center lowercase">
+                    <input id="profUsername" type="text" maxlength="15" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-sky-300 font-mono text-base text-center lowercase">
                 </div>
                 <div>
                     <label class="font-pixel text-[10px] text-slate-300 block mb-1.5">ДЕВИЗ АГЕНТА</label>
-                    <input id="profBio" type="text" maxlength="36" class="w-full bg-slate-950 border-2 border-slate-700 rounded-xl px-4 py-3 text-slate-200 text-sm text-center">
+                    <input id="profBio" type="text" maxlength="36" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-slate-200 text-sm text-center">
                 </div>
             </div>
 
@@ -502,27 +462,27 @@
     </div>
 
     <!-- ==================== 7. ДРУЗЬЯ И ЧАТ В РЕАЛЬНОМ ВРЕМЕНИ ==================== -->
-    <div id="modal-friends" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/85 backdrop-blur-md">
-        <div class="w-full max-w-5xl bg-slate-900 border-2 border-purple-400 rounded-3xl p-6 sm:p-7 shadow-2xl relative max-h-[92vh] flex flex-col">
-            <button onclick="window.closeFriendsModal()" class="absolute top-4 right-4 w-11 h-11 rounded-xl bg-slate-800 hover:bg-rose-600 text-white font-bold text-lg">✕</button>
-            <h2 class="font-pixel text-lg sm:text-xl text-purple-300 mb-5">👥 ДРУЗЬЯ И ЗАЩИЩЕННЫЙ ЧАТ</h2>
+    <div id="modal-friends" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80">
+        <div class="w-full max-w-5xl bg-slate-900 border-2 border-slate-700 rounded-3xl p-6 sm:p-7 shadow-2xl relative max-h-[92vh] flex flex-col">
+            <button onclick="window.closeFriendsModal()" class="absolute top-4 right-4 w-10 h-10 rounded-xl bg-slate-800 hover:bg-rose-600 text-white font-bold text-lg">✕</button>
+            <h2 class="font-pixel text-lg text-purple-300 mb-5">👥 ДРУЗЬЯ И ЧАТ</h2>
 
             <div class="grid grid-cols-1 md:grid-cols-12 gap-5 flex-1 overflow-hidden min-h-[400px]">
-                <div class="md:col-span-5 bg-slate-950/90 border-2 border-slate-800 rounded-2xl p-4 flex flex-col overflow-hidden">
-                    <div class="font-pixel text-[10px] text-cyan-400 mb-2.5">ДОБАВИТЬ ДРУГА ПО @USERNAME</div>
+                <div class="md:col-span-5 bg-slate-950 border border-slate-800 rounded-2xl p-4 flex flex-col overflow-hidden">
+                    <div class="font-pixel text-[10px] text-sky-400 mb-2.5">ДОБАВИТЬ ДРУГА ПО @USERNAME</div>
                     <div class="flex gap-2 mb-4">
                         <input id="friendSearchInput" type="text" maxlength="16" placeholder="@username друга"
-                            class="flex-1 bg-slate-900 border-2 border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white font-mono lowercase outline-none focus:border-cyan-400">
+                            class="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white font-mono lowercase outline-none focus:border-sky-400">
                         <button onclick="window.addFriendByUsername()" class="dp-btn !py-2.5 !px-4 !text-xs">➕</button>
                     </div>
                     <div class="font-pixel text-[10px] text-slate-400 mb-2.5 flex justify-between">
-                        <span>ДРУЗЬЯ (В ОДИНОЧНУЮ ВОЙТИ НЕЛЬЗЯ)</span>
-                        <span id="friendsCountLabel" class="text-cyan-400">0</span>
+                        <span>СПИСОК ДРУЗЕЙ</span>
+                        <span id="friendsCountLabel" class="text-sky-400">0</span>
                     </div>
                     <div id="friendsListContainer" class="flex-1 overflow-y-auto space-y-2.5 pr-1 text-sm"></div>
                 </div>
 
-                <div class="md:col-span-7 bg-slate-950/90 border-2 border-slate-800 rounded-2xl p-4 flex flex-col overflow-hidden">
+                <div class="md:col-span-7 bg-slate-950 border border-slate-800 rounded-2xl p-4 flex flex-col overflow-hidden">
                     <div class="border-b border-slate-800 pb-3 mb-3 flex items-center justify-between">
                         <div class="flex items-center gap-3">
                             <span id="chatPartnerAvatar" class="text-2xl">🌐</span>
@@ -531,15 +491,15 @@
                                 <div id="chatPartnerStatus" class="text-xs text-emerald-400">Выберите друга слева для личного чата</div>
                             </div>
                         </div>
-                        <button onclick="window.selectFriendForChat(null)" class="text-[10px] font-pixel text-cyan-400 underline">ОБЩИЙ ЧАТ</button>
+                        <button onclick="window.selectFriendForChat(null)" class="text-[10px] font-pixel text-sky-400 underline">ОБЩИЙ ЧАТ</button>
                     </div>
 
-                    <div id="chatMessagesBox" class="flex-1 overflow-y-auto space-y-2.5 p-3 bg-slate-900/60 rounded-xl mb-3 text-sm max-h-64"></div>
+                    <div id="chatMessagesBox" class="flex-1 overflow-y-auto space-y-2.5 p-3 bg-slate-900 rounded-xl mb-3 text-sm max-h-64"></div>
 
                     <div class="flex gap-2.5">
                         <input id="chatMessageInput" type="text" maxlength="140" placeholder="Введите сообщение..."
                             onkeydown="if(event.key==='Enter') window.sendChatMessage()"
-                            class="flex-1 bg-slate-900 border-2 border-slate-700 rounded-xl px-4 py-3 text-sm text-white outline-none focus:border-purple-400">
+                            class="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white outline-none focus:border-purple-400">
                         <button onclick="window.sendChatMessage()" class="dp-btn dp-btn-purple !py-3 !px-5 !text-xs">ОТПРАВИТЬ ▶</button>
                     </div>
                 </div>
@@ -547,96 +507,114 @@
         </div>
     </div>
 
-    <!-- ==================== 8. МУЛЬТИПЛЕЕР: СПЕЦ-КАРТЫ, ТАЙМЕР И ЧАТ ЛОББИ ==================== -->
-    <div id="modal-multiplayer" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/85 backdrop-blur-md">
-        <div class="w-full max-w-6xl bg-slate-900 border-2 border-emerald-400 rounded-3xl p-5 sm:p-7 shadow-2xl relative max-h-[95vh] flex flex-col overflow-y-auto">
-            <button onclick="window.closeMultiplayerModal()" class="absolute top-4 right-4 w-11 h-11 rounded-xl bg-slate-800 hover:bg-rose-600 text-white font-bold text-lg">✕</button>
-            <h2 class="font-pixel text-lg sm:text-2xl text-emerald-400 mb-4">🌐 МУЛЬТИПЛЕЕР (СЕРВЕР BOMNA5)</h2>
+    <!-- ==================== 8. МУЛЬТИПЛЕЕР: 5 РЕЖИМОВ (ВКЛЮЧАЯ ДОГОНЯЛКИ «ГАЛЯ») ==================== -->
+    <div id="modal-multiplayer" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80">
+        <div class="w-full max-w-6xl bg-slate-900 border-2 border-slate-700 rounded-3xl p-5 sm:p-7 shadow-2xl relative max-h-[95vh] flex flex-col overflow-y-auto">
+            <button onclick="window.closeMultiplayerModal()" class="absolute top-4 right-4 w-10 h-10 rounded-xl bg-slate-800 hover:bg-rose-600 text-white font-bold text-lg">✕</button>
+            <h2 class="font-pixel text-lg sm:text-xl text-emerald-400 mb-4">🌐 МУЛЬТИПЛЕЕР И ВЫБОР РЕЖИМА</h2>
 
-            <!-- 4 режима со специальными картами и временем -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 mb-5">
-                <div id="mpModeCard-normal" onclick="window.selectMpGameMode('normal')" class="p-4 rounded-2xl bg-slate-950 border-2 border-cyan-400 cursor-pointer transition-all">
-                    <div class="flex justify-between items-center mb-2">
-                        <span class="text-3xl">💎</span>
-                        <span class="px-2.5 py-1 rounded bg-cyan-950 border border-cyan-500 font-pixel text-[9px] text-cyan-300">⏱️ 120 СЕК</span>
+            <!-- 5 режимов игры -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 mb-5">
+                <div id="mpModeCard-normal" onclick="window.selectMpGameMode('normal')" class="p-3.5 rounded-2xl bg-slate-950 border-2 border-sky-400 cursor-pointer transition-all">
+                    <div class="flex justify-between items-center mb-1.5">
+                        <span class="text-2xl">💎</span>
+                        <span class="px-2 py-0.5 rounded bg-sky-950 border border-sky-600 font-pixel text-[8px] text-sky-300">150 СЕК</span>
                     </div>
-                    <div class="font-pixel text-xs text-cyan-300 mb-1.5">1. ОБЫЧНЫЙ (КООП)</div>
-                    <div class="font-pixel text-[9px] text-amber-300 mb-1">КАРТА: БАНК ЦИТАДЕЛЬ</div>
-                    <p class="text-xs text-slate-300">Кооперативный взлом двойного хранилища вместе с реальными игроками!</p>
+                    <div class="font-pixel text-[10px] text-sky-300 mb-1">1. КООП-ОГРАБЛЕНИЕ</div>
+                    <p class="text-xs text-slate-400">Совместный взлом огромного хранилища 36×24 с напарниками.</p>
                 </div>
 
-                <div id="mpModeCard-infection" onclick="window.selectMpGameMode('infection')" class="p-4 rounded-2xl bg-slate-950 border-2 border-slate-700 cursor-pointer transition-all">
-                    <div class="flex justify-between items-center mb-2">
-                        <span class="text-3xl">🧟</span>
-                        <span class="px-2.5 py-1 rounded bg-lime-950 border border-lime-500 font-pixel text-[9px] text-lime-300">⏱️ 90 СЕК</span>
+                <div id="mpModeCard-galya" onclick="window.selectMpGameMode('galya')" class="p-3.5 rounded-2xl bg-slate-950 border-2 border-slate-700 cursor-pointer transition-all">
+                    <div class="flex justify-between items-center mb-1.5">
+                        <span class="text-2xl">🏃</span>
+                        <span class="px-2 py-0.5 rounded bg-amber-950 border border-amber-500 font-pixel text-[8px] text-amber-300">120 СЕК</span>
                     </div>
-                    <div class="font-pixel text-xs text-lime-400 mb-1.5">2. ЗАРАЖЕНИЕ</div>
-                    <div class="font-pixel text-[9px] text-amber-300 mb-1">КАРТА: БИО-ЛАБОРАТОРИЯ Z</div>
-                    <p class="text-xs text-slate-300">Убегайте от Заражённых мутантов 🧟 по кольцевым коридорам и шахтам!</p>
+                    <div class="font-pixel text-[10px] text-amber-300 mb-1">2. ДОГОНЯЛКИ (ГАЛЯ)</div>
+                    <p class="text-xs text-slate-400">Выбирается «Галя» (Вода) 👑! Догоните другого игрока, чтобы передать ему роль «Гали»!</p>
                 </div>
 
-                <div id="mpModeCard-hideseek" onclick="window.selectMpGameMode('hideseek')" class="p-4 rounded-2xl bg-slate-950 border-2 border-slate-700 cursor-pointer transition-all">
-                    <div class="flex justify-between items-center mb-2">
-                        <span class="text-3xl">📦</span>
-                        <span class="px-2.5 py-1 rounded bg-amber-950 border border-amber-500 font-pixel text-[9px] text-amber-300">⏱️ 100 СЕК</span>
+                <div id="mpModeCard-infection" onclick="window.selectMpGameMode('infection')" class="p-3.5 rounded-2xl bg-slate-950 border-2 border-slate-700 cursor-pointer transition-all">
+                    <div class="flex justify-between items-center mb-1.5">
+                        <span class="text-2xl">🧟</span>
+                        <span class="px-2 py-0.5 rounded bg-lime-950 border border-lime-600 font-pixel text-[8px] text-lime-300">120 СЕК</span>
                     </div>
-                    <div class="font-pixel text-xs text-amber-300 mb-1.5">3. ПРЯТКИ</div>
-                    <div class="font-pixel text-[9px] text-amber-300 mb-1">КАРТА: СКЛАД КОНТЕЙНЕРОВ</div>
-                    <p class="text-xs text-slate-300">Нажмите [E], чтобы замаскироваться под ящик 📦 среди десятков коробок!</p>
+                    <div class="font-pixel text-[10px] text-lime-400 mb-1">3. ЗАРАЖЕНИЕ</div>
+                    <p class="text-xs text-slate-400">Убегайте от Заражённых 🧟 по огромному био-комплексу и вентиляциям.</p>
                 </div>
 
-                <div id="mpModeCard-bomb" onclick="window.selectMpGameMode('bomb')" class="p-4 rounded-2xl bg-slate-950 border-2 border-slate-700 cursor-pointer transition-all">
-                    <div class="flex justify-between items-center mb-2">
-                        <span class="text-3xl">💣</span>
-                        <span class="px-2.5 py-1 rounded bg-rose-950 border border-rose-500 font-pixel text-[9px] text-rose-300">⏱️ 60 СЕК</span>
+                <div id="mpModeCard-hideseek" onclick="window.selectMpGameMode('hideseek')" class="p-3.5 rounded-2xl bg-slate-950 border-2 border-slate-700 cursor-pointer transition-all">
+                    <div class="flex justify-between items-center mb-1.5">
+                        <span class="text-2xl">📦</span>
+                        <span class="px-2 py-0.5 rounded bg-purple-950 border border-purple-500 font-pixel text-[8px] text-purple-300">120 СЕК</span>
                     </div>
-                    <div class="font-pixel text-xs text-rose-400 mb-1.5">4. ГОРЯЧАЯ БОМБА</div>
-                    <div class="font-pixel text-[9px] text-amber-300 mb-1">КАРТА: РЕАКТОР ДЕТОНАЦИИ</div>
-                    <p class="text-xs text-slate-300">Бомба взрывается через 60 сек! Обезвредьте её у терминалов реактора!</p>
+                    <div class="font-pixel text-[10px] text-purple-300 mb-1">4. ПРЯТКИ</div>
+                    <p class="text-xs text-slate-400">Нажмите [E], чтобы замаскироваться под контейнер 📦 на огромном складе.</p>
+                </div>
+
+                <div id="mpModeCard-bomb" onclick="window.selectMpGameMode('bomb')" class="p-3.5 rounded-2xl bg-slate-950 border-2 border-slate-700 cursor-pointer transition-all">
+                    <div class="flex justify-between items-center mb-1.5">
+                        <span class="text-2xl">💣</span>
+                        <span class="px-2 py-0.5 rounded bg-rose-950 border border-rose-500 font-pixel text-[8px] text-rose-300">90 СЕК</span>
+                    </div>
+                    <div class="font-pixel text-[10px] text-rose-400 mb-1">5. ГОРЯЧАЯ БОМБА</div>
+                    <p class="text-xs text-slate-400">Передайте бомбу 💣 другому игроку или обезвредьте её у терминалов!</p>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
-                <!-- Создание / вход в комнату -->
-                <div class="lg:col-span-4 bg-slate-950/90 border-2 border-slate-800 rounded-2xl p-4 flex flex-col justify-between">
+                <!-- Создание / вход в комнату + Выбор Гали (Ведущего) -->
+                <div class="lg:col-span-4 bg-slate-950 border border-slate-800 rounded-2xl p-4 flex flex-col justify-between">
                     <div>
-                        <div class="font-pixel text-xs text-emerald-400 mb-3">НАСТРОЙКИ МАТЧА</div>
+                        <div class="font-pixel text-xs text-emerald-400 mb-3">НАСТРОЙКИ КОМНАТЫ И ГАЛИ</div>
                         <div class="mb-3">
-                            <label class="font-pixel text-[10px] text-slate-300 block mb-1.5">КОД КОМНАТЫ</label>
-                            <input id="mpRoomCodeInput" type="text" maxlength="12" value="ROOM_1" class="w-full bg-slate-900 border-2 border-slate-700 rounded-xl px-3 py-2.5 text-white font-pixel text-sm uppercase text-center">
+                            <label class="font-pixel text-[9px] text-slate-300 block mb-1">КОД КОМНАТЫ</label>
+                            <input id="mpRoomCodeInput" type="text" maxlength="12" value="ROOM_1" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-white font-pixel text-sm uppercase text-center">
                         </div>
                         <div class="mb-3">
-                            <label class="font-pixel text-[10px] text-slate-300 block mb-1.5">СПЕЦ-КАРТА МУЛЬТИПЛЕЕРА</label>
-                            <select id="mpArenaSelect" class="w-full bg-slate-900 border-2 border-slate-700 rounded-xl px-3 py-3 text-amber-300 font-pixel text-[10px] outline-none">
-                                <option value="mp_citadel">🏦 АРЕНА 1: БАНК ЦИТАДЕЛЬ (120с)</option>
-                                <option value="mp_biolab">🧪 АРЕНА 2: БИО-ЛАБОРАТОРИЯ Z (90с)</option>
-                                <option value="mp_warehouse">📦 АРЕНА 3: СКЛАД КОНТЕЙНЕРОВ (100с)</option>
-                                <option value="mp_reactor">☢️ АРЕНА 4: РЕАКТОР ДЕТОНАЦИИ (60с)</option>
+                            <label class="font-pixel text-[9px] text-slate-300 block mb-1">ОГРОМНАЯ АРЕНА (36×24)</label>
+                            <select id="mpArenaSelect" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-amber-300 font-pixel text-[10px] outline-none">
+                                <option value="mp_citadel">🏦 МЕГА-БАНК «ЦИТАДЕЛЬ» (150с)</option>
+                                <option value="mp_polygon">🏃 КИБЕР-ПОЛИГОН «ГАЛЯ» (120с)</option>
+                                <option value="mp_biolab">🧪 БИО-КОМПЛЕКС «ОМЕГА» (120с)</option>
+                                <option value="mp_warehouse">📦 ГРУЗОВОЙ ТЕРМИНАЛ (120с)</option>
+                                <option value="mp_reactor">☢️ РЕАКТОР ДЕТОНАЦИИ (90с)</option>
                             </select>
                         </div>
+
+                        <!-- Панель выбора «Гали» (Воды / Ведущего) -->
+                        <div class="bg-slate-900 border border-amber-500/40 rounded-xl p-3 mb-3">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="font-pixel text-[9px] text-amber-300">👑 КТО «ГАЛЯ» (ВОДА):</span>
+                                <span id="mpCurrentGalyaLabel" class="font-mono text-xs font-bold text-white">АВТО</span>
+                            </div>
+                            <div class="flex gap-2">
+                                <button onclick="window.rollRandomGalya()" class="dp-btn dp-btn-gold !py-2 !px-3 !text-[9px] flex-1">🎲 СЛУЧАЙНАЯ ГАЛЯ</button>
+                                <button onclick="window.makeMeGalya()" class="dp-btn dp-btn-dark !py-2 !px-3 !text-[9px]">Я ГАЛЯ ✋</button>
+                            </div>
+                        </div>
                     </div>
-                    <button onclick="window.startMultiplayerMatch()" class="dp-btn dp-btn-emerald w-full py-4 text-sm mt-2">🚀 СОЗДАТЬ / ВОЙТИ В МАТЧ</button>
+                    <button onclick="window.startMultiplayerMatch()" class="dp-btn dp-btn-emerald w-full py-3.5 text-xs">🚀 ЗАПУСТИТЬ / ВОЙТИ В МАТЧ</button>
                 </div>
 
-                <!-- Активные комнаты и реальные агенты -->
-                <div class="lg:col-span-4 bg-slate-950/90 border-2 border-slate-800 rounded-2xl p-4 flex flex-col">
+                <!-- Активные комнаты и реальные игроки -->
+                <div class="lg:col-span-4 bg-slate-950 border border-slate-800 rounded-2xl p-4 flex flex-col">
                     <div class="flex items-center justify-between mb-2">
-                        <span class="font-pixel text-[10px] text-cyan-400">АКТИВНЫЕ ИГРОКИ И КОМНАТЫ</span>
+                        <span class="font-pixel text-[10px] text-sky-400">КОМНАТЫ И ИГРОКИ (НАЗНАЧИТЬ ГАЛЮ)</span>
                         <span id="mpOnlineBadge" class="font-pixel text-[10px] text-emerald-400">1 В СЕТИ</span>
                     </div>
-                    <div id="mpPlayersList" class="space-y-2 flex-1 overflow-y-auto max-h-44 text-xs mb-3"></div>
-                    <div class="font-pixel text-[10px] text-amber-400 mb-1.5">КАРТЫ ИГРОКОВ В БД</div>
+                    <div id="mpPlayersList" class="space-y-2 flex-1 overflow-y-auto max-h-48 text-xs mb-3"></div>
+                    <div class="font-pixel text-[10px] text-amber-400 mb-1.5">КАРТЫ ИГРОКОВ (36×24)</div>
                     <div id="mpCloudMapsList" class="space-y-1.5 overflow-y-auto max-h-24 text-xs"></div>
                 </div>
 
-                <!-- Живой чат мультиплеера прямо в лобби -->
-                <div class="lg:col-span-4 bg-slate-950/90 border-2 border-slate-800 rounded-2xl p-4 flex flex-col">
-                    <div class="font-pixel text-[10px] text-purple-300 mb-2">💬 ЧАТ МУЛЬТИПЛЕЕРА (ЛОББИ + МАТЧ)</div>
-                    <div id="mpLobbyChatBox" class="flex-1 overflow-y-auto space-y-2 p-2.5 bg-slate-900/70 rounded-xl mb-3 text-xs max-h-48 min-h-[150px]"></div>
+                <!-- Живой чат мультиплеера -->
+                <div class="lg:col-span-4 bg-slate-950 border border-slate-800 rounded-2xl p-4 flex flex-col">
+                    <div class="font-pixel text-[10px] text-purple-300 mb-2">💬 ЧАТ МУЛЬТИПЛЕЕРА</div>
+                    <div id="mpLobbyChatBox" class="flex-1 overflow-y-auto space-y-2 p-2.5 bg-slate-900 rounded-xl mb-3 text-xs max-h-52 min-h-[160px]"></div>
                     <div class="flex gap-2">
-                        <input id="mpLobbyChatInput" type="text" maxlength="120" placeholder="Написать в чат матча..."
+                        <input id="mpLobbyChatInput" type="text" maxlength="120" placeholder="Написать в чат..."
                             onkeydown="if(event.key==='Enter') window.sendMpChatMessage('lobby')"
-                            class="flex-1 bg-slate-900 border-2 border-slate-700 rounded-xl px-3 py-2 text-xs text-white outline-none focus:border-emerald-400">
+                            class="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white outline-none focus:border-emerald-400">
                         <button onclick="window.sendMpChatMessage('lobby')" class="dp-btn dp-btn-emerald !py-2 !px-3.5 !text-xs">▶</button>
                     </div>
                 </div>
@@ -645,13 +623,13 @@
     </div>
 
     <!-- ==================== 9. СЛОТЫ СОХРАНЕНИЯ (1, 2, 3) ==================== -->
-    <div id="screen-slots" class="fixed inset-0 z-40 hidden flex-col items-center justify-center p-4 bg-black/90 backdrop-blur-md">
-        <div class="w-full max-w-4xl bg-slate-900/95 border-2 border-blue-500/60 rounded-3xl p-6 sm:p-8 shadow-2xl">
+    <div id="screen-slots" class="fixed inset-0 z-40 hidden flex-col items-center justify-center p-4 bg-slate-950/95">
+        <div class="w-full max-w-4xl bg-slate-900 border-2 border-slate-700 rounded-3xl p-6 sm:p-8 shadow-2xl">
             <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-6">
                 <div class="flex items-center gap-4">
-                    <span id="slotHeaderAvatar" class="text-4xl bg-slate-800 p-2.5 rounded-2xl border border-cyan-500/40">🕵️</span>
+                    <span id="slotHeaderAvatar" class="text-4xl bg-slate-800 p-2.5 rounded-2xl border border-slate-600">🕵️</span>
                     <div>
-                        <div class="font-pixel text-[10px] text-cyan-400">ОБЛАЧНЫЕ СЛОТЫ BOMNA5</div>
+                        <div class="font-pixel text-[10px] text-sky-400">ПРОГРЕСС КАМПАНИИ</div>
                         <div id="slotHeaderName" class="font-pixel text-base text-white mt-1">AGENT</div>
                     </div>
                 </div>
@@ -662,18 +640,18 @@
         </div>
     </div>
 
-    <!-- ==================== 10. КАРТА 20 УРОВНЕЙ (СТИЛЬ WATER AND FIRE) ==================== -->
-    <div id="screen-map" class="fixed inset-0 z-30 hidden flex-col bg-[#030712]">
-        <div class="h-20 bg-slate-950/95 border-b-2 border-cyan-500/40 px-4 sm:px-8 flex items-center justify-between z-20 backdrop-blur-md">
+    <!-- ==================== 10. КАРТА 20 УРОВНЕЙ ==================== -->
+    <div id="screen-map" class="fixed inset-0 z-30 hidden flex-col bg-[#0b1120]">
+        <div class="h-20 bg-slate-900 border-b border-slate-800 px-4 sm:px-8 flex items-center justify-between z-20">
             <div class="flex items-center gap-4">
                 <span class="text-3xl">💎</span>
                 <div>
-                    <div class="font-pixel text-sm sm:text-base text-cyan-400">КАРТА ОПЕРАЦИЙ (20 МИССИЙ)</div>
-                    <div id="mapSlotInfo" class="font-pixel text-[10px] text-slate-300 mt-1">СЛОТ #1 • НАЖМИТЕ НА УРОВЕНЬ ДЛЯ БРИФИНГА</div>
+                    <div class="font-pixel text-sm sm:text-base text-sky-400">КАРТА ОПЕРАЦИЙ (20 ОГРОМНЫХ МИССИЙ)</div>
+                    <div id="mapSlotInfo" class="font-pixel text-[10px] text-slate-300 mt-1">СЛОТ #1 • НАЖМИТЕ НА УРОВЕНЬ ДЛЯ ЗАПУСКА</div>
                 </div>
             </div>
             <div class="flex items-center gap-3">
-                <button onclick="window.openMultiplayerModal()" class="dp-btn dp-btn-emerald !py-2.5 !px-4 !text-xs">🌐 ОНЛАЙН</button>
+                <button onclick="window.openMultiplayerModal()" class="dp-btn dp-btn-emerald !py-2.5 !px-4 !text-xs">🌐 МУЛЬТИПЛЕЕР</button>
                 <button onclick="window.showScreen('hub')" class="dp-btn dp-btn-dark !py-2.5 !px-4 !text-xs">🏠 МЕНЮ</button>
             </div>
         </div>
@@ -687,58 +665,58 @@
     </div>
 
     <!-- ==================== 11. БРИФИНГ УРОВНЯ И ДОПОЛНЕНИЯ ==================== -->
-    <div id="modal-briefing" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/85 backdrop-blur-md">
-        <div class="w-full max-w-xl bg-slate-900 border-2 border-cyan-400 rounded-3xl p-7 shadow-2xl relative max-h-[94vh] overflow-y-auto">
-            <button onclick="window.closeBriefing()" class="absolute top-4 right-4 w-11 h-11 rounded-xl bg-slate-800 hover:bg-rose-600 text-white font-bold text-lg">✕</button>
-            <div class="flex items-center gap-2 font-pixel text-xs text-cyan-400 mb-2">
+    <div id="modal-briefing" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80">
+        <div class="w-full max-w-xl bg-slate-900 border-2 border-slate-700 rounded-3xl p-7 shadow-2xl relative max-h-[94vh] overflow-y-auto">
+            <button onclick="window.closeBriefing()" class="absolute top-4 right-4 w-10 h-10 rounded-xl bg-slate-800 hover:bg-rose-600 text-white font-bold text-lg">✕</button>
+            <div class="flex items-center gap-2 font-pixel text-xs text-sky-400 mb-2">
                 <span id="briefLevelNum">ОПЕРАЦИЯ #01</span>
                 <span>•</span>
-                <span class="text-rose-400">🔒 ОДИНОЧНЫЙ РЕЖИМ</span>
+                <span class="text-amber-300">КАРТА 36×24</span>
             </div>
             <h2 id="briefLevelTitle" class="font-pixel text-lg sm:text-2xl text-white mb-5">ТИХИЙ ВХОД</h2>
 
-            <div class="grid grid-cols-2 gap-4 bg-slate-950/90 border-2 border-slate-800 rounded-2xl p-4 mb-5">
+            <div class="grid grid-cols-2 gap-4 bg-slate-950 border border-slate-800 rounded-2xl p-4 mb-5">
                 <div>
                     <div class="font-pixel text-[10px] text-slate-400 mb-1">СЛОЖНОСТЬ</div>
                     <div id="briefDifficulty" class="font-pixel text-sm text-amber-400">★☆☆☆☆ ЛЕГКО</div>
                 </div>
                 <div>
-                    <div class="font-pixel text-[10px] text-slate-400 mb-1">СТАТУС</div>
-                    <div id="briefStatus" class="font-pixel text-sm text-emerald-400">ДОСТУПЕН</div>
+                    <div class="font-pixel text-[10px] text-slate-400 mb-1">МАСШТАБ ОБЪЕКТА</div>
+                    <div id="briefStatus" class="font-pixel text-sm text-emerald-400">ОГРОМНЫЙ (36×24)</div>
                 </div>
             </div>
 
             <div class="mb-5">
-                <div class="font-pixel text-[10px] text-slate-300 mb-2.5">ОБЪЕКТЫ НА УРОВНЕ:</div>
+                <div class="font-pixel text-[10px] text-slate-300 mb-2.5">ОБЪЕКТЫ В СЕКТОРЕ:</div>
                 <div id="briefBuiltInTags" class="flex flex-wrap gap-2"></div>
             </div>
 
             <div class="mb-6">
-                <div class="font-pixel text-[10px] text-cyan-300 mb-2.5">ДОПОЛНЕНИЯ (МОДИФИКАТОРЫ):</div>
+                <div class="font-pixel text-[10px] text-sky-300 mb-2.5">МОДИФИКАТОРЫ МИССИИ:</div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <label class="flex items-center gap-3 bg-slate-950 border-2 border-slate-700 rounded-xl p-3 cursor-pointer">
-                        <input type="checkbox" id="mod-darkness" class="w-5 h-5 accent-cyan-400">
+                    <label class="flex items-center gap-3 bg-slate-950 border border-slate-700 rounded-xl p-3 cursor-pointer">
+                        <input type="checkbox" id="mod-darkness" class="w-5 h-5 accent-sky-400">
                         <div>
                             <div class="font-pixel text-[10px] text-white">🔦 БЛЭКАУТ</div>
-                            <div class="text-xs text-slate-400">Туман войны вокруг агента</div>
+                            <div class="text-xs text-slate-400">Ограниченный обзор</div>
                         </div>
                     </label>
-                    <label class="flex items-center gap-3 bg-slate-950 border-2 border-slate-700 rounded-xl p-3 cursor-pointer">
-                        <input type="checkbox" id="mod-timer" class="w-5 h-5 accent-cyan-400">
+                    <label class="flex items-center gap-3 bg-slate-950 border border-slate-700 rounded-xl p-3 cursor-pointer">
+                        <input type="checkbox" id="mod-timer" class="w-5 h-5 accent-sky-400">
                         <div>
                             <div class="font-pixel text-[10px] text-white">⏱️ БЛИЦ-ТАЙМЕР</div>
-                            <div class="text-xs text-slate-400">Успеть за 45 секунд</div>
+                            <div class="text-xs text-slate-400">Лимит времени 90 сек</div>
                         </div>
                     </label>
-                    <label class="flex items-center gap-3 bg-slate-950 border-2 border-slate-700 rounded-xl p-3 cursor-pointer">
-                        <input type="checkbox" id="mod-turbo" class="w-5 h-5 accent-cyan-400">
+                    <label class="flex items-center gap-3 bg-slate-950 border border-slate-700 rounded-xl p-3 cursor-pointer">
+                        <input type="checkbox" id="mod-turbo" class="w-5 h-5 accent-sky-400">
                         <div>
                             <div class="font-pixel text-[10px] text-white">⚡ ТУРБО-ОХРАНА</div>
-                            <div class="text-xs text-slate-400">Ускоренные патрули</div>
+                            <div class="text-xs text-slate-400">Быстрые патрули</div>
                         </div>
                     </label>
-                    <label class="flex items-center gap-3 bg-slate-950 border-2 border-slate-700 rounded-xl p-3 cursor-pointer">
-                        <input type="checkbox" id="mod-ghost" class="w-5 h-5 accent-cyan-400">
+                    <label class="flex items-center gap-3 bg-slate-950 border border-slate-700 rounded-xl p-3 cursor-pointer">
+                        <input type="checkbox" id="mod-ghost" class="w-5 h-5 accent-sky-400">
                         <div>
                             <div class="font-pixel text-[10px] text-white">👻 ФАНТОМ</div>
                             <div class="text-xs text-slate-400">Бесконечный рывок + 3 ЭМИ</div>
@@ -753,187 +731,157 @@
         </div>
     </div>
 
-    <!-- ==================== 12. ИГРОВОЙ ЭКРАН (CANVAS + HUD + ЧАТ МУЛЬТИПЛЕЕРА) ==================== -->
-    <div id="screen-game" class="fixed inset-0 z-20 hidden flex-col items-center justify-center bg-black">
-        <div id="gameTopHud" class="fixed top-3 left-3 z-40 flex flex-wrap items-center gap-2.5 pointer-events-none pr-16">
-            <div class="bg-slate-950/90 border-2 border-cyan-500/60 px-4 py-2 rounded-xl">
-                <span id="hudLevelName" class="font-pixel text-xs text-cyan-400">МИССИЯ #1</span>
+    <!-- ==================== 12. ИГРОВОЙ ЭКРАН (CANVAS + КАМЕРА + МИНИКАРТА + HUD) ==================== -->
+    <div id="screen-game" class="fixed inset-0 z-20 hidden flex-col items-center justify-center bg-[#070b14]">
+        <div id="gameTopHud" class="fixed top-3 left-3 z-40 flex flex-wrap items-center gap-2 pointer-events-none pr-16">
+            <div class="bg-slate-900/95 border border-slate-700 px-3.5 py-2 rounded-xl">
+                <span id="hudLevelName" class="font-pixel text-[11px] text-sky-400">МИССИЯ #1</span>
             </div>
-            <div class="bg-slate-950/90 border-2 border-amber-500/60 px-4 py-2 rounded-xl">
-                <span id="hudObjective" class="font-pixel text-xs text-amber-300">ЦЕЛЬ: АЛМАЗ 💎</span>
+            <div class="bg-slate-900/95 border border-slate-700 px-3.5 py-2 rounded-xl">
+                <span id="hudObjective" class="font-pixel text-[11px] text-amber-300">ЦЕЛЬ: АЛМАЗ 💎</span>
             </div>
-            <div class="bg-slate-950/90 border-2 border-purple-500/60 px-4 py-2 rounded-xl pointer-events-auto cursor-pointer" onclick="window.triggerActionSkill()">
-                <span id="hudInventoryText" class="font-pixel text-xs text-purple-300">💳:0 | 🛜ЭМИ(E):1</span>
+            <div class="bg-slate-900/95 border border-slate-700 px-3.5 py-2 rounded-xl pointer-events-auto cursor-pointer" onclick="window.triggerActionSkill()">
+                <span id="hudInventoryText" class="font-pixel text-[11px] text-purple-300">💳:0 | 🛜ЭМИ(E):1</span>
             </div>
-            <div id="hudTimerBox" class="hidden bg-rose-950/95 border-2 border-rose-500 px-4 py-2 rounded-xl shadow-[0_0_20px_rgba(244,63,94,0.5)]">
-                <span id="hudTimerText" class="font-pixel text-xs text-rose-300">⏱️ 60.0с</span>
+            <div id="hudGalyaBox" class="hidden bg-amber-950/95 border border-amber-500 px-3.5 py-2 rounded-xl pointer-events-auto cursor-pointer" onclick="window.rollRandomGalya()">
+                <span id="hudGalyaText" class="font-pixel text-[11px] text-amber-300">👑 ГАЛЯ: АВТО (🎲)</span>
             </div>
-            <button id="hudMpChatToggleBtn" onclick="window.toggleInGameMpChat()" class="hidden pointer-events-auto bg-emerald-950/90 border-2 border-emerald-400 px-3.5 py-2 rounded-xl font-pixel text-xs text-emerald-300 cursor-pointer">
-                💬 ЧАТ МАТЧА
+            <div id="hudTimerBox" class="hidden bg-rose-950/95 border border-rose-500 px-3.5 py-2 rounded-xl">
+                <span id="hudTimerText" class="font-pixel text-[11px] text-rose-300">⏱️ 90.0с</span>
+            </div>
+            <button onclick="window.toggleCameraZoom()" class="pointer-events-auto bg-slate-900/95 border border-slate-600 px-3 py-2 rounded-xl font-pixel text-[10px] text-slate-200 hover:border-sky-400 cursor-pointer">
+                📷 КАМЕРА (Z)
+            </button>
+            <button id="hudMpChatToggleBtn" onclick="window.toggleInGameMpChat()" class="hidden pointer-events-auto bg-emerald-950/95 border border-emerald-500 px-3 py-2 rounded-xl font-pixel text-[10px] text-emerald-300 cursor-pointer">
+                💬 ЧАТ
             </button>
         </div>
 
-        <!-- Баннер визуального интерактивного обучения на 1 уровне (без диалогов) -->
-        <div id="tutorialBanner" class="fixed top-16 left-1/2 -translate-x-1/2 z-40 hidden bg-slate-950/95 border-2 border-emerald-400 rounded-2xl px-5 py-3 shadow-[0_0_30px_rgba(16,185,129,0.5)] max-w-xl w-[94%] text-center pointer-events-none">
-            <div id="tutorialStepText" class="font-pixel text-xs text-emerald-300 leading-relaxed">
-                ШАГ 1: ДВИГАЙТЕСЬ ПО СВЕТЯЩИМСЯ СТРЕЛКАМ К БАТАРЕЕ ЭМИ 🔋
+        <!-- Баннер обучения на 1 уровне -->
+        <div id="tutorialBanner" class="fixed top-16 left-1/2 -translate-x-1/2 z-40 hidden bg-slate-900/95 border border-emerald-500 rounded-2xl px-5 py-2.5 max-w-xl w-[94%] text-center pointer-events-none">
+            <div id="tutorialStepText" class="font-pixel text-[11px] text-emerald-300 leading-relaxed">
+                ШАГ 1: ДВИГАЙТЕСЬ ПО УКАЗАТЕЛЮ К БАТАРЕЕ ЭМИ 🔋
             </div>
         </div>
 
         <!-- Внутриигровой чат для Мультиплеера -->
-        <div id="inGameMpChatPanel" class="fixed top-16 right-4 z-50 hidden w-80 sm:w-96 bg-slate-950/95 border-2 border-emerald-400 rounded-2xl p-3.5 shadow-2xl backdrop-blur-md">
+        <div id="inGameMpChatPanel" class="fixed top-16 right-4 z-50 hidden w-80 sm:w-96 bg-slate-900/95 border-2 border-slate-700 rounded-2xl p-3.5 shadow-2xl">
             <div class="flex items-center justify-between border-b border-slate-800 pb-2 mb-2">
-                <span class="font-pixel text-[10px] text-emerald-400">💬 ЧАТ КОМНАТЫ</span>
+                <span class="font-pixel text-[10px] text-emerald-400">💬 ЧАТ МАТЧА</span>
                 <button onclick="window.toggleInGameMpChat()" class="text-slate-400 hover:text-white font-bold">✕</button>
             </div>
-            <div id="inGameMpChatMessages" class="h-40 overflow-y-auto space-y-1.5 p-2 bg-slate-900/80 rounded-xl mb-2.5 text-xs"></div>
+            <div id="inGameMpChatMessages" class="h-40 overflow-y-auto space-y-1.5 p-2 bg-slate-950 rounded-xl mb-2.5 text-xs"></div>
             <div class="flex gap-2">
                 <input id="inGameMpChatInput" type="text" maxlength="100" placeholder="Сообщение игрокам..."
                     onkeydown="if(event.key==='Enter'){ window.sendMpChatMessage('ingame'); event.stopPropagation(); }"
-                    class="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white outline-none focus:border-emerald-400">
+                    class="flex-1 bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white outline-none focus:border-emerald-400">
                 <button onclick="window.sendMpChatMessage('ingame')" class="dp-btn dp-btn-emerald !py-2 !px-3 !text-[10px]">▶</button>
             </div>
         </div>
 
         <canvas id="gameCanvas" tabindex="0"></canvas>
 
-        <div id="staminaContainer" class="fixed bottom-4 left-1/2 -translate-x-1/2 w-48 sm:w-64 h-3.5 bg-slate-900 border-2 border-slate-400 rounded-full overflow-hidden z-40">
-            <div id="staminaFill" class="w-full h-full bg-gradient-to-r from-amber-500 to-yellow-300 transition-all duration-75"></div>
+        <div id="staminaContainer" class="fixed bottom-4 left-1/2 -translate-x-1/2 w-48 sm:w-64 h-3 bg-slate-900 border border-slate-600 rounded-full overflow-hidden z-40">
+            <div id="staminaFill" class="w-full h-full bg-amber-400 transition-all duration-75"></div>
         </div>
 
-        <!-- Панель Конструктора Уровней -->
+        <!-- Панель Конструктора Уровней (36×24) -->
         <div id="editorHud" class="hidden">
-            <div class="fixed top-3 left-3 z-50 bg-slate-950/95 border-2 border-cyan-500/60 px-4 py-2.5 rounded-xl flex items-center gap-2">
-                <span class="font-pixel text-xs text-cyan-400">🛠️ РЕДАКТОР:</span>
+            <div class="fixed top-3 left-3 z-50 bg-slate-900/95 border border-slate-700 px-4 py-2.5 rounded-xl flex items-center gap-2">
+                <span class="font-pixel text-xs text-sky-400">🛠️ РЕДАКТОР (36×24):</span>
                 <span id="editorActiveToolName" class="font-pixel text-xs text-amber-300">🧱 СТЕНА</span>
             </div>
 
-            <div class="fixed bottom-3 left-1/2 -translate-x-1/2 bg-slate-950/95 border-2 border-cyan-500/70 p-2.5 rounded-2xl flex flex-wrap justify-center gap-2 z-50 w-[96vw] max-w-3xl shadow-2xl">
-                <button class="ed-tool w-11 h-11 rounded-xl bg-slate-800 border-2 border-emerald-400 flex items-center justify-center text-lg" onclick="window.selectEditorTool(1, '🧱 СТЕНА', this)">🧱</button>
-                <button class="ed-tool w-11 h-11 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-lg" onclick="window.selectEditorTool(0, '⬛ ПОЛ', this)">⬛</button>
-                <button class="ed-tool w-11 h-11 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-xs" onclick="window.selectEditorTool(2, '👮↔ ОХРАНА X', this)">👮↔</button>
-                <button class="ed-tool w-11 h-11 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-xs" onclick="window.selectEditorTool(3, '👮↕ ОХРАНА Y', this)">👮↕</button>
-                <button class="ed-tool w-11 h-11 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-lg" onclick="window.selectEditorTool(15, '🛸 ДРОН', this)">🛸</button>
-                <button class="ed-tool w-11 h-11 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-lg" onclick="window.selectEditorTool(11, '📹 КАМЕРА', this)">📹</button>
-                <button class="ed-tool w-11 h-11 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-lg" onclick="window.selectEditorTool(6, '🟥 ЛАЗЕР', this)">🟥</button>
-                <button class="ed-tool w-11 h-11 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-lg" onclick="window.selectEditorTool(7, '🌀 ПОРТАЛ', this)">🌀</button>
-                <button class="ed-tool w-11 h-11 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-lg" onclick="window.selectEditorTool(9, '💳 КЛЮЧ-КАРТА', this)">💳</button>
-                <button class="ed-tool w-11 h-11 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-lg" onclick="window.selectEditorTool(10, '🔒 ДВЕРЬ', this)">🔒</button>
-                <button class="ed-tool w-11 h-11 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-lg" onclick="window.selectEditorTool(12, '💻 ТЕРМИНАЛ', this)">💻</button>
-                <button class="ed-tool w-11 h-11 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-lg" onclick="window.selectEditorTool(13, '🕳️ ВЕНТИЛЯЦИЯ', this)">🕳️</button>
-                <button class="ed-tool w-11 h-11 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-lg" onclick="window.selectEditorTool(14, '🔋 БАТАРЕЯ ЭМИ', this)">🔋</button>
-                <button class="ed-tool w-11 h-11 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-lg" onclick="window.selectEditorTool(16, '⚙️ ШИПЫ', this)">⚙️</button>
-                <button class="ed-tool w-11 h-11 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-lg" onclick="window.selectEditorTool(4, '🕵️ СТАРТ', this)">🕵️</button>
-                <button class="ed-tool w-11 h-11 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-lg" onclick="window.selectEditorTool(5, '💎 АЛМАЗ', this)">💎</button>
-                <button class="ed-tool w-11 h-11 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-lg" onclick="window.selectEditorTool(8, '📝 ТЕКСТ', this)">📝</button>
+            <div class="fixed bottom-3 left-1/2 -translate-x-1/2 bg-slate-900/95 border border-slate-700 p-2 rounded-2xl flex flex-wrap justify-center gap-1.5 z-50 w-[96vw] max-w-3xl shadow-2xl">
+                <button class="ed-tool w-10 h-10 rounded-xl bg-slate-800 border-2 border-emerald-400 flex items-center justify-center text-base" onclick="window.selectEditorTool(1, '🧱 СТЕНА', this)">🧱</button>
+                <button class="ed-tool w-10 h-10 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-base" onclick="window.selectEditorTool(0, '⬛ ПОЛ', this)">⬛</button>
+                <button class="ed-tool w-10 h-10 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-xs" onclick="window.selectEditorTool(2, '👮↔ ОХРАНА X', this)">👮↔</button>
+                <button class="ed-tool w-10 h-10 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-xs" onclick="window.selectEditorTool(3, '👮↕ ОХРАНА Y', this)">👮↕</button>
+                <button class="ed-tool w-10 h-10 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-base" onclick="window.selectEditorTool(15, '🛸 ДРОН', this)">🛸</button>
+                <button class="ed-tool w-10 h-10 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-base" onclick="window.selectEditorTool(11, '📹 КАМЕРА', this)">📹</button>
+                <button class="ed-tool w-10 h-10 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-base" onclick="window.selectEditorTool(6, '🟥 ЛАЗЕР', this)">🟥</button>
+                <button class="ed-tool w-10 h-10 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-base" onclick="window.selectEditorTool(7, '🌀 ПОРТАЛ', this)">🌀</button>
+                <button class="ed-tool w-10 h-10 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-base" onclick="window.selectEditorTool(9, '💳 КЛЮЧ-КАРТА', this)">💳</button>
+                <button class="ed-tool w-10 h-10 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-base" onclick="window.selectEditorTool(10, '🔒 ДВЕРЬ', this)">🔒</button>
+                <button class="ed-tool w-10 h-10 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-base" onclick="window.selectEditorTool(12, '💻 ТЕРМИНАЛ', this)">💻</button>
+                <button class="ed-tool w-10 h-10 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-base" onclick="window.selectEditorTool(13, '🕳️ ВЕНТИЛЯЦИЯ', this)">🕳️</button>
+                <button class="ed-tool w-10 h-10 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-base" onclick="window.selectEditorTool(14, '🔋 БАТАРЕЯ ЭМИ', this)">🔋</button>
+                <button class="ed-tool w-10 h-10 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-base" onclick="window.selectEditorTool(16, '⚙️ ШИПЫ', this)">⚙️</button>
+                <button class="ed-tool w-10 h-10 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-base" onclick="window.selectEditorTool(4, '🕵️ СТАРТ', this)">🕵️</button>
+                <button class="ed-tool w-10 h-10 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-base" onclick="window.selectEditorTool(5, '💎 АЛМАЗ', this)">💎</button>
+                <button class="ed-tool w-10 h-10 rounded-xl bg-slate-800 border-2 border-slate-600 flex items-center justify-center text-base" onclick="window.selectEditorTool(8, '📝 ТЕКСТ', this)">📝</button>
             </div>
 
             <div class="fixed top-3 right-3 z-50 flex flex-wrap gap-2 justify-end">
-                <button onclick="window.testEditorMap()" class="dp-btn dp-btn-emerald !py-2.5 !px-3.5 !text-[10px]">▶ ТЕСТ</button>
-                <button onclick="window.publishCustomMapToCloud()" class="dp-btn dp-btn-purple !py-2.5 !px-3.5 !text-[10px]">☁️ В БД</button>
-                <button onclick="window.saveCustomMap()" class="dp-btn !py-2.5 !px-3.5 !text-[10px]">💾 СОХР.</button>
-                <button onclick="window.clearCustomMap()" class="dp-btn dp-btn-gold !py-2.5 !px-3.5 !text-[10px]">🗑️</button>
-                <button onclick="window.exitToHub()" class="dp-btn dp-btn-dark !py-2.5 !px-3.5 !text-[10px]">🏠 МЕНЮ</button>
+                <button onclick="window.testEditorMap()" class="dp-btn dp-btn-emerald !py-2 !px-3 !text-[10px]">▶ ТЕСТ</button>
+                <button onclick="window.publishCustomMapToCloud()" class="dp-btn dp-btn-purple !py-2 !px-3 !text-[10px]">☁️ ОПУБЛИКОВАТЬ</button>
+                <button onclick="window.saveCustomMap()" class="dp-btn !py-2 !px-3 !text-[10px]">💾 СОХР.</button>
+                <button onclick="window.clearCustomMap()" class="dp-btn dp-btn-gold !py-2 !px-3 !text-[10px]">🗑️</button>
+                <button onclick="window.exitToHub()" class="dp-btn dp-btn-dark !py-2 !px-3 !text-[10px]">🏠 МЕНЮ</button>
             </div>
         </div>
 
-        <button id="pauseHudBtn" onclick="window.togglePauseGame()" class="w-12 h-12 rounded-xl bg-slate-900/90 border-2 border-slate-500 items-center justify-center text-xl">⏸️</button>
+        <button id="pauseHudBtn" onclick="window.togglePauseGame()" class="w-11 h-11 rounded-xl bg-slate-900 border border-slate-600 items-center justify-center text-lg">⏸️</button>
         
         <div id="actionRightHud">
-            <button onclick="window.triggerActionSkill()" class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-purple-600/45 border-2 border-purple-400 flex flex-col items-center justify-center text-2xl backdrop-blur-md">
+            <button onclick="window.triggerActionSkill()" class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-purple-700/60 border-2 border-purple-400 flex flex-col items-center justify-center text-2xl">
                 <span id="actionSkillIcon">🛜</span>
-                <span id="actionSkillLabel" class="font-pixel text-[8px] text-purple-200 mt-0.5">ЭМИ</span>
+                <span id="actionSkillLabel" class="font-pixel text-[8px] text-purple-100 mt-0.5">ЭМИ</span>
             </button>
             <button id="sprintHudBtn"
                 ontouchstart="window.setSprint(true); event.preventDefault();"
                 ontouchend="window.setSprint(false); event.preventDefault();"
                 onmousedown="window.setSprint(true)" onmouseup="window.setSprint(false)"
-                class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-amber-500/40 border-2 border-amber-400 flex flex-col items-center justify-center text-3xl backdrop-blur-md">
+                class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-amber-600/60 border-2 border-amber-400 flex flex-col items-center justify-center text-3xl">
                 <span>⚡</span>
-                <span class="font-pixel text-[8px] text-amber-200 mt-0.5">РЫВОК</span>
+                <span class="font-pixel text-[8px] text-amber-100 mt-0.5">РЫВОК</span>
             </button>
         </div>
 
         <div id="joystickZone">
-            <div id="joystickBase" class="w-32 h-32 rounded-full bg-slate-900/75 border-2 border-cyan-400/70 relative flex items-center justify-center backdrop-blur-md">
-                <div id="joystickStick" class="w-14 h-14 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 border-2 border-white pointer-events-none"></div>
+            <div id="joystickBase" class="w-32 h-32 rounded-full bg-slate-900/85 border-2 border-slate-500 relative flex items-center justify-center">
+                <div id="joystickStick" class="w-14 h-14 rounded-full bg-sky-500 border-2 border-white pointer-events-none"></div>
             </div>
         </div>
     </div>
 
-    <!-- ==================== 13. ОПЦИИ И ЗАЩИТА FIREBASE BOMNA5 ==================== -->
-    <div id="modal-security" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/85 backdrop-blur-md">
-        <div class="w-full max-w-2xl bg-slate-900 border-2 border-cyan-500 rounded-3xl p-7 max-h-[92vh] overflow-y-auto relative">
-            <button onclick="window.closeSecurityRulesModal()" class="absolute top-4 right-4 w-11 h-11 rounded-xl bg-slate-800 hover:bg-rose-600 text-white font-bold text-lg">✕</button>
-            <h2 class="font-pixel text-base sm:text-lg text-cyan-400 mb-5">🛡️ НАСТРОЙКИ И ЗАЩИТА БД BOMNA5</h2>
+    <!-- ==================== 13. ЧИСТЫЕ ИГРОВЫЕ НАСТРОЙКИ (БЕЗ RULES) ==================== -->
+    <div id="modal-settings" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80">
+        <div class="w-full max-w-lg bg-slate-900 border-2 border-slate-700 rounded-3xl p-7 relative">
+            <button onclick="window.closeSettingsModal()" class="absolute top-4 right-4 w-10 h-10 rounded-xl bg-slate-800 hover:bg-rose-600 text-white font-bold text-lg">✕</button>
+            <h2 class="font-pixel text-base sm:text-lg text-sky-400 mb-5">⚙️ НАСТРОЙКИ ИГРЫ</h2>
 
             <div class="space-y-4 mb-6">
-                <div class="grid grid-cols-3 gap-2.5">
-                    <button onclick="window.changeVisualStyle('CYBER')" class="dp-btn dp-btn-dark !py-3 !text-[10px]">СТИЛЬ: КИБЕР</button>
-                    <button onclick="window.changeVisualStyle('TACTICAL')" class="dp-btn dp-btn-dark !py-3 !text-[10px]">СТИЛЬ: ТАКТИКА</button>
-                    <button onclick="window.changeVisualStyle('ARCADE')" class="dp-btn dp-btn-dark !py-3 !text-[10px]">СТИЛЬ: АРКАДА</button>
+                <div>
+                    <div class="font-pixel text-[10px] text-slate-400 mb-2">ЦВЕТОВАЯ ТЕМА КАРТЫ</div>
+                    <div class="grid grid-cols-3 gap-2.5">
+                        <button onclick="window.changeVisualStyle('CYBER')" class="dp-btn dp-btn-dark !py-3 !text-[10px]">ТЕМНАЯ</button>
+                        <button onclick="window.changeVisualStyle('TACTICAL')" class="dp-btn dp-btn-dark !py-3 !text-[10px]">ТАКТИКА</button>
+                        <button onclick="window.changeVisualStyle('ARCADE')" class="dp-btn dp-btn-dark !py-3 !text-[10px]">КОНТРАСТ</button>
+                    </div>
                 </div>
 
                 <div class="flex flex-wrap gap-3 justify-between items-center bg-slate-950 p-4 rounded-2xl border border-slate-800">
-                    <span class="font-pixel text-xs text-slate-300">ЗВУК И ДЖОЙСТИК</span>
+                    <span class="font-pixel text-xs text-slate-300">АУДИО И УПРАВЛЕНИЕ</span>
                     <div class="flex gap-2.5">
                         <button id="muteBtnToggle" onclick="window.toggleAudioMute()" class="dp-btn !py-2.5 !px-4 !text-[10px]">ЗВУК: ВКЛ 🔊</button>
                         <button id="touchModeBtn" onclick="window.cycleTouchMode()" class="dp-btn dp-btn-dark !py-2.5 !px-4 !text-[10px]">ДЖОЙСТИК: АВТО 📱</button>
                     </div>
                 </div>
 
-                <div class="bg-slate-950 border border-emerald-500/50 rounded-2xl p-4">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="font-pixel text-[10px] text-emerald-400">🔒 1. REALTIME DATABASE RULES (BOMNA5):</span>
-                        <button onclick="window.copySecurityRules()" class="text-[10px] font-pixel text-cyan-400 underline">КОПИРОВАТЬ RTDB RULES</button>
-                    </div>
-                    <pre id="rtdbRulesCode" class="text-xs font-mono text-slate-300 bg-black p-3 rounded-xl overflow-x-auto select-all">{
-  "rules": {
-    ".read": true,
-    "diamond_plan_v2": {
-      ".read": true,
-      ".write": true,
-      "usernames": {
-        "$uname": { ".write": "!data.exists() || data.val() === newData.val()" }
-      },
-      "accounts": {
-        "$uname": { ".write": "newData.child('appSignature').val() === 'DIAMOND_PLAN_OFFICIAL_CLIENT'" }
-      },
-      "presence": {
-        "$uname": { ".write": true }
-      },
-      "rooms": { ".write": true },
-      "chat": { ".write": true },
-      "mp_chat": { ".write": true },
-      "maps": { ".write": true }
-    }
-  }
-}</pre>
-                </div>
-
-                <div class="bg-slate-950 border border-cyan-500/50 rounded-2xl p-4">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="font-pixel text-[10px] text-cyan-400">🔒 2. FIRESTORE DATABASE RULES (BOMNA5):</span>
-                        <button onclick="window.copyFirestoreRules()" class="text-[10px] font-pixel text-amber-400 underline">КОПИРОВАТЬ FIRESTORE RULES</button>
-                    </div>
-                    <pre id="firestoreRulesCode" class="text-xs font-mono text-slate-300 bg-black p-3 rounded-xl overflow-x-auto select-all">rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write: if true;
-    }
-  }
-}</pre>
+                <div class="flex flex-wrap gap-3 justify-between items-center bg-slate-950 p-4 rounded-2xl border border-slate-800">
+                    <span class="font-pixel text-xs text-slate-300">РЕЖИМ КАМЕРЫ НА УРОВНЯХ (36×24)</span>
+                    <button id="cameraModeSettingBtn" onclick="window.toggleCameraZoom()" class="dp-btn dp-btn-emerald !py-2.5 !px-4 !text-[10px]">КАМЕРА: СЛЕЖЕНИЕ 📷</button>
                 </div>
             </div>
-            <button onclick="window.closeSecurityRulesModal()" class="dp-btn w-full py-4">ЗАКРЫТЬ</button>
+            <button onclick="window.closeSettingsModal()" class="dp-btn w-full py-4">СОХРАНИТЬ И ЗАКРЫТЬ</button>
         </div>
     </div>
 
     <!-- ==================== 14. ПАУЗА, ПОБЕДА, ПОРАЖЕНИЕ ==================== -->
-    <div id="modal-pause" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-        <div class="w-full max-w-md bg-slate-900 border-2 border-cyan-500 rounded-3xl p-7 text-center">
-            <h2 class="font-pixel text-2xl text-cyan-400 mb-6">ПАУЗА</h2>
+    <div id="modal-pause" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80">
+        <div class="w-full max-w-md bg-slate-900 border-2 border-slate-700 rounded-3xl p-7 text-center">
+            <h2 class="font-pixel text-2xl text-sky-400 mb-6">ПАУЗА</h2>
             <div class="flex flex-col gap-3.5">
                 <button onclick="window.togglePauseGame()" class="dp-btn w-full py-4">▶ ПРОДОЛЖИТЬ</button>
                 <button onclick="window.restartActiveLevel()" class="dp-btn dp-btn-dark w-full py-4">🔄 ЗАНОВО</button>
@@ -943,8 +891,8 @@ service cloud.firestore {
         </div>
     </div>
 
-    <div id="modal-gameover" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/85 backdrop-blur-md">
-        <div class="w-full max-w-md bg-slate-900 border-2 border-rose-500 rounded-3xl p-7 text-center shadow-2xl">
+    <div id="modal-gameover" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/85">
+        <div class="w-full max-w-md bg-slate-900 border-2 border-rose-600 rounded-3xl p-7 text-center shadow-2xl">
             <div class="text-6xl mb-4">🚨</div>
             <h2 class="font-pixel text-2xl text-rose-500 mb-3">ПРОВАЛ!</h2>
             <p id="gameOverReason" class="font-pixel text-xs text-slate-300 mb-6 leading-relaxed">МИССИЯ СОРВАНА</p>
@@ -955,9 +903,9 @@ service cloud.firestore {
         </div>
     </div>
 
-    <div id="modal-win" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/85 backdrop-blur-md">
-        <div class="w-full max-w-md bg-slate-900 border-2 border-amber-400 rounded-3xl p-7 text-center shadow-2xl">
-            <div class="text-6xl mb-4 animate-bounce">💎</div>
+    <div id="modal-win" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/85">
+        <div class="w-full max-w-md bg-slate-900 border-2 border-amber-500 rounded-3xl p-7 text-center shadow-2xl">
+            <div class="text-6xl mb-4">💎</div>
             <h2 class="font-pixel text-xl text-amber-400 mb-3">ПЛАН ВЫПОЛНЕН!</h2>
             <p id="winStatsText" class="font-pixel text-xs text-emerald-300 mb-6 leading-relaxed">АЛМАЗ ДОСТАВЛЕН НА БАЗУ</p>
             <div class="flex flex-col gap-3.5">
@@ -967,11 +915,11 @@ service cloud.firestore {
         </div>
     </div>
 
-    <div id="modal-custom-prompt" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-black/85 backdrop-blur-sm">
-        <div class="w-full max-w-md bg-slate-900 border-2 border-cyan-400 rounded-3xl p-6 text-center shadow-2xl">
-            <h3 id="cpTitle" class="font-pixel text-sm text-cyan-400 mb-3">СООБЩЕНИЕ</h3>
+    <div id="modal-custom-prompt" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-black/85">
+        <div class="w-full max-w-md bg-slate-900 border-2 border-slate-600 rounded-3xl p-6 text-center shadow-2xl">
+            <h3 id="cpTitle" class="font-pixel text-sm text-sky-400 mb-3">СООБЩЕНИЕ</h3>
             <p id="cpMessage" class="text-sm text-slate-200 mb-5 leading-relaxed"></p>
-            <input id="cpInput" type="text" maxlength="24" class="hidden w-full bg-slate-950 border-2 border-cyan-500 rounded-xl px-4 py-3 text-white font-pixel text-sm text-center mb-5 outline-none">
+            <input id="cpInput" type="text" maxlength="24" class="hidden w-full bg-slate-950 border border-sky-500 rounded-xl px-4 py-3 text-white font-pixel text-sm text-center mb-5 outline-none">
             <div class="flex gap-3 justify-center">
                 <button id="cpCancelBtn" class="dp-btn dp-btn-dark flex-1 !py-3 !text-xs">ОТМЕНА</button>
                 <button id="cpOkBtn" class="dp-btn flex-1 !py-3 !text-xs">ОК</button>
@@ -1147,7 +1095,7 @@ const SessionPersistence = {
                 req.onupgradeneeded = (e) => {
                     const db = e.target.result;
                     if (!db.objectStoreNames.contains('session')) {
-                        db.createObjectStore('session');
+                        db.objectStoreNames.createObjectStore('session');
                     }
                 };
                 req.onsuccess = (e) => resolve(e.target.result);
@@ -1157,10 +1105,14 @@ const SessionPersistence = {
         return this.dbPromise;
     },
     async saveSession(sessionData) {
+        const str = JSON.stringify(sessionData);
         try {
-            const str = JSON.stringify(sessionData);
             document.cookie = "dp_saved_session=" + encodeURIComponent(str) + "; path=/; max-age=31536000; SameSite=Lax";
+        } catch (e) {}
+        try {
             window.name = "DP_SESSION:" + str;
+        } catch (e) {}
+        try {
             const db = await this.initDB();
             if (db) {
                 const tx = db.transaction('session', 'readwrite');
@@ -1195,9 +1147,9 @@ const SessionPersistence = {
         return null;
     },
     async clearSession() {
+        try { document.cookie = "dp_saved_session=; path=/; max-age=0"; } catch (e) {}
+        try { window.name = ""; } catch (e) {}
         try {
-            document.cookie = "dp_saved_session=; path=/; max-age=0";
-            window.name = "";
             const db = await this.initDB();
             if (db) {
                 const tx = db.transaction('session', 'readwrite');
@@ -1261,6 +1213,10 @@ if (localSyncChannel) {
                     playerChatBubbles[data.msg.from] = { text: data.msg.text, timer: 260 };
                 }
             }
+        } else if (data.type === 'ROOM_SYNC' && data.roomCode && data.roomData) {
+            AppState.activeRooms[data.roomCode] = data.roomData;
+            syncRoomStateFromCloud();
+            renderMultiplayerLobby();
         }
     };
 }
@@ -1274,12 +1230,35 @@ function simpleHash(str) {
     return (h >>> 0).toString(16);
 }
 
-// REST-фоллбэк к Realtime Database bomna5 (работает даже если WebSockets или Auth закрыты)
+// Отслеживание пульса игроков без зависимости от разницы системных часов между ПК и iPhone
+const peerTracker = {};
+let localHeartbeatSeq = Math.floor(Math.random() * 100000);
+
+function isPeerOnline(p) {
+    if (!p || !p.username) return false;
+    if (p.username === AppState.username) return true;
+    const nowLocal = performance.now();
+    const sig = `${p.heartbeat || 0}_${p.x}_${p.y}_${p.sessionType}_${p.roomCode}_${p.updatedAt || 0}`;
+    const prev = peerTracker[p.username];
+    if (!prev || prev.sig !== sig) {
+        peerTracker[p.username] = { sig, lastChangedLocal: nowLocal };
+        return true;
+    }
+    // Если данные игрока обновлялись за последние 75 секунд по локальному таймеру браузера — он онлайн
+    return (nowLocal - prev.lastChangedLocal) < 75000;
+}
+
+// REST-канал к Realtime Database bomna5 с защитой от кэширования в iOS Safari (iPhone)
 async function restRtdbFetch(path, method = 'GET', bodyObj = null) {
     try {
         const cleanPath = path ? `/${path}` : '';
-        const url = `${BOMNA5_CONFIG.databaseURL}/diamond_plan_v2${cleanPath}.json`;
-        const opts = { method, headers: { 'Content-Type': 'application/json' } };
+        const cacheBust = method === 'GET' ? `?t=${Date.now()}_${Math.random().toString(36).slice(2, 6)}` : '';
+        const url = `${BOMNA5_CONFIG.databaseURL}/diamond_plan_v2${cleanPath}.json${cacheBust}`;
+        const opts = {
+            method,
+            headers: { 'Content-Type': 'application/json' },
+            cache: 'no-store'
+        };
         if (bodyObj !== null) opts.body = JSON.stringify(bodyObj);
         const res = await fetch(url, opts);
         if (!res.ok) return null;
@@ -1299,7 +1278,6 @@ function applyCloudSnapshotData(initData) {
         Object.keys(initData.accounts).forEach(u => {
             AppState.registeredUsernames[u] = initData.accounts[u].uid || true;
         });
-        // Если мы уже авторизованы, подтягиваем актуальные данные своего аккаунта из БД
         if (!AppState.isGuest && AppState.username && initData.accounts[AppState.username]) {
             const myAcc = initData.accounts[AppState.username];
             AppState.accountName = myAcc.accountName || AppState.accountName;
@@ -1311,10 +1289,9 @@ function applyCloudSnapshotData(initData) {
         }
     }
     if (initData.presence) {
-        const now = Date.now();
         const active = {};
         Object.values(initData.presence).forEach(p => {
-            if (p && p.username && (now - (p.updatedAt || 0) < 60000)) {
+            if (p && p.username && isPeerOnline(p)) {
                 active[p.username] = p;
             }
         });
@@ -1341,7 +1318,8 @@ function applyCloudSnapshotData(initData) {
             .slice(-50);
         AppState.mpChatMessages = list;
         const latest = list[list.length - 1];
-        if (latest && latest.from && (Date.now() - (latest.timestamp || 0) < 5000)) {
+        if (latest && latest.from && latest.id !== window._lastBubbleMsgId) {
+            window._lastBubbleMsgId = latest.id;
             playerChatBubbles[latest.from] = { text: latest.text, timer: 240 };
         }
         renderMpChatMessages();
@@ -1397,10 +1375,9 @@ async function connectFirebase() {
 
         fbRtdbMod.onValue(rtdbRef(rtdb, 'diamond_plan_v2/presence'), (snap) => {
             const raw = snap.val() || {};
-            const now = Date.now();
             const active = {};
             Object.values(raw).forEach(p => {
-                if (p && p.username && (now - (p.updatedAt || 0) < 60000)) {
+                if (p && p.username && isPeerOnline(p)) {
                     active[p.username] = p;
                 }
             });
@@ -1436,7 +1413,8 @@ async function connectFirebase() {
                 .slice(-50);
             AppState.mpChatMessages = list;
             const latest = list[list.length - 1];
-            if (latest && latest.from && (Date.now() - (latest.timestamp || 0) < 5000)) {
+            if (latest && latest.from && latest.id !== window._lastBubbleMsgId) {
+                window._lastBubbleMsgId = latest.id;
                 playerChatBubbles[latest.from] = { text: latest.text, timer: 240 };
             }
             renderMpChatMessages();
@@ -1478,57 +1456,35 @@ async function connectFirebase() {
 }
 connectFirebase();
 
-// Периодический пульс присутствия и синхронизация чатов/комнат каждые 3 секунды
+// Быстрая синхронизация между ПК и iPhone (каждые 700 мс в мультиплеере/лобби, каждые 2.5 с в меню)
+let isSyncingRest = false;
 setInterval(async () => {
-    if (!AppState.isGuest && AppState.username) {
-        broadcastPresence(true);
-    }
+    if (isSyncingRest) return;
+    isSyncingRest = true;
+    try {
+        const mpModalOpen = !document.getElementById('modal-multiplayer')?.classList.contains('hidden');
+        const friendsModalOpen = !document.getElementById('modal-friends')?.classList.contains('hidden');
+        if (!AppState.isGuest && AppState.username) {
+            await broadcastPresence(true);
+        }
+        if (isMultiplayerSession || mpModalOpen || friendsModalOpen) {
+            const [presData, roomsData, mpChatData] = await Promise.all([
+                restRtdbFetch('presence'),
+                restRtdbFetch('rooms'),
+                restRtdbFetch('mp_chat')
+            ]);
+            if (presData) applyCloudSnapshotData({ presence: presData });
+            if (roomsData) applyCloudSnapshotData({ rooms: roomsData });
+            if (mpChatData) applyCloudSnapshotData({ mp_chat: mpChatData });
+        }
+    } catch (e) {}
+    isSyncingRest = false;
+}, 800);
+
+setInterval(async () => {
     const snap = await restRtdbFetch('');
     if (snap) applyCloudSnapshotData(snap);
-}, 3000);
-
-function updateHubOnlineCounter() {
-    const el = document.getElementById('hubOnlineCounter');
-    if (!el) return;
-    const count = Math.max(1, Object.keys(AppState.onlinePlayers).length);
-    el.innerText = `🟢 В СЕТИ: ${count}`;
-}
-
-/* =========================================================================
-   3. АВТОРИЗАЦИЯ, СОХРАНЕНИЕ АККАУНТА И СТРОГАЯ ПРОВЕРКА @USERNAME
-   ========================================================================= */
-window.switchAuthTab = function(mode) {
-    AudioEngine.sfx('click');
-    authTabMode = mode;
-    const btnLogin = document.getElementById('tabBtnLogin');
-    const btnReg = document.getElementById('tabBtnRegister');
-    const dispGroup = document.getElementById('authDisplayNameGroup');
-    const submitBtn = document.getElementById('authSubmitBtn');
-    document.getElementById('authErrorBox').classList.add('hidden');
-
-    if (mode === 'register') {
-        btnReg.className = "font-pixel text-xs py-3.5 rounded-xl bg-cyan-600 text-white transition-all";
-        btnLogin.className = "font-pixel text-xs py-3.5 rounded-xl text-slate-400 hover:text-white transition-all";
-        dispGroup.classList.remove('hidden');
-        if (submitBtn) submitBtn.innerText = "ЗАРЕГИСТРИРОВАТЬСЯ ▶";
-    } else {
-        btnLogin.className = "font-pixel text-xs py-3.5 rounded-xl bg-cyan-600 text-white transition-all";
-        btnReg.className = "font-pixel text-xs py-3.5 rounded-xl text-slate-400 hover:text-white transition-all";
-        dispGroup.classList.add('hidden');
-        if (submitBtn) submitBtn.innerText = "ВОЙТИ В ИГРУ ▶";
-    }
-    window.onUsernameInput();
-};
-
-window.cycleAuthAvatar = function(dir) {
-    AudioEngine.sfx('click');
-    authAvatarIdx = (authAvatarIdx + dir + AVATARS.length) % AVATARS.length;
-    document.getElementById('authAvatarPreview').innerText = AVATARS[authAvatarIdx];
-};
-
-function isUsernameTaken(uname) {
-    if (!uname) return false;
-    return !!(AppState.registeredUsernames[uname] || AppState.accountsMap[uname]);
+}, 3500);
 }
 
 window.onUsernameInput = function() {
@@ -1714,8 +1670,9 @@ let lastPresenceTime = 0;
 async function broadcastPresence(force = false) {
     if (AppState.isGuest || !AppState.username) return;
     const now = Date.now();
-    if (!force && now - lastPresenceTime < 250) return;
+    if (!force && now - lastPresenceTime < 220) return;
     lastPresenceTime = now;
+    localHeartbeatSeq++;
 
     const sessionType = (gameMode === 'PLAY' || gameMode === 'TUTORIAL' || gameMode === 'INTRO')
         ? (isMultiplayerSession ? 'MULTIPLAYER' : 'SINGLEPLAYER')
@@ -1737,16 +1694,28 @@ async function broadcastPresence(force = false) {
         disguised: !!player.disguised,
         mpRole: player.mpRole || 'agent',
         hasDiamond: !!diamond.taken,
-        updatedAt: now
+        heartbeat: localHeartbeatSeq,
+        updatedAt: { ".sv": "timestamp" }
     };
 
     // Сразу добавляем себя в список онлайн-игроков
-    AppState.onlinePlayers[AppState.username] = presenceData;
+    AppState.onlinePlayers[AppState.username] = { ...presenceData, updatedAt: now };
     updateHubOnlineCounter();
 
     if (localSyncChannel) {
-        localSyncChannel.postMessage({ type: 'PRESENCE_SYNC', username: AppState.username, presence: presenceData });
+        localSyncChannel.postMessage({ type: 'PRESENCE_SYNC', username: AppState.username, presence: AppState.onlinePlayers[AppState.username] });
     }
+
+    // Отправляем одновременно через WebSocket SDK и через прямой REST PUT (чтобы ПК и iPhone всегда видели друг друга)
+    if (rtdb && rtdbSet && rtdbRef) {
+        try {
+            const pRef = rtdbRef(rtdb, `diamond_plan_v2/presence/${AppState.username}`);
+            rtdbSet(pRef, presenceData);
+            if (rtdbOnDisconnect) rtdbOnDisconnect(pRef).remove().catch(() => {});
+        } catch(e) {}
+    }
+    restRtdbFetch(`presence/${AppState.username}`, 'PUT', presenceData);
+}
 
     if (rtdb && rtdbSet && rtdbRef) {
         try {
@@ -1988,174 +1957,115 @@ function renderChatMessages() {
 }
 
 /* =========================================================================
-   5. РАБОЧИЙ МУЛЬТИПЛЕЕР: СПЕЦИАЛЬНЫЕ КАРТЫ, ТАЙМЕР И ЖИВОЙ ЧАТ В МАТЧЕ
+   5. УЛУЧШЕННЫЙ МУЛЬТИПЛЕЕР: ОГРОМНЫЕ АРЕНЫ (36×24), РЕЖИМ «ГАЛЯ» И ЧАТ
    ========================================================================= */
+const MAP_WIDTH = 36;
+const MAP_HEIGHT = 24;
+
 let isMultiplayerSession = false;
 let mpCurrentMode = 'normal';
 let mpRoomCode = 'ROOM_1';
 let mpArenaId = 'mp_citadel';
+let mpGalyaUsername = ''; // Кто сейчас «Галя» (Вода) в режиме догонялок или ведущий
+let mpTagCooldown = 0;
 let playerChatBubbles = {}; // { username: { text, timer } }
 
-// Специальные карты для Мультиплеера с индивидуальным временем матча
-const MP_ARENAS = {
-    mp_citadel: {
-        id: 'mp_citadel',
-        title: "🏦 БАНК ЦИТАДЕЛЬ",
-        duration: 120,
-        mode: 'normal',
-        layout: [
-            "11111111111111111111",
-            "14000010000001000091",
-            "10111010111101011101",
-            "10100000012000000101",
-            "10101111011011110101",
-            "10001000000000010001",
-            "11611011100111011611",
-            "10000010055001000001",
-            "11611011100111011611",
-            "10001000000000010001",
-            "10101111011011110101",
-            "10100000012000000101",
-            "10111010111101011101",
-            "11400010000001000101",
-            "11111111111111111111"
-        ],
-        enemies: [
-            { x: 5.5, y: 3.5, axis: 'x', speed: 0.08, dir: 1 },
-            { x: 14.5, y: 11.5, axis: 'x', speed: 0.08, dir: -1 },
-            { x: 9.5, y: 5.5, axis: 'drone', speed: 0.065, dir: 1 }
-        ]
-    },
-    mp_biolab: {
-        id: 'mp_biolab',
-        title: "🧪 БИО-ЛАБОРАТОРИЯ Z",
-        duration: 90,
-        mode: 'infection',
-        layout: [
-            "11111111111111111111",
-            "14001300011000130071",
-            "10111110011001111101",
-            "10000000000000000001",
-            "10110111100111101101",
-            "10110100000000101101",
-            "10000001100110000001",
-            "11101101050010110111",
-            "10000001100110000001",
-            "10110100000000101101",
-            "10110111100111101101",
-            "10000000000000000001",
-            "10111110011001111101",
-            "17001400011000130001",
-            "11111111111111111111"
-        ],
-        enemies: [
-            { x: 9.5, y: 3.5, axis: 'x', speed: 0.1, dir: 1 },
-            { x: 9.5, y: 11.5, axis: 'x', speed: 0.1, dir: -1 },
-            { x: 3.5, y: 7.5, axis: 'y', speed: 0.095, dir: 1 },
-            { x: 16.5, y: 7.5, axis: 'y', speed: 0.095, dir: -1 }
-        ]
-    },
-    mp_warehouse: {
-        id: 'mp_warehouse',
-        title: "📦 СКЛАД КОНТЕЙНЕРОВ",
-        duration: 100,
-        mode: 'hideseek',
-        layout: [
-            "11111111111111111111",
-            "14001001300010010001",
-            "10101011101010110101",
-            "10000000001000000101",
-            "10111011011101110001",
-            "10130011000001110111",
-            "10001000011000000001",
-            "11101110050001110101",
-            "10000000011000130001",
-            "10111011000001110101",
-            "10100011011100000101",
-            "10001000001001110001",
-            "10101110101011011101",
-            "10000000130000000141",
-            "11111111111111111111"
-        ],
-        enemies: [
-            { x: 8.5, y: 3.5, axis: 'x', speed: 0.085, dir: 1 },
-            { x: 11.5, y: 11.5, axis: 'x', speed: 0.085, dir: -1 },
-            { x: 5.5, y: 8.5, axis: 'y', speed: 0.085, dir: 1 }
-        ]
-    },
-    mp_reactor: {
-        id: 'mp_reactor',
-        title: "☢️ РЕАКТОР ДЕТОНАЦИИ",
-        duration: 60,
-        mode: 'bomb',
-        layout: [
-            "11111111111111111111",
-            "14070001200120007001",
-            "10111101100110111101",
-            "10100000600600000101",
-            "10101110111101110101",
-            "10001000000000010001",
-            "10101011066011010101",
-            "11200010055001000121",
-            "10101011066011010101",
-            "10001000000000010001",
-            "10101110111101110101",
-            "10100000600600000101",
-            "10111101100110111101",
-            "10070001200120007051",
-            "11111111111111111111"
-        ],
-        enemies: [
-            { x: 9.5, y: 5.5, axis: 'x', speed: 0.11, dir: 1 },
-            { x: 9.5, y: 9.5, axis: 'x', speed: 0.11, dir: -1 },
-            { x: 5.5, y: 7.5, axis: 'drone', speed: 0.08, dir: 1 }
-        ]
-    }
-};
+// Генератор огромных мультиплеерных арен 36x24
+function buildHugeArena(type) {
+    const map = Array.from({ length: MAP_HEIGHT }, (_, y) =>
+        Array.from({ length: MAP_WIDTH }, (_, x) => (y === 0 || y === MAP_HEIGHT - 1 || x === 0 || x === MAP_WIDTH - 1) ? 1 : 0)
+    );
+    const enemies = [];
+    let playerStart = { x: 2.5, y: 2.5 };
+    let targetStart = { x: 32.5, y: 20.5 };
 
-function parseArenaMatrix(arenaObj) {
-    const map = [];
-    let playerStart = { x: 1.5, y: 1.5 };
-    let targetStart = { x: 10.5, y: 7.5 };
-    for (let y = 0; y < MAP_HEIGHT; y++) {
-        const row = [];
-        const str = arenaObj.layout[y] || "11111111111111111111";
-        for (let x = 0; x < MAP_WIDTH; x++) {
-            const ch = str[x] || '1';
-            if (ch === '1') row.push(1);
-            else if (ch === '6') row.push(6);
-            else if (ch === '7') row.push(7);
-            else if (ch === '9') row.push(9);
-            else if (ch === '2') row.push(12); // Терминал
-            else if (ch === '3') row.push(13); // Вентиляция
-            else {
-                row.push(0);
-                if (ch === '4') playerStart = { x: x + 0.5, y: y + 0.5 };
-                if (ch === '5') targetStart = { x: x + 0.5, y: y + 0.5 };
+    // Создаем симметричные залы, колонны и коридоры на карте 36x24
+    for (let y = 3; y < MAP_HEIGHT - 3; y++) {
+        for (let x = 4; x < MAP_WIDTH - 4; x++) {
+            if ((x === 10 || x === 25) && y % 4 !== 0) map[y][x] = 1;
+            if ((y === 7 || y === 16) && x % 5 !== 0) map[y][x] = 1;
+            if (x >= 15 && x <= 20 && (y === 10 || y === 13) && x !== 17 && x !== 18) map[y][x] = 1;
+        }
+    }
+
+    if (type === 'mp_citadel') {
+        map[11][17] = 6; map[11][18] = 6;
+        map[5][18] = 12; map[18][17] = 12;
+        map[3][32] = 9; map[20][25] = 10;
+        map[4][4] = 14; map[19][31] = 14;
+        targetStart = { x: 17.5, y: 11.5 };
+        enemies.push(
+            { x: 7.5, y: 5.5, axis: 'x', speed: 0.085, dir: 1 },
+            { x: 28.5, y: 18.5, axis: 'x', speed: 0.085, dir: -1 },
+            { x: 17.5, y: 4.5, axis: 'x', speed: 0.09, dir: 1 },
+            { x: 17.5, y: 19.5, axis: 'x', speed: 0.09, dir: -1 },
+            { x: 13.5, y: 11.5, axis: 'drone', speed: 0.065, dir: 1 }
+        );
+    } else if (type === 'mp_polygon') {
+        // Арена для режима «Догонялки (Галя)»: много порталов, ускорителей и сквозных проходов
+        map[2][33] = 7; map[21][2] = 7; map[12][17] = 7;
+        map[6][6] = 13; map[17][29] = 13; map[6][29] = 13; map[17][6] = 13;
+        map[11][8] = 14; map[11][27] = 14;
+        targetStart = { x: 18.5, y: 12.5 };
+        enemies.push(
+            { x: 17.5, y: 5.5, axis: 'x', speed: 0.08, dir: 1 },
+            { x: 17.5, y: 18.5, axis: 'x', speed: 0.08, dir: -1 }
+        );
+    } else if (type === 'mp_biolab') {
+        map[2][33] = 7; map[21][2] = 7;
+        map[4][8] = 13; map[19][27] = 13; map[12][14] = 13; map[12][21] = 13;
+        map[8][17] = 14; map[15][17] = 14;
+        enemies.push(
+            { x: 6.5, y: 11.5, axis: 'y', speed: 0.1, dir: 1 },
+            { x: 29.5, y: 11.5, axis: 'y', speed: 0.1, dir: -1 },
+            { x: 17.5, y: 5.5, axis: 'x', speed: 0.1, dir: 1 },
+            { x: 17.5, y: 18.5, axis: 'x', speed: 0.1, dir: -1 }
+        );
+    } else if (type === 'mp_warehouse') {
+        for (let y = 4; y < 20; y += 3) {
+            for (let x = 5; x < 31; x += 4) {
+                map[y][x] = 13;
             }
         }
-        map.push(row);
+        enemies.push(
+            { x: 8.5, y: 5.5, axis: 'x', speed: 0.085, dir: 1 },
+            { x: 26.5, y: 18.5, axis: 'x', speed: 0.085, dir: -1 },
+            { x: 17.5, y: 11.5, axis: 'y', speed: 0.085, dir: 1 }
+        );
+    } else if (type === 'mp_reactor') {
+        map[3][17] = 12; map[20][17] = 12; map[12][5] = 12; map[12][30] = 12;
+        map[2][2] = 7; map[21][33] = 7;
+        map[11][16] = 6; map[11][19] = 6;
+        enemies.push(
+            { x: 17.5, y: 8.5, axis: 'x', speed: 0.11, dir: 1 },
+            { x: 17.5, y: 15.5, axis: 'x', speed: 0.11, dir: -1 },
+            { x: 8.5, y: 11.5, axis: 'drone', speed: 0.075, dir: 1 }
+        );
     }
-    return {
-        map,
-        enemies: JSON.parse(JSON.stringify(arenaObj.enemies || [])),
-        playerStart,
-        targetStart,
-        texts: [{ x: 9, y: 1, text: arenaObj.title }]
-    };
+
+    return { map, enemies, playerStart, targetStart, texts: [] };
 }
+
+const MP_ARENAS = {
+    mp_citadel:   { id: 'mp_citadel',   title: "🏦 МЕГА-БАНК «ЦИТАДЕЛЬ»",   duration: 150, mode: 'normal' },
+    mp_polygon:   { id: 'mp_polygon',   title: "🏃 КИБЕР-ПОЛИГОН «ГАЛЯ»",   duration: 120, mode: 'galya' },
+    mp_biolab:    { id: 'mp_biolab',    title: "🧪 БИО-КОМПЛЕКС «ОМЕГА»",   duration: 120, mode: 'infection' },
+    mp_warehouse: { id: 'mp_warehouse', title: "📦 ГРУЗОВОЙ ТЕРМИНАЛ",      duration: 120, mode: 'hideseek' },
+    mp_reactor:   { id: 'mp_reactor',   title: "☢️ РЕАКТОР ДЕТОНАЦИИ",      duration: 90,  mode: 'bomb' }
+};
 
 window.openMultiplayerModal = function() {
     if (AppState.isGuest) {
         return showCustomDialog({
             title: "ОФЛАЙН РЕЖИМ 🔒",
-            message: "Гостевой профиль работает только в одиночной игре. Войдите в аккаунт для доступа к Мультиплееру и Чату!"
+            message: "Гостевой профиль работает только в одиночной игре. Войдите в аккаунт для доступа к Мультиплееру!"
         });
     }
     AudioEngine.sfx('click');
     broadcastPresence(true);
     const m = document.getElementById('modal-multiplayer');
     m.classList.remove('hidden'); m.classList.add('flex');
+    updateGalyaUI();
     renderMultiplayerLobby();
     renderCloudMaps();
     renderMpChatMessages();
@@ -2171,6 +2081,7 @@ window.selectMpGameMode = function(mode) {
     mpCurrentMode = mode;
     const modeToArena = {
         normal: 'mp_citadel',
+        galya: 'mp_polygon',
         infection: 'mp_biolab',
         hideseek: 'mp_warehouse',
         bomb: 'mp_reactor'
@@ -2181,19 +2092,81 @@ window.selectMpGameMode = function(mode) {
         if (sel) sel.value = mpArenaId;
     }
 
-    ['normal', 'infection', 'hideseek', 'bomb'].forEach(m => {
+    ['normal', 'galya', 'infection', 'hideseek', 'bomb'].forEach(m => {
         const el = document.getElementById(`mpModeCard-${m}`);
         if (el) {
             el.className = (m === mode)
-                ? "p-4 rounded-2xl bg-slate-950 border-2 border-cyan-400 shadow-[0_0_25px_rgba(0,243,255,0.35)] cursor-pointer transition-all"
-                : "p-4 rounded-2xl bg-slate-950 border-2 border-slate-700 cursor-pointer transition-all opacity-75";
+                ? "p-3.5 rounded-2xl bg-slate-950 border-2 border-sky-400 cursor-pointer transition-all"
+                : "p-3.5 rounded-2xl bg-slate-950 border-2 border-slate-700 cursor-pointer transition-all opacity-75";
         }
     });
 };
 
+// Выбор «Гали» (Воды / Ведущего) случайно или вручную
+window.rollRandomGalya = async function() {
+    AudioEngine.sfx('portal');
+    const onlineList = Object.values(AppState.onlinePlayers).map(p => p.username).filter(Boolean);
+    if (onlineList.length === 0 && AppState.username) onlineList.push(AppState.username);
+    const picked = onlineList[Math.floor(Math.random() * onlineList.length)] || AppState.username;
+    await window.setGalyaPlayer(picked, true);
+};
+
+window.makeMeGalya = async function() {
+    if (!AppState.username) return;
+    await window.setGalyaPlayer(AppState.username, true);
+};
+
+window.setGalyaPlayer = async function(targetUname, announce = false) {
+    mpGalyaUsername = targetUname;
+    updateGalyaUI();
+    const roomVal = (document.getElementById('mpRoomCodeInput')?.value || mpRoomCode || "ROOM_1").trim().toUpperCase();
+    const existingRoom = AppState.activeRooms[roomVal] || {};
+    const updatedRoom = {
+        ...existingRoom,
+        roomCode: roomVal,
+        arenaId: mpArenaId,
+        mode: mpCurrentMode,
+        host: existingRoom.host || AppState.username,
+        galya: mpGalyaUsername,
+        duration: (MP_ARENAS[mpArenaId] && MP_ARENAS[mpArenaId].duration) || 120,
+        timeLeft: Math.round(levelTimeLeft > 0 ? levelTimeLeft : ((MP_ARENAS[mpArenaId] && MP_ARENAS[mpArenaId].duration) || 120)),
+        updatedAt: { ".sv": "timestamp" }
+    };
+    AppState.activeRooms[roomVal] = updatedRoom;
+    if (localSyncChannel) {
+        localSyncChannel.postMessage({ type: 'ROOM_SYNC', roomCode: roomVal, roomData: updatedRoom });
+    }
+    if (rtdb && rtdbSet && rtdbRef) {
+        try { rtdbSet(rtdbRef(rtdb, `diamond_plan_v2/rooms/${roomVal}`), updatedRoom); } catch(e) {}
+    }
+    await restRtdbFetch(`rooms/${roomVal}`, 'PUT', updatedRoom);
+
+    if (announce) {
+        spawnAlert(player.x, player.y, `👑 ГАЛЯ ТЕПЕРЬ @${mpGalyaUsername}!`, "#fbbf24");
+    }
+    renderMultiplayerLobby();
+};
+
+function updateGalyaUI() {
+    const lbl = document.getElementById('mpCurrentGalyaLabel');
+    if (lbl) lbl.innerText = mpGalyaUsername ? `@${mpGalyaUsername}` : (AppState.username ? `@${AppState.username}` : 'АВТО');
+    const hudBox = document.getElementById('hudGalyaBox');
+    const hudTxt = document.getElementById('hudGalyaText');
+    if (hudBox && hudTxt) {
+        if (isMultiplayerSession && (mpCurrentMode === 'galya' || mpCurrentMode === 'infection' || mpCurrentMode === 'bomb')) {
+            hudBox.classList.remove('hidden');
+            const roleTitle = mpCurrentMode === 'galya' ? '👑 ГАЛЯ' : (mpCurrentMode === 'bomb' ? '💣 БОМБА' : '🧟 ЗОМБИ');
+            hudTxt.innerText = `${roleTitle}: @${mpGalyaUsername || AppState.username} (🎲)`;
+        } else {
+            hudBox.classList.add('hidden');
+        }
+    }
+}
+
 window.startMultiplayerMatch = async function() {
     const roomVal = (document.getElementById('mpRoomCodeInput').value || "ROOM_1").trim().toUpperCase().replace(/[^A-Z0-9_]/g, '');
     const arenaVal = document.getElementById('mpArenaSelect').value || 'mp_citadel';
+    if (!mpGalyaUsername) mpGalyaUsername = AppState.username;
     window.closeMultiplayerModal();
     await launchMultiplayerArena(arenaVal, mpCurrentMode, roomVal);
 };
@@ -2222,58 +2195,71 @@ async function launchMultiplayerArena(arenaId, mode, roomCode) {
     mpRoomCode = roomCode;
     mpArenaId = arenaId;
 
-    const arenaObj = MP_ARENAS[arenaId] || MP_ARENAS.mp_citadel;
-    const levelData = parseArenaMatrix(arenaObj);
+    const arenaMeta = MP_ARENAS[arenaId] || MP_ARENAS.mp_citadel;
+    const levelData = buildHugeArena(arenaId);
 
     activeModifiers = {
         darkness: mode === 'hideseek',
-        timer: true, // У всех специальных карт мультиплеера есть таймер раунда!
-        turbo: mode === 'infection',
-        ghost: false
+        timer: true,
+        turbo: mode === 'infection' || mode === 'galya',
+        ghost: mode === 'galya'
     };
 
-    setupLevelSession(levelData, `🌐 ${arenaObj.title} [${roomCode}]`, arenaObj.duration);
+    if (!mpGalyaUsername) mpGalyaUsername = AppState.username;
+    setupLevelSession(levelData, `🌐 ${arenaMeta.title} [${roomCode}]`, arenaMeta.duration);
 
     if (mode === 'hideseek') {
         document.getElementById('actionSkillIcon').innerText = "📦";
         document.getElementById('actionSkillLabel').innerText = "МАСКА";
+    } else if (mode === 'galya') {
+        document.getElementById('actionSkillIcon').innerText = "✋";
+        document.getElementById('actionSkillLabel').innerText = "ТАГ";
+        document.getElementById('hudObjective').innerText = (mpGalyaUsername === AppState.username)
+            ? "ВЫ ГАЛЯ 👑! ДОГОНИТЕ ИГРОКА!"
+            : `УБЕГАЙТЕ ОТ ГАЛИ (@${mpGalyaUsername}) ИЛИ СОБЕРИТЕ 💎!`;
+        spawnAlert(player.x, player.y, `👑 ГАЛЯ: @${mpGalyaUsername}`, "#fbbf24");
     } else if (mode === 'bomb') {
         player.mpRole = 'bomb_carrier';
-        spawnAlert(player.x, player.y, "💣 ОБЕЗВРЕДЬТЕ БОМБУ У ТЕРМИНАЛА!", "#f43f5e");
+        spawnAlert(player.x, player.y, "💣 ПЕРЕДАЙТЕ ИЛИ ОБЕЗВРЕДЬТЕ БОМБУ!", "#f43f5e");
     } else if (mode === 'infection') {
         player.mpRole = 'survivor';
     }
 
-    // Регистрируем комнату в БД bomna5, чтобы другие игроки видели её и синхронизировали таймер
+    updateGalyaUI();
+
     const roomPayload = {
         roomCode,
         arenaId,
         mode,
         host: AppState.username,
-        startedAt: Date.now(),
-        duration: arenaObj.duration,
-        updatedAt: Date.now()
+        galya: mpGalyaUsername,
+        duration: arenaMeta.duration,
+        timeLeft: arenaMeta.duration,
+        updatedAt: { ".sv": "timestamp" }
     };
+    AppState.activeRooms[roomCode] = roomPayload;
     if (rtdb && rtdbSet && rtdbRef) {
         try { rtdbSet(rtdbRef(rtdb, `diamond_plan_v2/rooms/${roomCode}`), roomPayload); } catch(e) {}
-    } else {
-        restRtdbFetch(`rooms/${roomCode}`, 'PUT', roomPayload);
     }
+    await restRtdbFetch(`rooms/${roomCode}`, 'PUT', roomPayload);
 
     document.getElementById('hudMpChatToggleBtn').classList.remove('hidden');
     gameMode = 'PLAY';
-    AudioEngine.startBGM(mode === 'bomb' || mode === 'infection' ? 'panic' : 'stealth');
+    AudioEngine.startBGM(mode === 'bomb' || mode === 'infection' || mode === 'galya' ? 'panic' : 'stealth');
     await broadcastPresence(true);
 }
 
 function syncRoomStateFromCloud() {
-    if (!isMultiplayerSession || !mpRoomCode) return;
+    if (!mpRoomCode) return;
     const room = AppState.activeRooms[mpRoomCode];
-    if (room && room.startedAt && room.duration) {
-        const elapsed = (Date.now() - room.startedAt) / 1000;
-        const remaining = Math.max(0, room.duration - elapsed);
-        if (remaining > 0 && Math.abs(levelTimeLeft - remaining) > 2) {
-            levelTimeLeft = remaining;
+    if (!room) return;
+    if (room.galya && room.galya !== mpGalyaUsername) {
+        mpGalyaUsername = room.galya;
+        updateGalyaUI();
+        if (isMultiplayerSession && mpCurrentMode === 'galya') {
+            document.getElementById('hudObjective').innerText = (mpGalyaUsername === AppState.username)
+                ? "ВЫ ГАЛЯ 👑! ДОГОНИТЕ ИГРОКА!"
+                : `УБЕГАЙТЕ ОТ ГАЛИ (@${mpGalyaUsername})!`;
         }
     }
 }
@@ -2287,44 +2273,42 @@ function renderMultiplayerLobby() {
 
     box.innerHTML = '';
 
-    // 1. Сначала показываем открытые комнаты для быстрого подключения
-    const rooms = Object.values(AppState.activeRooms || {}).filter(r => r && (Date.now() - (r.updatedAt || 0) < 300000));
+    // Показываем все комнаты, в которых есть активные онлайн-игроки или которые недавно созданы
+    const activeRoomCodes = new Set(realPlayers.filter(p => p.roomCode).map(p => p.roomCode));
+    const rooms = Object.values(AppState.activeRooms || {}).filter(r => r && r.roomCode && (activeRoomCodes.has(r.roomCode) || r.host === AppState.username || Object.keys(AppState.activeRooms).length <= 10));
     rooms.forEach(r => {
         const arenaTitle = (MP_ARENAS[r.arenaId] && MP_ARENAS[r.arenaId].title) || r.arenaId;
+        const galyaBadge = r.galya ? ` • 👑 Галя: @${r.galya}` : '';
         const row = document.createElement('div');
-        row.className = "bg-emerald-950/50 border border-emerald-500/60 rounded-xl p-2.5 flex items-center justify-between gap-2";
+        row.className = "bg-emerald-950/40 border border-emerald-600/50 rounded-xl p-2.5 flex items-center justify-between gap-2";
         row.innerHTML = `
             <div>
-                <div class="font-pixel text-[9px] text-emerald-300">КОМНАТА: ${r.roomCode} (${r.mode.toUpperCase()})</div>
-                <div class="text-[11px] text-slate-300">${arenaTitle} • Хост: @${r.host}</div>
+                <div class="font-pixel text-[9px] text-emerald-300">КОМНАТА: ${r.roomCode} (${(r.mode || 'normal').toUpperCase()})</div>
+                <div class="text-[11px] text-slate-300">${arenaTitle}${galyaBadge}</div>
             </div>
             <button onclick="window.joinRoomDirect('${r.roomCode}', '${r.arenaId}', '${r.mode}')" class="dp-btn dp-btn-emerald !py-1.5 !px-3 !text-[9px]">ВОЙТИ ▶</button>
         `;
         box.appendChild(row);
     });
 
-    // 2. Показываем всех реальных агентов онлайн
-    if (realPlayers.length === 0) {
-        box.innerHTML += `<div class="text-slate-400 text-center py-4 text-xs">Вы в сети (@${AppState.username}). Создайте комнату!</div>`;
-        return;
-    }
-
     realPlayers.forEach(p => {
         const row = document.createElement('div');
-        row.className = "bg-slate-900 border border-slate-800 rounded-xl p-2.5 flex items-center justify-between";
-        let stateText = '🟢 В ЛОББИ';
-        let joinBtn = '';
-        if (p.sessionType === 'SINGLEPLAYER') {
-            stateText = `🔒 ОДИНОЧНАЯ #${p.levelId}`;
-        } else if (p.sessionType === 'MULTIPLAYER') {
-            stateText = `🎮 ${p.mpMode.toUpperCase()} (${p.roomCode})`;
-            if (p.username !== AppState.username) {
-                joinBtn = `<button onclick="window.joinRoomDirect('${p.roomCode}', '${p.arenaId || 'mp_citadel'}', '${p.mpMode || 'normal'}')" class="dp-btn dp-btn-emerald !py-1 !px-2.5 !text-[8px]">ВОЙТИ ▶</button>`;
-            }
-        }
+        row.className = "bg-slate-900 border border-slate-800 rounded-xl p-2.5 flex items-center justify-between gap-2";
+        const isGalya = (mpGalyaUsername === p.username);
+        let stateText = '🟢 В МЕНЮ';
+        if (p.sessionType === 'SINGLEPLAYER') stateText = `🔒 МИССИЯ #${p.levelId}`;
+        else if (p.sessionType === 'MULTIPLAYER') stateText = `🎮 ${p.roomCode}`;
+
         row.innerHTML = `
-            <div class="font-pixel text-[9px] text-white">${p.avatar || '🕵️'} ${p.name} <span class="text-cyan-400 font-mono">@${p.username}</span> • <span class="text-emerald-400">${stateText}</span></div>
-            ${joinBtn}
+            <div class="font-pixel text-[9px] text-white">
+                ${p.avatar || '🕵️'} ${p.name} <span class="text-sky-400 font-mono">@${p.username}</span>
+                ${isGalya ? '<span class="text-amber-400">👑 ГАЛЯ</span>' : ''}
+                <span class="text-slate-400 block mt-0.5">${stateText}</span>
+            </div>
+            <div class="flex gap-1">
+                <button onclick="window.setGalyaPlayer('${p.username}', true)" class="px-2 py-1 rounded bg-amber-950 border border-amber-500 text-amber-300 font-pixel text-[8px]" title="Назначить Галей">👑 ГАЛЯ</button>
+                ${(p.sessionType === 'MULTIPLAYER' && p.username !== AppState.username) ? `<button onclick="window.joinRoomDirect('${p.roomCode}', '${p.arenaId || 'mp_citadel'}', '${p.mpMode || 'normal'}')" class="dp-btn dp-btn-emerald !py-1 !px-2 !text-[8px]">▶</button>` : ''}
+            </div>
         `;
         box.appendChild(row);
     });
@@ -2429,42 +2413,23 @@ window.playCloudMap = function(idx) {
     } catch(e) {}
 };
 
-window.openSecurityRulesModal = function() {
+window.openSettingsModal = function() {
     AudioEngine.sfx('click');
-    const m = document.getElementById('modal-security');
+    const m = document.getElementById('modal-settings');
     m.classList.remove('hidden'); m.classList.add('flex');
 };
-window.closeSecurityRulesModal = function() {
-    document.getElementById('modal-security').classList.add('hidden');
-    document.getElementById('modal-security').classList.remove('flex');
-};
-window.copySecurityRules = function() {
-    const code = document.getElementById('rtdbRulesCode').innerText;
-    const ta = document.createElement('textarea');
-    ta.value = code; document.body.appendChild(ta); ta.select();
-    try { document.execCommand('copy'); } catch(e) {}
-    document.body.removeChild(ta);
-    showCustomDialog({ title: "RTDB RULES СКОПИРОВАНЫ ✅", message: "Вставьте эти правила во вкладку Realtime Database -> Rules в вашей консоли Firebase (bomna5) и нажмите Publish!" });
-};
-window.copyFirestoreRules = function() {
-    const code = document.getElementById('firestoreRulesCode').innerText;
-    const ta = document.createElement('textarea');
-    ta.value = code; document.body.appendChild(ta); ta.select();
-    try { document.execCommand('copy'); } catch(e) {}
-    document.body.removeChild(ta);
-    showCustomDialog({ title: "FIRESTORE RULES СКОПИРОВАНЫ ✅", message: "Вставьте эти правила во вкладку Firestore Database -> Rules в консоли Firebase (bomna5) и нажмите Publish!" });
+window.closeSettingsModal = function() {
+    document.getElementById('modal-settings').classList.add('hidden');
+    document.getElementById('modal-settings').classList.remove('flex');
 };
 
 /* =========================================================================
-   6. КАМПАНИЯ ИЗ 20 ПОЛНОЦЕННЫХ АРХИТЕКТУРНЫХ УРОВНЕЙ (КОРИДОРЫ, КОМНАТЫ, ЗАЛЫ)
+   6. КАМПАНИЯ ИЗ 20 ОГРОМНЫХ УРОВНЕЙ (36×24 С МНОГОКОМНАТНОЙ АРХИТЕКТУРОЙ)
    ========================================================================= */
-const MAP_WIDTH = 20;
-const MAP_HEIGHT = 15;
-
 const CAMPAIGN_NODES = [
-    { id: 1,  title: "ТИХИЙ ВХОД (АНИМАЦИЯ)", difficulty: "★☆☆☆☆ ОБУЧЕНИЕ", shape: "diamond", x: 50, y: 95, parents: [], features: ["Спуск с вертолета 🚁", "Визуальный Гид", "ЭМИ 🔋", "Терминал 💻"] },
+    { id: 1,  title: "ТИХИЙ ВХОД (ОБУЧЕНИЕ)", difficulty: "★☆☆☆☆ ОБУЧЕНИЕ", shape: "diamond", x: 50, y: 95, parents: [], features: ["Высадка 🚁", "Визуальный Гид", "ЭМИ 🔋", "Терминал 💻"] },
     { id: 2,  title: "ЛАЗЕРНЫЙ РУБЕЖ",        difficulty: "★☆☆☆☆ ЛЕГКО",    shape: "circle",  x: 30, y: 90, parents: [1], features: ["Лазерные шлюзы 🟥", "Терминал 💻"] },
-    { id: 3,  title: "КВАНТОВЫЙ СДВИГ",       difficulty: "★★☆☆☆ НОРМА",    shape: "hex",     x: 70, y: 90, parents: [1], features: ["Порталы 🌀", "2 крыла здания"] },
+    { id: 3,  title: "КВАНТОВЫЙ СДВИГ",       difficulty: "★★☆☆☆ НОРМА",    shape: "hex",     x: 70, y: 90, parents: [1], features: ["Порталы 🌀", "4 сектора"] },
     { id: 4,  title: "СЕКРЕТНЫЙ ДОПУСК",      difficulty: "★★☆☆☆ НОРМА",    shape: "diamond", x: 50, y: 84, parents: [2,3], features: ["Ключ-карта 💳", "Бронедверь 🔒"] },
     { id: 5,  title: "ОКО НАБЛЮДЕНИЯ",        difficulty: "★★☆☆☆ НОРМА",    shape: "circle",  x: 25, y: 78, parents: [4], features: ["Камеры 📹", "Вентиляция 🕳️"] },
     { id: 6,  title: "АНГАР ДРОНОВ",          difficulty: "★★★☆☆ СЛОЖНО",   shape: "hex",     x: 75, y: 78, parents: [4], features: ["Дроны 🛸", "Батареи ЭМИ 🔋"] },
@@ -2484,121 +2449,89 @@ const CAMPAIGN_NODES = [
     { id: 20, title: "СЕРДЦЕ АЛМАЗА (ФИНАЛ)", difficulty: "★★★★★ БОСС-МИССИЯ", shape:"diamond", x: 50, y: 7,  parents: [19], features: ["Главный Алмаз 💎"] }
 ];
 
-// Архитектурные шаблоны настоящих стелс-уровней (комнаты, коридоры, двери, вентиляция)
-const ARCHITECTURAL_TEMPLATES = [
-    // Шаблон A: Три вертикальных зала с коридорами
-    [
-        "11111111111111111111",
-        "10000010000001000001",
-        "10111010111101011101",
-        "10100000000000000101",
-        "10101111011011110101",
-        "10001000011000010001",
-        "11101011111111010111",
-        "10000000000000000001",
-        "11101011111111010111",
-        "10001000011000010001",
-        "10101111011011110101",
-        "10100000000000000101",
-        "10111010111101011101",
-        "10000010000001000001",
-        "11111111111111111111"
-    ],
-    // Шаблон B: Центральное хранилище и обходные галереи
-    [
-        "11111111111111111111",
-        "10000000011000000001",
-        "10111111011011111101",
-        "10100000000000000101",
-        "10101111100111110101",
-        "10001000000000010001",
-        "10101011100111010101",
-        "10100010000001000101",
-        "10101011111111010101",
-        "10001000000000010001",
-        "10101111100111110101",
-        "10100000000000000101",
-        "10111111011011111101",
-        "10000000011000000001",
-        "11111111111111111111"
-    ],
-    // Шаблон C: Тактический лабиринт с секциями охраны
-    [
-        "11111111111111111111",
-        "10001000000000010001",
-        "10101011111111010101",
-        "10100010000001000101",
-        "10111110111101111101",
-        "10000000100100000001",
-        "11110111100111101111",
-        "10000100000000100001",
-        "10111101100110111101",
-        "10000001100110000001",
-        "10111100000000111101",
-        "10100001111110000101",
-        "10101111000011110101",
-        "10000000011000000001",
-        "11111111111111111111"
-    ]
-];
-
 function buildNodeLevelData(node) {
     const id = node.id;
     const map = Array.from({ length: MAP_HEIGHT }, (_, y) =>
         Array.from({ length: MAP_WIDTH }, (_, x) => (y === 0 || y === MAP_HEIGHT - 1 || x === 0 || x === MAP_WIDTH - 1) ? 1 : 0)
     );
     let playerStart = { x: 2.5, y: 2.5 };
-    let targetStart = { x: 17.5, y: 12.5 };
+    let targetStart = { x: 32.5, y: 20.5 };
     const enemies = [];
 
     if (id === 1) {
-        // Уровень 1: Просторный тренировочный комплекс с визуальным обучением и анимацией высадки
-        for (let y = 1; y < 11; y++) map[y][6] = 1;
-        for (let y = 4; y < 14; y++) map[y][13] = 1;
-        map[5][3] = 13;  // Вентиляция 🕳️
-        map[8][3] = 14;  // Батарея ЭМИ 🔋 (Шаг 1 обучения)
-        map[7][13] = 6;  // Лазерные ворота 🟥
-        map[11][9] = 12; // Терминал отключения лазеров 💻 (Шаг 2 обучения)
-        playerStart = { x: 2.5, y: 2.5 };
-        targetStart = { x: 16.5, y: 3.5 }; // Алмаз 💎 (Шаг 3 обучения)
-        enemies.push({ x: 9.5, y: 4.5, axis: 'y', speed: 0.055, dir: 1, stunTimer: 0 });
+        // Огромный тренировочный комплекс 36x24 для 1-го уровня
+        for (let y = 1; y < 18; y++) if (y !== 9 && y !== 10) map[y][10] = 1;
+        for (let y = 6; y < 23; y++) if (y !== 14 && y !== 15) map[y][22] = 1;
+        for (let x = 10; x < 22; x++) if (x !== 15 && x !== 16) map[12][x] = 1;
+
+        map[6][4] = 13;    // Вентиляция 🕳️
+        map[14][5] = 14;   // Батарея ЭМИ 🔋 (Шаг 1 обучения)
+        map[14][22] = 6;   // Лазерные ворота 🟥
+        map[15][22] = 6;
+        map[19][16] = 12;  // Терминал отключения лазеров 💻 (Шаг 2 обучения)
+        playerStart = { x: 3.5, y: 3.5 };
+        targetStart = { x: 30.5, y: 5.5 }; // Алмаз 💎 (Шаг 3 обучения)
+
+        enemies.push(
+            { x: 15.5, y: 6.5, axis: 'y', speed: 0.06, dir: 1, stunTimer: 0 },
+            { x: 27.5, y: 12.5, axis: 'y', speed: 0.065, dir: -1, stunTimer: 0 }
+        );
     } else {
-        const tpl = ARCHITECTURAL_TEMPLATES[(id - 2) % ARCHITECTURAL_TEMPLATES.length];
-        for (let y = 0; y < MAP_HEIGHT; y++) {
-            for (let x = 0; x < MAP_WIDTH; x++) {
-                const reverseX = (id % 2 === 1) ? (MAP_WIDTH - 1 - x) : x;
-                map[y][x] = tpl[y][reverseX] === '1' ? 1 : 0;
+        // Генератор огромных многокомнатных комплексов 36x24 для миссий 2..20
+        const vWalls = [8, 17, 26];
+        const hWalls = [7, 16];
+
+        vWalls.forEach((vx, idx) => {
+            const shift = ((id + idx) % 3) - 1;
+            const wx = vx + shift;
+            for (let y = 1; y < MAP_HEIGHT - 1; y++) {
+                // Оставляем широкие коридорные проходы
+                if (y === 3 || y === 4 || y === 11 || y === 12 || y === 19 || y === 20) continue;
+                map[y][wx] = 1;
             }
-        }
-        playerStart = { x: 2.5, y: 1.5 };
-        targetStart = { x: 17.5, y: 13.5 };
-        map[1][2] = 0; map[13][17] = 0;
+        });
 
-        // Расстановка тактических объектов по номерам миссий
-        if (id % 2 === 0) { map[7][9] = 6; map[7][10] = 6; map[3][10] = 12; } // Лазерный шлюз + Терминал
-        if (id >= 3 && id % 3 === 0) { map[1][17] = 7; map[13][2] = 7; }      // Квантовые порталы
-        if (id >= 4) { map[11][3] = 9; map[11][16] = 10; }                    // Ключ-карта + Бронедверь
-        if (id >= 5) { map[3][5] = 13; map[11][14] = 13; map[3][14] = 11; }   // Вентиляция + Камера
-        if (id >= 6) { map[7][3] = 14; }                                      // Батарея ЭМИ
-        if (id >= 7) { map[5][9] = 16; map[9][10] = 16; }                     // Механические шипы
+        hWalls.forEach((hy, idx) => {
+            for (let x = 1; x < MAP_WIDTH - 1; x++) {
+                if (x === 4 || x === 5 || x === 12 || x === 13 || x === 21 || x === 22 || x === 30 || x === 31) continue;
+                map[hy][x] = 1;
+            }
+        });
 
-        // Патрули в свободных коридорах
-        const patrolSpots = [
-            { x: 9.5, y: 3.5, axis: 'x' },
-            { x: 9.5, y: 11.5, axis: 'x' },
-            { x: 3.5, y: 7.5, axis: 'y' },
-            { x: 16.5, y: 7.5, axis: 'y' },
-            { x: 9.5, y: 7.5, axis: 'drone' }
+        playerStart = { x: 2.5, y: 2.5 };
+        targetStart = { x: 32.5, y: 20.5 };
+        map[2][2] = 0; map[20][32] = 0;
+
+        // Специальное оснащение секторов
+        map[7][21] = 6; map[7][22] = 6;
+        map[16][12] = 6; map[16][13] = 6;
+        map[4][14] = 12; // Терминал взлома лазеров
+        map[19][6] = 9;  // Ключ-карта 💳
+        map[19][26] = 10; map[20][26] = 10; // Бронедвери 🔒
+        map[2][32] = 7; map[21][2] = 7; // Квантовые порталы 🌀
+        map[5][5] = 13; map[12][18] = 13; map[18][30] = 13; // Шахты вентиляции 🕳️
+        map[10][4] = 14; map[14][29] = 14; // Батареи ЭМИ 🔋
+        if (id >= 5) { map[5][22] = 11; map[18][13] = 11; }
+        if (id >= 7) { map[11][17] = 16; map[12][17] = 16; }
+
+        const patrolZones = [
+            { x: 6.5,  y: 4.5,  axis: 'x' },
+            { x: 14.5, y: 10.5, axis: 'x' },
+            { x: 22.5, y: 5.5,  axis: 'y' },
+            { x: 29.5, y: 13.5, axis: 'y' },
+            { x: 14.5, y: 19.5, axis: 'x' },
+            { x: 23.5, y: 19.5, axis: 'x' },
+            { x: 18.5, y: 11.5, axis: 'drone' }
         ];
-        const count = Math.min(patrolSpots.length, 2 + Math.floor(id / 4));
-        for (let i = 0; i < count; i++) {
-            const spot = patrolSpots[i];
-            map[Math.floor(spot.y)][Math.floor(spot.x)] = 0;
+        const guardCount = Math.min(patrolZones.length, 3 + Math.floor(id / 3));
+        for (let i = 0; i < guardCount; i++) {
+            const pz = patrolZones[i];
+            map[Math.floor(pz.y)][Math.floor(pz.x)] = 0;
             enemies.push({
-                x: spot.x,
-                y: spot.y,
-                axis: (spot.axis === 'drone' && id < 6) ? 'x' : spot.axis,
-                speed: 0.06 + (id * 0.003),
+                x: pz.x,
+                y: pz.y,
+                axis: (pz.axis === 'drone' && id < 6) ? 'x' : pz.axis,
+                speed: 0.065 + (id * 0.0025),
                 dir: i % 2 === 0 ? 1 : -1,
                 stunTimer: 0
             });
@@ -2608,52 +2541,135 @@ function buildNodeLevelData(node) {
 }
 
 /* =========================================================================
-   7. НАВИГАЦИЯ ПО ЭКРАНАМ, КАРТА И СЛОТЫ
+   7. НАВИГАЦИЯ ПО ЭКРАНАМ И РЕНДЕР КАРТЫ МИССИЙ
    ========================================================================= */
 function refreshHubHeader() {
     const slot = AppState.slots[AppState.activeSlotId] || AppState.slots[1];
-    document.getElementById('hubAvatar').innerText = AppState.accountAvatar;
-    document.getElementById('hubAgentName').innerText = AppState.accountName;
-    document.getElementById('hubUsernameTag').innerText = `@${AppState.username || 'guest'}`;
-    document.getElementById('hubBioText').innerText = `«${AppState.bio || 'Мастер скрытных операций'}»`;
-    document.getElementById('hubSlotBadge').innerText = slot.id;
-    document.getElementById('cardSlotNum').innerText = slot.id;
-    document.getElementById('podiumSlotNum').innerText = slot.id;
-    document.getElementById('hubDiamondsCount').innerText = slot.diamonds;
-    updateHubOnlineCounter();
+    const setTxt = (id, val) => { const el = document.getElementById(id); if (el) el.innerText = val; };
+    setTxt('hubSlotBadge', String(AppState.activeSlotId));
+    setTxt('cardSlotNum', String(AppState.activeSlotId));
+    setTxt('podiumSlotNum', String(AppState.activeSlotId));
+    setTxt('hubDiamondsCount', String(slot.diamonds || 0));
+    setTxt('hubAvatar', AppState.accountAvatar || "🕵️");
+    setTxt('hubAgentName', AppState.accountName || "АГЕНТ СПЕКТР");
+    setTxt('hubUsernameTag', `@${AppState.username || 'agent'}`);
+    setTxt('hubBioText', `«${AppState.bio || 'Мастер скрытных операций'}»`);
 
-    const badge = document.getElementById('hubModeBadge');
-    if (AppState.isGuest) {
-        badge.innerText = "ГОСТЬ (ОФЛАЙН)";
-        badge.className = "px-3 py-1.5 text-[10px] font-pixel rounded-lg bg-amber-950 text-amber-300 border border-amber-500";
-    } else {
-        badge.innerText = "ONLINE • BOMNA5";
-        badge.className = "px-3 py-1.5 text-[10px] font-pixel rounded-lg bg-emerald-950 text-emerald-300 border border-emerald-500";
+    const modeBadge = document.getElementById('hubModeBadge');
+    if (modeBadge) {
+        if (AppState.isGuest) {
+            modeBadge.innerText = "ГОСТЬ (ОФЛАЙН)";
+            modeBadge.className = "px-3 py-1.5 text-[10px] font-pixel rounded-lg bg-amber-950 text-amber-300 border border-amber-600";
+        } else {
+            modeBadge.innerText = "В СЕТИ (BOMNA5)";
+            modeBadge.className = "px-3 py-1.5 text-[10px] font-pixel rounded-lg bg-emerald-950 text-emerald-300 border border-emerald-600";
+        }
     }
+    updateHubOnlineCounter();
 }
 
-window.showScreen = function(name) {
+window.showScreen = function(screenName) {
     ['auth', 'hub', 'slots', 'map', 'game'].forEach(s => {
         const el = document.getElementById(`screen-${s}`);
-        if (el) { el.classList.add('hidden'); el.classList.remove('flex'); }
+        if (el) {
+            el.classList.add('hidden');
+            el.classList.remove('flex');
+        }
     });
-    document.body.classList.remove('in-game');
 
-    const targetEl = document.getElementById(`screen-${name}`);
-    if (targetEl) { targetEl.classList.remove('hidden'); targetEl.classList.add('flex'); }
-
-    if (name === 'hub') {
-        gameMode = 'NONE';
-        AudioEngine.startBGM('map');
-        refreshHubHeader();
-        broadcastPresence(true);
-    } else if (name === 'slots') {
-        renderSlots();
-    } else if (name === 'map') {
-        gameMode = 'NONE';
-        AudioEngine.startBGM('map');
-        renderWorldMap();
+    const target = document.getElementById(`screen-${screenName}`);
+    if (target) {
+        target.classList.remove('hidden');
+        target.classList.add('flex');
     }
+
+    if (screenName !== 'game') {
+        document.body.classList.remove('in-game');
+        gameMode = 'NONE';
+    }
+
+    if (screenName === 'hub') {
+        refreshHubHeader();
+        AudioEngine.startBGM('map');
+        broadcastPresence(true);
+    } else if (screenName === 'slots') {
+        renderSlots();
+    } else if (screenName === 'map') {
+        renderWorldMap();
+        AudioEngine.startBGM('map');
+    }
+};
+
+/* =========================================================================
+   8. ИГРОВОЙ ДВИЖОК (ОГРОМНЫЕ КАРТЫ 36×24, ПЛАВНАЯ КАМЕРА И МИНИКАРТА)
+   ========================================================================= */
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+let TILE_SIZE = 42;
+let cameraZoomMode = 'FOLLOW'; // 'FOLLOW' (крупный план с плавной камерой) | 'FULL' (вся карта 36x24 целиком)
+let camX = 0, camY = 0;
+
+let gameMode = 'NONE'; // 'NONE' | 'INTRO' | 'TUTORIAL' | 'PLAY' | 'PAUSED' | 'EDITOR'
+let activeNodeId = 1;
+let isPlayingCustom = false;
+let visualStyle = 'CYBER';
+let touchMode = 0;
+
+let activeModifiers = { darkness: false, timer: false, turbo: false, ghost: false };
+let levelTimeLeft = 90.0;
+let levelGrid = [];
+let enemies = [];
+let portals = [];
+let customTexts = [];
+let player = { x: 3.5, y: 3.5, speed: 0.135, tpCooldown: 0, keys: 0, empCharges: 1, inVent: false, disguised: false, mpRole: 'agent' };
+let diamond = { x: 30.5, y: 5.5, taken: false };
+let exitPoint = { x: 3, y: 3 };
+
+let introDropProgress = 0;
+let introScannerRadius = 0;
+let introSparks = [];
+let tutorialStep = 0;
+
+let editorSelectedTool = 1;
+let editorGrid = [];
+let editorEnemies = [];
+let editorTexts = [];
+let editorPlayerPos = { x: 2.5, y: 2.5 };
+let editorDiamondPos = { x: 32.5, y: 20.5 };
+let isPointerDown = false;
+let pointerX = 0, pointerY = 0;
+let lastEditedCell = { x: -1, y: -1 };
+
+const keysPressed = {};
+let joyVec = { x: 0, y: 0 };
+let isSprinting = false;
+let stamina = 100;
+let animTick = 0;
+let lastFrameTime = performance.now();
+let floatAlerts = [];
+
+function resizeGameCanvas() {
+    const maxW = Math.min(window.innerWidth - 16, 1440);
+    const maxH = Math.min(window.innerHeight - 76, 920);
+    if (gameMode === 'EDITOR' || cameraZoomMode === 'FULL') {
+        TILE_SIZE = Math.max(16, Math.floor(Math.min(maxW / MAP_WIDTH, maxH / MAP_HEIGHT)));
+        canvas.width = TILE_SIZE * MAP_WIDTH;
+        canvas.height = TILE_SIZE * MAP_HEIGHT;
+    } else {
+        TILE_SIZE = Math.max(36, Math.min(48, Math.floor(Math.min(maxW / 18, maxH / 12))));
+        canvas.width = maxW;
+        canvas.height = maxH;
+    }
+    applyTouchVisibility();
+}
+window.addEventListener('resize', resizeGameCanvas);
+
+window.toggleCameraZoom = function() {
+    AudioEngine.sfx('click');
+    cameraZoomMode = (cameraZoomMode === 'FOLLOW') ? 'FULL' : 'FOLLOW';
+    const btn = document.getElementById('cameraModeSettingBtn');
+    if (btn) btn.innerText = `КАМЕРА: ${cameraZoomMode === 'FOLLOW' ? 'СЛЕЖЕНИЕ 📷' : 'ВСЯ КАРТА 🗺️'}`;
+    resizeGameCanvas();
 };
 
 function renderSlots() {
@@ -2667,11 +2683,11 @@ function renderSlots() {
         const completedCount = Object.keys(slot.completed || {}).length;
         const isCurrent = AppState.activeSlotId === slotNum;
         const card = document.createElement('div');
-        card.className = `bg-slate-950/90 border-2 ${isCurrent ? 'border-cyan-400 shadow-[0_0_30px_rgba(0,243,255,0.3)]' : 'border-slate-700'} rounded-2xl p-6 flex flex-col justify-between`;
+        card.className = `bg-slate-950/90 border-2 ${isCurrent ? 'border-sky-400' : 'border-slate-700'} rounded-2xl p-6 flex flex-col justify-between`;
         card.innerHTML = `
             <div>
                 <div class="flex items-center justify-between mb-4">
-                    <span class="font-pixel text-sm text-cyan-400">СЛОТ #${slotNum}</span>
+                    <span class="font-pixel text-sm text-sky-400">СЛОТ #${slotNum}</span>
                     <span class="px-2.5 py-1 rounded-lg bg-blue-950 text-blue-300 border border-blue-700 font-pixel text-[9px]">${completedCount}/20 МИССИЙ</span>
                 </div>
                 <div class="my-5 text-center">
@@ -2728,7 +2744,7 @@ function renderWorldMap() {
             line.setAttribute('y1', `${parent.y}%`);
             line.setAttribute('x2', `${node.x}%`);
             line.setAttribute('y2', `${node.y}%`);
-            line.setAttribute('stroke', isUnlocked ? '#00f3ff' : '#334155');
+            line.setAttribute('stroke', isUnlocked ? '#38bdf8' : '#334155');
             line.setAttribute('stroke-width', isUnlocked ? '5' : '3');
             if (!isUnlocked) line.setAttribute('stroke-dasharray', '6,6');
             svg.appendChild(line);
@@ -2752,62 +2768,6 @@ function renderWorldMap() {
     const scrollArea = document.getElementById('mapScrollArea');
     setTimeout(() => { scrollArea.scrollTop = scrollArea.scrollHeight; }, 60);
 }
-
-/* =========================================================================
-   8. ИГРОВОЙ ДВИЖОК (КИНЕМАТОГРАФИЧНАЯ АНИМАЦИЯ ВЫСАДКИ И ВИЗУАЛЬНОЕ ОБУЧЕНИЕ)
-   ========================================================================= */
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
-let TILE_SIZE = 44;
-
-let gameMode = 'NONE'; // 'NONE' | 'INTRO' | 'TUTORIAL' | 'PLAY' | 'PAUSED' | 'EDITOR'
-let activeNodeId = 1;
-let isPlayingCustom = false;
-let visualStyle = 'CYBER';
-let touchMode = 0;
-
-let activeModifiers = { darkness: false, timer: false, turbo: false, ghost: false };
-let levelTimeLeft = 45.0;
-let levelGrid = [];
-let enemies = [];
-let portals = [];
-let customTexts = [];
-let player = { x: 2.5, y: 2.5, speed: 0.12, tpCooldown: 0, keys: 0, empCharges: 1, inVent: false, disguised: false, mpRole: 'agent' };
-let diamond = { x: 16.5, y: 3.5, taken: false };
-let exitPoint = { x: 2, y: 2 };
-
-let introDropProgress = 0;
-let introScannerRadius = 0;
-let introSparks = [];
-let tutorialStep = 0;
-
-let editorSelectedTool = 1;
-let editorGrid = [];
-let editorEnemies = [];
-let editorTexts = [];
-let editorPlayerPos = { x: 2.5, y: 2.5 };
-let editorDiamondPos = { x: 17.5, y: 12.5 };
-let isPointerDown = false;
-let pointerX = 0, pointerY = 0;
-let lastEditedCell = { x: -1, y: -1 };
-
-const keysPressed = {};
-let joyVec = { x: 0, y: 0 };
-let isSprinting = false;
-let stamina = 100;
-let animTick = 0;
-let lastFrameTime = performance.now();
-let floatAlerts = [];
-
-function resizeGameCanvas() {
-    const maxW = Math.min(window.innerWidth - 12, 1280);
-    const maxH = Math.min(window.innerHeight - 76, 940);
-    TILE_SIZE = Math.max(20, Math.floor(Math.min(maxW / MAP_WIDTH, maxH / MAP_HEIGHT)));
-    canvas.width = TILE_SIZE * MAP_WIDTH;
-    canvas.height = TILE_SIZE * MAP_HEIGHT;
-    applyTouchVisibility();
-}
-window.addEventListener('resize', resizeGameCanvas);
 
 function applyTouchVisibility() {
     const hasTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
@@ -2863,10 +2823,9 @@ window.launchSelectedLevel = function() {
     };
     const node = CAMPAIGN_NODES.find(n => n.id === activeNodeId) || CAMPAIGN_NODES[0];
     const levelData = buildNodeLevelData(node);
-    setupLevelSession(levelData, `МИССИЯ #${node.id}: ${node.title}`, 45.0);
+    setupLevelSession(levelData, `МИССИЯ #${node.id}: ${node.title}`, 90.0);
 
     if (activeNodeId === 1) {
-        // Вместо текстовых диалогов запускаем кинематографичную анимацию высадки и визуальный курс!
         gameMode = 'INTRO';
         introDropProgress = 0;
         introScannerRadius = 0;
@@ -2879,7 +2838,7 @@ window.launchSelectedLevel = function() {
     broadcastPresence(true);
 };
 
-function setupLevelSession(data, titleText, customDuration = 45.0) {
+function setupLevelSession(data, titleText, customDuration = 90.0) {
     window.showScreen('game');
     document.body.classList.add('in-game');
     document.getElementById('editorHud').classList.add('hidden');
@@ -2889,16 +2848,15 @@ function setupLevelSession(data, titleText, customDuration = 45.0) {
     document.getElementById('actionSkillIcon').innerText = "🛜";
     document.getElementById('actionSkillLabel').innerText = "ЭМИ";
 
-    resizeGameCanvas();
     levelGrid = JSON.parse(JSON.stringify(data.map));
-    const speedFactor = activeModifiers.turbo ? 1.35 : 1.0;
+    const speedFactor = activeModifiers.turbo ? 1.3 : 1.0;
     enemies = (data.enemies || []).map(e => ({ ...e, speed: (e.speed || 0.08) * speedFactor, dir: e.dir || 1, stunTimer: 0 }));
     customTexts = JSON.parse(JSON.stringify(data.texts || []));
 
     player = {
         x: data.playerStart.x,
         y: data.playerStart.y,
-        speed: 0.125,
+        speed: 0.14,
         tpCooldown: 0,
         keys: 0,
         empCharges: activeModifiers.ghost ? 3 : 1,
@@ -2909,10 +2867,14 @@ function setupLevelSession(data, titleText, customDuration = 45.0) {
     diamond = { x: data.targetStart.x, y: data.targetStart.y, taken: false };
     exitPoint = { x: Math.floor(data.playerStart.x), y: Math.floor(data.playerStart.y) };
 
+    resizeGameCanvas();
+    camX = player.x * TILE_SIZE - canvas.width / 2;
+    camY = player.y * TILE_SIZE - canvas.height / 2;
+
     portals = [];
     for (let y = 0; y < MAP_HEIGHT; y++) {
         for (let x = 0; x < MAP_WIDTH; x++) {
-            if (levelGrid[y][x] === 7) portals.push({ x, y });
+            if (levelGrid[y] && levelGrid[y][x] === 7) portals.push({ x, y });
         }
     }
 
@@ -2921,12 +2883,13 @@ function setupLevelSession(data, titleText, customDuration = 45.0) {
     document.getElementById('hudLevelName').innerText = titleText;
     document.getElementById('hudObjective').innerText = "ЦЕЛЬ: АЛМАЗ 💎";
     updateInventoryHud();
+    updateGalyaUI();
 
     const timerBox = document.getElementById('hudTimerBox');
     if (activeModifiers.timer) timerBox.classList.remove('hidden');
     else timerBox.classList.add('hidden');
 
-    spawnAlert(MAP_WIDTH / 2, MAP_HEIGHT / 2, titleText, "#00f3ff");
+    spawnAlert(player.x, player.y, titleText, "#38bdf8");
     canvas.focus();
 }
 
@@ -2943,8 +2906,12 @@ window.triggerActionSkill = function() {
         spawnAlert(player.x, player.y, player.disguised ? "МАСКИРОВКА 📦" : "АГЕНТ", "#fbbf24");
         return;
     }
+    if (isMultiplayerSession && mpCurrentMode === 'galya') {
+        window.rollRandomGalya();
+        return;
+    }
     if (player.empCharges <= 0) {
-        spawnAlert(player.x, player.y, "НЕТ ЭМИ 🔋!", "#f43f5e");
+        spawnAlert(player.x, player.y, "НЕТ ЗАРЯДОВ ЭМИ 🔋!", "#f43f5e");
         return;
     }
     player.empCharges--;
@@ -2980,33 +2947,32 @@ function canPlayerMoveTo(nx, ny) {
 
 function updateGameLogic(dt) {
     animTick += dt;
+    if (mpTagCooldown > 0) mpTagCooldown -= dt;
 
-    // Полноценная кинематографичная анимация высадки на 1-м уровне (без текстовых диалогов!)
     if (gameMode === 'INTRO') {
         if (introDropProgress < 1) {
-            introDropProgress = Math.min(1, introDropProgress + 0.018 * dt);
-            if (Math.random() < 0.6) {
+            introDropProgress = Math.min(1, introDropProgress + 0.022 * dt);
+            if (Math.random() < 0.5) {
                 introSparks.push({
-                    x: player.x * TILE_SIZE + (Math.random() - 0.5) * 20,
+                    x: player.x * TILE_SIZE + (Math.random() - 0.5) * 16,
                     y: (player.y * introDropProgress) * TILE_SIZE,
-                    vx: (Math.random() - 0.5) * 4,
-                    vy: -1 - Math.random() * 3,
-                    life: 25
+                    vx: (Math.random() - 0.5) * 3,
+                    vy: -1 - Math.random() * 2,
+                    life: 20
                 });
             }
             if (introDropProgress >= 1) {
                 AudioEngine.sfx('emp');
-                spawnAlert(player.x, player.y, "СКАНИРОВАНИЕ СЕКТОРА...", "#00f3ff");
+                spawnAlert(player.x, player.y, "СКАНИРОВАНИЕ ОБЪЕКТА...", "#38bdf8");
             }
         } else {
-            introScannerRadius += 14 * dt;
-            if (introScannerRadius >= canvas.width * 1.1) {
-                // Сразу переходим к интерактивному визуальному обучению с лазерными указателями!
+            introScannerRadius += 18 * dt;
+            if (introScannerRadius >= TILE_SIZE * 14) {
                 gameMode = 'TUTORIAL';
                 tutorialStep = 1;
                 const banner = document.getElementById('tutorialBanner');
                 banner.classList.remove('hidden');
-                document.getElementById('tutorialStepText').innerText = "ШАГ 1: ИДИТЕ ПО СВЕТЯЩЕЙСЯ ЛИНИИ К БАТАРЕЕ ЭМИ 🔋 ВНИЗУ СЛЕВА";
+                document.getElementById('tutorialStepText').innerText = "ШАГ 1: ДВИГАЙТЕСЬ ПО ЛИНИИ К БАТАРЕЕ ЭМИ 🔋";
                 spawnAlert(player.x, player.y, "ВПЕРЕД К 🔋!", "#34d399");
             }
         }
@@ -3025,6 +2991,13 @@ function updateGameLogic(dt) {
         const timerText = document.getElementById('hudTimerText');
         if (timerText) timerText.innerText = `⏱️ ${Math.max(0, levelTimeLeft).toFixed(1)}с`;
         if (levelTimeLeft <= 0) {
+            if (isMultiplayerSession && mpCurrentMode === 'galya') {
+                if (mpGalyaUsername === AppState.username) {
+                    return triggerGameOver("ВРЕМЯ ВЫШЛО! ВЫ ОСТАЛИСЬ «ГАЛЕЙ» 👑!");
+                } else {
+                    return triggerLevelWin();
+                }
+            }
             return triggerGameOver(isMultiplayerSession && mpCurrentMode === 'bomb' ? "💣 БОМБА ДЕТОНИРОВАЛА!" : "⏱️ ВРЕМЯ РАУНДА ИСТЕКЛО!");
         }
     }
@@ -3032,12 +3005,16 @@ function updateGameLogic(dt) {
     if (player.tpCooldown > 0) player.tpCooldown -= dt;
 
     let speedMult = 1;
+    // Если игрок «Галя» в режиме догонялок, он бегает на 15% быстрее
+    if (isMultiplayerSession && mpCurrentMode === 'galya' && mpGalyaUsername === AppState.username) {
+        speedMult = 1.15;
+    }
     const sprintActive = keysPressed['ShiftLeft'] || keysPressed['ShiftRight'] || isSprinting;
     if (sprintActive && (stamina > 0 || activeModifiers.ghost)) {
-        speedMult = 1.65;
-        if (!activeModifiers.ghost) stamina = Math.max(0, stamina - 1.6 * dt);
+        speedMult *= 1.55;
+        if (!activeModifiers.ghost) stamina = Math.max(0, stamina - 1.4 * dt);
     } else if (stamina < 100) {
-        stamina = Math.min(100, stamina + 0.6 * dt);
+        stamina = Math.min(100, stamina + 0.65 * dt);
     }
     document.getElementById('staminaFill').style.width = `${stamina}%`;
 
@@ -3068,6 +3045,21 @@ function updateGameLogic(dt) {
     if (canPlayerMoveTo(player.x + stepX, player.y)) player.x += stepX;
     if (canPlayerMoveTo(player.x, player.y + stepY)) player.y += stepY;
 
+    // Проверка касания между игроками в режиме «Догонялки (Галя)» и «Бомба»
+    if (isMultiplayerSession && (mpCurrentMode === 'galya' || mpCurrentMode === 'bomb') && mpTagCooldown <= 0) {
+        if (mpGalyaUsername === AppState.username) {
+            Object.values(AppState.onlinePlayers).forEach(other => {
+                if (other.username !== AppState.username && other.sessionType === 'MULTIPLAYER' && other.roomCode === mpRoomCode) {
+                    if (Math.hypot(player.x - other.x, player.y - other.y) < 1.1) {
+                        mpTagCooldown = 180; // 3 секунды защиты от обратного касания
+                        AudioEngine.sfx('portal');
+                        window.setGalyaPlayer(other.username, true);
+                    }
+                }
+            });
+        }
+    }
+
     const cx = Math.floor(player.x), cy = Math.floor(player.y);
     const tile = (levelGrid[cy] && levelGrid[cy][cx]) || 0;
 
@@ -3088,7 +3080,7 @@ function updateGameLogic(dt) {
         spawnAlert(player.x, player.y, "+1 ЭМИ 🔋", "#a855f7");
         if (gameMode === 'TUTORIAL' && tutorialStep === 1) {
             tutorialStep = 2;
-            document.getElementById('tutorialStepText').innerText = "ШАГ 2: ТЕПЕРЬ СЛЕДУЙТЕ ПО УКАЗАТЕЛЮ К ТЕРМИНАЛУ 💻 В ЦЕНТРАЛЬНОМ ЗАЛЕ";
+            document.getElementById('tutorialStepText').innerText = "ШАГ 2: ИДИТЕ ПО ЛИНИИ К ТЕРМИНАЛУ 💻 ДЛЯ ОТКЛЮЧЕНИЯ ЛАЗЕРОВ";
         }
     }
     if (tile === 12) {
@@ -3099,15 +3091,15 @@ function updateGameLogic(dt) {
             }
         }
         if (isMultiplayerSession && mpCurrentMode === 'bomb') {
-            levelTimeLeft += 15;
-            spawnAlert(player.x, player.y, "+15 СЕК ДО ВЗРЫВА 💻!", "#34d399");
+            levelTimeLeft += 20;
+            spawnAlert(player.x, player.y, "+20 СЕК ДО ВЗРЫВА 💻!", "#34d399");
         } else {
-            spawnAlert(player.x, player.y, "ЛАЗЕРЫ ОТКЛЮЧЕНЫ 💻!", "#00f3ff");
+            spawnAlert(player.x, player.y, "ЛАЗЕРЫ ОТКЛЮЧЕНЫ 💻!", "#38bdf8");
         }
         AudioEngine.sfx('hack');
         if (gameMode === 'TUTORIAL' && tutorialStep <= 2) {
             tutorialStep = 3;
-            document.getElementById('tutorialStepText').innerText = "ШАГ 3: ЗАБЕРИТЕ АЛМАЗ 💎 СПРАВА И ВЕРНИТЕСЬ НА ЗЕЛЕНУЮ ТОЧКУ ЭВАКУАЦИИ!";
+            document.getElementById('tutorialStepText').innerText = "ШАГ 3: ЗАБЕРИТЕ АЛМАЗ 💎 В ВОСТОЧНОМ КРЫЛЕ И ВЕРНИТЕСЬ НА ВЫХОД 🟢!";
         }
     }
     if (tile === 6 && ((Math.floor(animTick / 45) % 2) === 0)) {
@@ -3149,21 +3141,29 @@ function updateGameLogic(dt) {
         }
 
         if (!player.inVent && !player.disguised && Math.hypot(player.x - e.x, player.y - e.y) < 0.65) {
-            return triggerGameOver(isMultiplayerSession && mpCurrentMode === 'infection' ? "ВАС ЗАРАЗИЛ МУТАНТ 🧟!" : (e.axis === 'drone' ? "ВАС ПЕРЕХВАТИЛ ДРОН 🛸!" : "ВАС ЗАДЕРЖАЛА ОХРАНА 👮!"));
+            if (isMultiplayerSession && mpCurrentMode === 'galya') {
+                // В режиме «Галя» столкновение с патрулем делает вас Галей!
+                if (mpGalyaUsername !== AppState.username && mpTagCooldown <= 0) {
+                    mpTagCooldown = 120;
+                    window.setGalyaPlayer(AppState.username, true);
+                }
+            } else {
+                return triggerGameOver(isMultiplayerSession && mpCurrentMode === 'infection' ? "ВАС ЗАРАЗИЛ МУТАНТ 🧟!" : (e.axis === 'drone' ? "ВАС ПЕРЕХВАТИЛ ДРОН 🛸!" : "ВАС ЗАДЕРЖАЛА ОХРАНА 👮!"));
+            }
         }
     }
 
     if (!diamond.taken) {
-        if (Math.hypot(player.x - diamond.x, player.y - diamond.y) < 0.75) {
+        if (Math.hypot(player.x - diamond.x, player.y - diamond.y) < 0.8) {
             diamond.taken = true;
             AudioEngine.sfx('pickup');
             AudioEngine.startBGM('panic');
             document.getElementById('hudObjective').innerText = "ЦЕЛЬ: ЭВАКУАЦИЯ 🟢!";
-            spawnAlert(player.x, player.y, "БЕГИ К ВЫХОДУ 🟢!", "#fbbf24");
-            enemies.forEach(e => e.speed *= 1.2);
+            spawnAlert(player.x, player.y, "ИДИТЕ К ТОЧКЕ ЭВАКУАЦИИ 🟢!", "#34d399");
+            enemies.forEach(e => e.speed *= 1.15);
         }
     } else {
-        if (Math.hypot(player.x - (exitPoint.x + 0.5), player.y - (exitPoint.y + 0.5)) < 0.85) {
+        if (Math.hypot(player.x - (exitPoint.x + 0.5), player.y - (exitPoint.y + 0.5)) < 0.9) {
             return triggerLevelWin();
         }
     }
@@ -3206,11 +3206,11 @@ function triggerLevelWin() {
 }
 
 /* =========================================================================
-   9. ОТРИСОВКА ИГРЫ, АНИМАЦИИ ВЫСАДКИ, УКАЗАТЕЛЕЙ И ЧАТА НАД ИГРОКАМИ
+   9. ОТРИСОВКА ОГРОМНОЙ КАРТЫ, ПЛАВНОЙ КАМЕРЫ И МИНИКАРТЫ-РАДАРА
    ========================================================================= */
 function drawGameScene() {
     if (gameMode === 'NONE') return;
-    ctx.fillStyle = visualStyle === 'ARCADE' ? '#0f172a' : '#020617';
+    ctx.fillStyle = visualStyle === 'ARCADE' ? '#0f172a' : '#070b14';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     const grid = (gameMode === 'EDITOR') ? editorGrid : levelGrid;
@@ -3219,73 +3219,97 @@ function drawGameScene() {
     const laserActive = ((Math.floor(animTick / 45) % 2) === 0);
     const spikesActive = ((Math.floor(animTick / 40) % 2) === 0);
 
-    for (let y = 0; y < MAP_HEIGHT; y++) {
-        for (let x = 0; x < MAP_WIDTH; x++) {
+    // Плавное следование камеры за игроком на огромных картах 36x24
+    const worldW = MAP_WIDTH * TILE_SIZE;
+    const worldH = MAP_HEIGHT * TILE_SIZE;
+    if (gameMode === 'EDITOR' || cameraZoomMode === 'FULL') {
+        camX = 0;
+        camY = 0;
+    } else {
+        const targetCamX = player.x * TILE_SIZE - canvas.width / 2;
+        const targetCamY = player.y * TILE_SIZE - canvas.height / 2;
+        camX += (targetCamX - camX) * 0.14;
+        camY += (targetCamY - camY) * 0.14;
+        camX = Math.max(0, Math.min(Math.max(0, worldW - canvas.width), camX));
+        camY = Math.max(0, Math.min(Math.max(0, worldH - canvas.height), camY));
+    }
+
+    ctx.save();
+    ctx.translate(-Math.floor(camX), -Math.floor(camY));
+
+    const startCol = Math.max(0, Math.floor(camX / TILE_SIZE));
+    const endCol = Math.min(MAP_WIDTH - 1, Math.ceil((camX + canvas.width) / TILE_SIZE));
+    const startRow = Math.max(0, Math.floor(camY / TILE_SIZE));
+    const endRow = Math.min(MAP_HEIGHT - 1, Math.ceil((camY + canvas.height) / TILE_SIZE));
+
+    for (let y = startRow; y <= endRow; y++) {
+        for (let x = startCol; x <= endCol; x++) {
             const px = x * TILE_SIZE, py = y * TILE_SIZE;
             const cell = (grid[y] && grid[y][x]) || 0;
 
-            ctx.fillStyle = (x + y) % 2 === 0 ? '#090d16' : '#0d1322';
+            ctx.fillStyle = (x + y) % 2 === 0 ? '#0b111e' : '#0f172a';
             ctx.fillRect(px, py, TILE_SIZE, TILE_SIZE);
 
             if (cell === 1) {
-                ctx.fillStyle = diamond.taken ? `hsl(${(animTick * 4 + x * 8) % 360}, 80%, 40%)` : '#1d4ed8';
+                // Спокойные цвета стен без резкого мигания
+                ctx.fillStyle = diamond.taken ? '#1e3a8a' : (visualStyle === 'TACTICAL' ? '#1e293b' : '#1d4ed8');
                 ctx.fillRect(px, py, TILE_SIZE, TILE_SIZE);
-                ctx.strokeStyle = '#38bdf8';
-                ctx.strokeRect(px + 2, py + 2, TILE_SIZE - 4, TILE_SIZE - 4);
+                ctx.strokeStyle = diamond.taken ? '#f59e0b' : '#3b82f6';
+                ctx.lineWidth = 1;
+                ctx.strokeRect(px + 1.5, py + 1.5, TILE_SIZE - 3, TILE_SIZE - 3);
             } else if (cell === 6) {
-                ctx.fillStyle = laserActive ? 'rgba(244, 63, 94, 0.75)' : 'rgba(244, 63, 94, 0.15)';
+                ctx.fillStyle = laserActive ? 'rgba(244, 63, 94, 0.7)' : 'rgba(244, 63, 94, 0.15)';
                 ctx.fillRect(px, py, TILE_SIZE, TILE_SIZE);
             } else if (cell === 7) {
-                drawEmoji("🌀", x + 0.5, y + 0.5, 0.78);
+                drawEmoji("🌀", x + 0.5, y + 0.5, 0.75);
             } else if (cell === 9) {
-                drawEmoji("💳", x + 0.5, y + 0.5, 0.78);
+                drawEmoji("💳", x + 0.5, y + 0.5, 0.75);
             } else if (cell === 10) {
-                ctx.fillStyle = '#d97706'; ctx.fillRect(px, py, TILE_SIZE, TILE_SIZE);
-                drawEmoji("🔒", x + 0.5, y + 0.5, 0.72);
+                ctx.fillStyle = '#b45309'; ctx.fillRect(px, py, TILE_SIZE, TILE_SIZE);
+                drawEmoji("🔒", x + 0.5, y + 0.5, 0.7);
             } else if (cell === 11) {
-                drawEmoji("📹", x + 0.5, y + 0.5, 0.72);
+                drawEmoji("📹", x + 0.5, y + 0.5, 0.7);
             } else if (cell === 12) {
-                drawEmoji("💻", x + 0.5, y + 0.5, 0.78);
+                drawEmoji("💻", x + 0.5, y + 0.5, 0.75);
             } else if (cell === 13) {
-                ctx.fillStyle = '#1e293b'; ctx.fillRect(px + 3, py + 3, TILE_SIZE - 6, TILE_SIZE - 6);
-                drawEmoji("🕳️", x + 0.5, y + 0.5, 0.68);
+                ctx.fillStyle = '#1e293b'; ctx.fillRect(px + 2, py + 2, TILE_SIZE - 4, TILE_SIZE - 4);
+                drawEmoji("🕳️", x + 0.5, y + 0.5, 0.65);
             } else if (cell === 14) {
-                drawEmoji("🔋", x + 0.5, y + 0.5, 0.78);
+                drawEmoji("🔋", x + 0.5, y + 0.5, 0.75);
             } else if (cell === 16) {
-                ctx.fillStyle = spikesActive ? '#e11d48' : '#334155';
-                ctx.fillRect(px + 4, py + 4, TILE_SIZE - 8, TILE_SIZE - 8);
-                drawEmoji("⚙️", x + 0.5, y + 0.5, 0.68);
+                ctx.fillStyle = spikesActive ? '#be123c' : '#334155';
+                ctx.fillRect(px + 3, py + 3, TILE_SIZE - 6, TILE_SIZE - 6);
+                drawEmoji("⚙️", x + 0.5, y + 0.5, 0.65);
             }
 
             if (gameMode !== 'EDITOR' && x === exitPoint.x && y === exitPoint.y) {
-                ctx.fillStyle = diamond.taken ? 'rgba(16, 185, 129, 0.55)' : 'rgba(56, 189, 248, 0.22)';
+                ctx.fillStyle = diamond.taken ? 'rgba(16, 185, 129, 0.5)' : 'rgba(56, 189, 248, 0.2)';
                 ctx.fillRect(px, py, TILE_SIZE, TILE_SIZE);
             }
         }
     }
 
-    // Визуальные анимированные лазерные указатели для 1-го уровня (вместо диалогов)
+    // Визуальные указатели для 1-го уровня
     if (gameMode === 'TUTORIAL') {
         let targetX = diamond.x, targetY = diamond.y;
-        if (tutorialStep === 1) { targetX = 3.5; targetY = 8.5; }
-        else if (tutorialStep === 2) { targetX = 9.5; targetY = 11.5; }
+        if (tutorialStep === 1) { targetX = 5.5; targetY = 14.5; }
+        else if (tutorialStep === 2) { targetX = 16.5; targetY = 19.5; }
         else if (diamond.taken) { targetX = exitPoint.x + 0.5; targetY = exitPoint.y + 0.5; }
 
         ctx.save();
         ctx.strokeStyle = '#10b981';
-        ctx.lineWidth = 4;
-        ctx.setLineDash([10, 8]);
-        ctx.lineDashOffset = -(animTick * 1.5);
+        ctx.lineWidth = 3;
+        ctx.setLineDash([8, 6]);
+        ctx.lineDashOffset = -(animTick * 1.2);
         ctx.beginPath();
         ctx.moveTo(player.x * TILE_SIZE, player.y * TILE_SIZE);
         ctx.lineTo(targetX * TILE_SIZE, targetY * TILE_SIZE);
         ctx.stroke();
 
-        // Пульсирующее кольцо вокруг текущей цели обучения
-        const ringR = TILE_SIZE * (0.55 + Math.sin(animTick / 6) * 0.15);
+        const ringR = TILE_SIZE * 0.6;
         ctx.setLineDash([]);
-        ctx.strokeStyle = '#00f3ff';
-        ctx.lineWidth = 3;
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 2.5;
         ctx.beginPath();
         ctx.arc(targetX * TILE_SIZE, targetY * TILE_SIZE, ringR, 0, Math.PI * 2);
         ctx.stroke();
@@ -3293,131 +3317,169 @@ function drawGameScene() {
     }
 
     texts.forEach(t => {
-        ctx.font = `bold ${Math.floor(TILE_SIZE * 0.38)}px 'Press Start 2P', monospace`;
+        ctx.font = `bold ${Math.floor(TILE_SIZE * 0.36)}px 'Press Start 2P', monospace`;
         ctx.textAlign = 'center';
         ctx.fillStyle = '#fde047';
         ctx.fillText(t.text, (t.x + 0.5) * TILE_SIZE, (t.y + 0.5) * TILE_SIZE);
     });
 
     if (gameMode === 'EDITOR') {
-        drawEmoji(AppState.accountAvatar, editorPlayerPos.x, editorPlayerPos.y, 0.82);
-        drawEmoji("💎", editorDiamondPos.x, editorDiamondPos.y, 0.88);
+        drawEmoji(AppState.accountAvatar, editorPlayerPos.x, editorPlayerPos.y, 0.8);
+        drawEmoji("💎", editorDiamondPos.x, editorDiamondPos.y, 0.85);
     } else {
         if (!diamond.taken) {
-            const bob = Math.sin(animTick / 10) * 0.08;
-            drawEmoji("💎", diamond.x, diamond.y + bob, 0.9);
+            drawEmoji("💎", diamond.x, diamond.y, 0.85);
         }
 
-        // Отрисовка других реальных игроков в комнате Мультиплеера + их никнеймов и чата
         if (isMultiplayerSession) {
             Object.values(AppState.onlinePlayers).forEach(p => {
                 if (p.username !== AppState.username && p.sessionType === 'MULTIPLAYER' && p.roomCode === mpRoomCode) {
+                    const isOtherGalya = (mpCurrentMode === 'galya' && mpGalyaUsername === p.username);
+                    if (isOtherGalya) {
+                        ctx.strokeStyle = '#fbbf24';
+                        ctx.lineWidth = 3;
+                        ctx.beginPath();
+                        ctx.arc(p.x * TILE_SIZE, p.y * TILE_SIZE, TILE_SIZE * 0.52, 0, Math.PI * 2);
+                        ctx.stroke();
+                    }
                     drawEmoji(p.disguised ? "📦" : (p.avatar || "🥷"), p.x, p.y, 0.82);
-                    drawPlayerTagAndChat(p.x, p.y, `@${p.username}`, playerChatBubbles[p.username]);
+                    const tagLabel = isOtherGalya ? `👑 ГАЛЯ @${p.username}` : `@${p.username}`;
+                    drawPlayerTagAndChat(p.x, p.y, tagLabel, playerChatBubbles[p.username]);
                 }
             });
         }
 
-        // Кинематографичная высадка с вертолетным лучом, тросом, искрами и сканером
         if (gameMode === 'INTRO') {
             const curY = player.y * introDropProgress;
-            // Луч прожектора сверху
-            const grad = ctx.createLinearGradient(player.x * TILE_SIZE, 0, player.x * TILE_SIZE, canvas.height);
-            grad.addColorStop(0, 'rgba(0, 243, 255, 0.45)');
-            grad.addColorStop(1, 'rgba(0, 243, 255, 0.0)');
-            ctx.fillStyle = grad;
-            ctx.beginPath();
-            ctx.moveTo((player.x - 0.4) * TILE_SIZE, 0);
-            ctx.lineTo((player.x + 0.4) * TILE_SIZE, 0);
-            ctx.lineTo((player.x + 1.8) * TILE_SIZE, canvas.height);
-            ctx.lineTo((player.x - 1.8) * TILE_SIZE, canvas.height);
-            ctx.closePath();
-            ctx.fill();
-
-            // Неоновый трос
-            ctx.strokeStyle = '#00f3ff';
-            ctx.lineWidth = 3;
+            ctx.strokeStyle = '#38bdf8';
+            ctx.lineWidth = 2.5;
             ctx.beginPath();
             ctx.moveTo(player.x * TILE_SIZE, 0);
             ctx.lineTo(player.x * TILE_SIZE, curY * TILE_SIZE);
             ctx.stroke();
 
-            // Искры спуска
             introSparks.forEach((sp, i) => {
                 sp.x += sp.vx; sp.y += sp.vy; sp.life--;
                 ctx.fillStyle = '#fde047';
-                ctx.fillRect(sp.x, sp.y, 4, 4);
+                ctx.fillRect(sp.x, sp.y, 3, 3);
                 if (sp.life <= 0) introSparks.splice(i, 1);
             });
 
-            drawEmoji(AppState.accountAvatar, player.x, curY, 0.9);
+            drawEmoji(AppState.accountAvatar, player.x, curY, 0.85);
 
-            // Волна тактического сканера после приземления
             if (introScannerRadius > 0) {
-                ctx.strokeStyle = 'rgba(0, 243, 255, 0.85)';
-                ctx.lineWidth = 5;
+                ctx.strokeStyle = 'rgba(56, 189, 248, 0.7)';
+                ctx.lineWidth = 3;
                 ctx.beginPath();
                 ctx.arc(player.x * TILE_SIZE, player.y * TILE_SIZE, introScannerRadius, 0, Math.PI * 2);
                 ctx.stroke();
             }
         } else {
             ctx.save();
-            if (player.inVent) ctx.globalAlpha = 0.4;
+            if (player.inVent) ctx.globalAlpha = 0.45;
+            const amIGalya = (isMultiplayerSession && mpCurrentMode === 'galya' && mpGalyaUsername === AppState.username);
+            if (amIGalya) {
+                ctx.strokeStyle = '#f59e0b';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.arc(player.x * TILE_SIZE, player.y * TILE_SIZE, TILE_SIZE * 0.54, 0, Math.PI * 2);
+                ctx.stroke();
+            }
             drawEmoji(player.disguised ? "📦" : AppState.accountAvatar, player.x, player.y, 0.85);
             if (isMultiplayerSession && mpCurrentMode === 'bomb') {
                 drawEmoji("💣", player.x + 0.35, player.y - 0.35, 0.45);
+            } else if (amIGalya) {
+                drawEmoji("👑", player.x, player.y - 0.5, 0.42);
             }
             ctx.restore();
-            drawPlayerTagAndChat(player.x, player.y, `@${AppState.username || 'agent'}`, playerChatBubbles[AppState.username]);
+            const myTag = (isMultiplayerSession && mpCurrentMode === 'galya' && mpGalyaUsername === AppState.username)
+                ? `👑 ГАЛЯ @${AppState.username}`
+                : `@${AppState.username || 'agent'}`;
+            drawPlayerTagAndChat(player.x, player.y, myTag, playerChatBubbles[AppState.username]);
         }
     }
 
     guards.forEach(e => {
         const icon = e.stunTimer > 0 ? "💫" : (isMultiplayerSession && mpCurrentMode === 'infection' ? "🧟" : (e.axis === 'drone' ? "🛸" : "👮"));
-        drawEmoji(icon, e.x, e.y, 0.84);
+        drawEmoji(icon, e.x, e.y, 0.82);
     });
 
     if (gameMode !== 'EDITOR' && activeModifiers.darkness) {
         const px = player.x * TILE_SIZE, py = player.y * TILE_SIZE;
-        const grad = ctx.createRadialGradient(px, py, TILE_SIZE * 1.5, px, py, TILE_SIZE * 4.4);
+        const grad = ctx.createRadialGradient(px, py, TILE_SIZE * 1.8, px, py, TILE_SIZE * 5.2);
         grad.addColorStop(0, 'rgba(0,0,0,0)');
-        grad.addColorStop(1, 'rgba(0,0,0,0.95)');
+        grad.addColorStop(1, 'rgba(0,0,0,0.92)');
         ctx.fillStyle = grad;
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillRect(camX, camY, canvas.width, canvas.height);
     }
 
     floatAlerts.forEach((fa, idx) => {
-        fa.y -= 0.8; fa.life--;
-        ctx.font = `bold ${Math.max(11, Math.floor(TILE_SIZE * 0.36))}px 'Press Start 2P', monospace`;
+        fa.y -= 0.7; fa.life--;
+        ctx.font = `bold ${Math.max(11, Math.floor(TILE_SIZE * 0.34))}px 'Press Start 2P', monospace`;
         ctx.textAlign = 'center';
         ctx.fillStyle = fa.color;
         ctx.fillText(fa.text, fa.x, fa.y);
         if (fa.life <= 0) floatAlerts.splice(idx, 1);
     });
+
+    ctx.restore();
+
+    // Отрисовка тактического радара (миникарты) в углу для навигации по огромным уровням 36x24
+    if (gameMode === 'PLAY' || gameMode === 'TUTORIAL') {
+        drawMinimapRadar(grid, guards);
+    }
 }
 
-function drawPlayerTagAndChat(gx, gy, tagText, bubbleObj) {
-    const px = gx * TILE_SIZE;
-    const py = gy * TILE_SIZE;
-    ctx.save();
-    ctx.font = `bold ${Math.max(9, Math.floor(TILE_SIZE * 0.24))}px 'Press Start 2P', monospace`;
-    ctx.textAlign = 'center';
-    ctx.fillStyle = '#38bdf8';
-    ctx.fillText(tagText, px, py - TILE_SIZE * 0.58);
+function drawMinimapRadar(grid, guards) {
+    const scale = 4;
+    const mw = MAP_WIDTH * scale;
+    const mh = MAP_HEIGHT * scale;
+    const mx = canvas.width - mw - 14;
+    const my = 56;
 
-    if (bubbleObj && bubbleObj.timer > 0) {
-        bubbleObj.timer--;
-        ctx.font = `bold ${Math.max(10, Math.floor(TILE_SIZE * 0.28))}px Inter, sans-serif`;
-        const msg = bubbleObj.text;
-        const w = Math.min(220, ctx.measureText(msg).width + 18);
-        ctx.fillStyle = 'rgba(15, 23, 42, 0.92)';
-        ctx.strokeStyle = '#10b981';
-        ctx.lineWidth = 2;
-        ctx.fillRect(px - w / 2, py - TILE_SIZE * 1.25, w, 24);
-        ctx.strokeRect(px - w / 2, py - TILE_SIZE * 1.25, w, 24);
-        ctx.fillStyle = '#ffffff';
-        ctx.fillText(msg, px, py - TILE_SIZE * 1.25 + 15);
+    ctx.save();
+    ctx.fillStyle = 'rgba(15, 23, 42, 0.88)';
+    ctx.strokeStyle = '#475569';
+    ctx.lineWidth = 2;
+    ctx.fillRect(mx - 2, my - 2, mw + 4, mh + 4);
+    ctx.strokeRect(mx - 2, my - 2, mw + 4, mh + 4);
+
+    for (let y = 0; y < MAP_HEIGHT; y++) {
+        for (let x = 0; x < MAP_WIDTH; x++) {
+            const c = (grid[y] && grid[y][x]) || 0;
+            if (c === 1) {
+                ctx.fillStyle = '#334155';
+                ctx.fillRect(mx + x * scale, my + y * scale, scale, scale);
+            } else if (c === 6) {
+                ctx.fillStyle = '#f43f5e';
+                ctx.fillRect(mx + x * scale, my + y * scale, scale, scale);
+            }
+        }
     }
+
+    if (!diamond.taken) {
+        ctx.fillStyle = '#38bdf8';
+        ctx.fillRect(mx + diamond.x * scale - 2, my + diamond.y * scale - 2, 5, 5);
+    }
+    ctx.fillStyle = '#10b981';
+    ctx.fillRect(mx + exitPoint.x * scale, my + exitPoint.y * scale, 4, 4);
+
+    guards.forEach(e => {
+        ctx.fillStyle = '#ef4444';
+        ctx.fillRect(mx + e.x * scale - 1.5, my + e.y * scale - 1.5, 3, 3);
+    });
+
+    if (isMultiplayerSession) {
+        Object.values(AppState.onlinePlayers).forEach(p => {
+            if (p.username !== AppState.username && p.sessionType === 'MULTIPLAYER' && p.roomCode === mpRoomCode) {
+                ctx.fillStyle = (mpGalyaUsername === p.username) ? '#f59e0b' : '#a855f7';
+                ctx.fillRect(mx + p.x * scale - 2, my + p.y * scale - 2, 4, 4);
+            }
+        });
+    }
+
+    ctx.fillStyle = '#fde047';
+    ctx.fillRect(mx + player.x * scale - 2, my + player.y * scale - 2, 5, 5);
     ctx.restore();
 }
 
@@ -3429,19 +3491,46 @@ function drawEmoji(char, gx, gy, scale = 0.8) {
     ctx.fillText(char, gx * TILE_SIZE, gy * TILE_SIZE);
 }
 
+function drawPlayerTagAndChat(gx, gy, tagText, bubble) {
+    const px = gx * TILE_SIZE;
+    const py = gy * TILE_SIZE - TILE_SIZE * 0.62;
+    ctx.save();
+    ctx.font = `bold ${Math.max(9, Math.floor(TILE_SIZE * 0.24))}px 'Press Start 2P', monospace`;
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#0f172a';
+    const tw = ctx.measureText(tagText).width + 10;
+    ctx.fillRect(px - tw / 2, py - 11, tw, 15);
+    ctx.fillStyle = tagText.includes('ГАЛЯ') ? '#fbbf24' : '#38bdf8';
+    ctx.fillText(tagText, px, py);
+
+    if (bubble && bubble.timer > 0) {
+        bubble.timer -= 1;
+        const by = py - 22;
+        ctx.font = `bold 11px 'Inter', sans-serif`;
+        const bw = Math.min(220, ctx.measureText(bubble.text).width + 16);
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.95)';
+        ctx.strokeStyle = '#34d399';
+        ctx.lineWidth = 1.5;
+        ctx.fillRect(px - bw / 2, by - 16, bw, 20);
+        ctx.strokeRect(px - bw / 2, by - 16, bw, 20);
+        ctx.fillStyle = '#ffffff';
+        ctx.fillText(bubble.text.slice(0, 28), px, by - 3);
+    }
+    ctx.restore();
+}
+
 function spawnAlert(gx, gy, text, color = "#ffffff") {
     floatAlerts.push({ x: gx * TILE_SIZE, y: gy * TILE_SIZE, text, color, life: 55 });
 }
 
-// Ультра-динамичный 3D кибер-фон Главного Меню с прожекторами и алмазными частицами
+// Спокойный тактический фон Главного Меню без резких вспышек
 const bgCanvas = document.getElementById('menuBgCanvas');
 const bgCtx = bgCanvas.getContext('2d');
-const bgParticles = Array.from({ length: 38 }, () => ({
+const bgParticles = Array.from({ length: 24 }, () => ({
     x: Math.random() * window.innerWidth,
     y: Math.random() * window.innerHeight,
-    s: 2 + Math.random() * 4,
-    vy: 0.4 + Math.random() * 1.1,
-    rot: Math.random() * Math.PI
+    s: 1.5 + Math.random() * 2.5,
+    vy: 0.25 + Math.random() * 0.5
 }));
 
 function drawMenuBackground() {
@@ -3451,50 +3540,25 @@ function drawMenuBackground() {
         bgCanvas.height = window.innerHeight;
     }
     const w = bgCanvas.width, h = bgCanvas.height;
-    const t = performance.now() * 0.001;
 
-    bgCtx.fillStyle = '#020617';
+    bgCtx.fillStyle = '#0b1120';
     bgCtx.fillRect(0, 0, w, h);
 
-    // Двойные поисковые лазерные лучи на заднем плане
-    for (let i = 0; i < 2; i++) {
-        const bx = (w * (0.3 + i * 0.4)) + Math.sin(t * (0.7 + i * 0.3)) * (w * 0.25);
-        const grad = bgCtx.createLinearGradient(bx, 0, bx, h);
-        grad.addColorStop(0, i === 0 ? 'rgba(0, 243, 255, 0.12)' : 'rgba(59, 130, 246, 0.12)');
-        grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
-        bgCtx.fillStyle = grad;
-        bgCtx.beginPath();
-        bgCtx.moveTo(bx - 40, 0);
-        bgCtx.lineTo(bx + 40, 0);
-        bgCtx.lineTo(bx + 260, h);
-        bgCtx.lineTo(bx - 260, h);
-        bgCtx.closePath();
-        bgCtx.fill();
-    }
-
-    // Неоновая сетка
-    bgCtx.strokeStyle = 'rgba(0, 243, 255, 0.09)';
+    bgCtx.strokeStyle = 'rgba(56, 189, 248, 0.05)';
     bgCtx.lineWidth = 1;
-    const step = 56;
-    const offset = (performance.now() / 30) % step;
+    const step = 64;
     for (let x = 0; x < w; x += step) {
         bgCtx.beginPath(); bgCtx.moveTo(x, 0); bgCtx.lineTo(x, h); bgCtx.stroke();
     }
-    for (let y = offset; y < h; y += step) {
+    for (let y = 0; y < h; y += step) {
         bgCtx.beginPath(); bgCtx.moveTo(0, y); bgCtx.lineTo(w, y); bgCtx.stroke();
     }
 
-    // Парящие кристаллы
-    bgCtx.fillStyle = 'rgba(0, 243, 255, 0.55)';
+    bgCtx.fillStyle = 'rgba(56, 189, 248, 0.25)';
     bgParticles.forEach(p => {
         p.y -= p.vy;
-        p.rot += 0.02;
         if (p.y < -10) { p.y = h + 10; p.x = Math.random() * w; }
-        bgCtx.save();
-        bgCtx.translate(p.x, p.y);
-        bgCtx.rotate(p.rot);
-        bgCtx.fillRect(-p.s, -p.s, p.s * 2, p.s * 2);
-        bgCtx.restore();
+        bgCtx.fillRect(p.x, p.y, p.s * 2, p.s * 2);
     });
 }
 
@@ -3543,7 +3607,7 @@ function resetEditorGrid() {
     editorEnemies = [];
     editorTexts = [];
     editorPlayerPos = { x: 2.5, y: 2.5 };
-    editorDiamondPos = { x: 17.5, y: 12.5 };
+    editorDiamondPos = { x: 32.5, y: 20.5 };
 }
 
 window.selectEditorTool = function(toolId, label, btnEl) {
@@ -3555,7 +3619,7 @@ window.selectEditorTool = function(toolId, label, btnEl) {
 
 function handleEditorPointer() {
     if (!isPointerDown) { lastEditedCell = { x: -1, y: -1 }; return; }
-    const gx = Math.floor(pointerX / TILE_SIZE), gy = Math.floor(pointerY / TILE_SIZE);
+    const gx = Math.floor((pointerX + camX) / TILE_SIZE), gy = Math.floor((pointerY + camY) / TILE_SIZE);
     if (gx <= 0 || gx >= MAP_WIDTH - 1 || gy <= 0 || gy >= MAP_HEIGHT - 1) return;
     if (gx === lastEditedCell.x && gy === lastEditedCell.y) return;
     lastEditedCell = { x: gx, y: gy };
@@ -3709,6 +3773,7 @@ window.addEventListener('keydown', e => {
     keysPressed[e.code] = true;
     if (e.code === 'Escape') window.togglePauseGame();
     if (e.code === 'KeyE') window.triggerActionSkill();
+    if (e.code === 'KeyZ') window.toggleCameraZoom();
 });
 window.addEventListener('keyup', e => { keysPressed[e.code] = false; });
 
