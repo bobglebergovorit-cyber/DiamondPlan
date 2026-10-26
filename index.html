@@ -1485,7 +1485,51 @@ setInterval(async () => {
     const snap = await restRtdbFetch('');
     if (snap) applyCloudSnapshotData(snap);
 }, 3500);
+
+/* =========================================================================
+   3. АВТОРИЗАЦИЯ И ПРОВЕРКА УНИКАЛЬНОСТИ @USERNAME
+   ========================================================================= */
+function updateHubOnlineCounter() {
+    const count = Math.max(1, Object.keys(AppState.onlinePlayers || {}).length);
+    const el = document.getElementById('hubOnlineCounter');
+    if (el) el.innerText = `🟢 ОНЛАЙН: ${count}`;
 }
+
+function isUsernameTaken(uname) {
+    if (!uname) return false;
+    return Boolean(AppState.registeredUsernames[uname] || AppState.accountsMap[uname]);
+}
+
+window.switchAuthTab = function(mode) {
+    AudioEngine.sfx('click');
+    authTabMode = mode;
+    const btnLogin = document.getElementById('tabBtnLogin');
+    const btnReg = document.getElementById('tabBtnRegister');
+    const dispGroup = document.getElementById('authDisplayNameGroup');
+    const submitBtn = document.getElementById('authSubmitBtn');
+    const errBox = document.getElementById('authErrorBox');
+    if (errBox) errBox.classList.add('hidden');
+
+    if (mode === 'register') {
+        if (btnReg) btnReg.className = "font-pixel text-xs py-3.5 rounded-xl bg-blue-600 text-white transition-all";
+        if (btnLogin) btnLogin.className = "font-pixel text-xs py-3.5 rounded-xl text-slate-400 hover:text-white transition-all";
+        if (dispGroup) dispGroup.classList.remove('hidden');
+        if (submitBtn) submitBtn.innerText = "СОЗДАТЬ АККАУНТ ▶";
+    } else {
+        if (btnLogin) btnLogin.className = "font-pixel text-xs py-3.5 rounded-xl bg-blue-600 text-white transition-all";
+        if (btnReg) btnReg.className = "font-pixel text-xs py-3.5 rounded-xl text-slate-400 hover:text-white transition-all";
+        if (dispGroup) dispGroup.classList.add('hidden');
+        if (submitBtn) submitBtn.innerText = "ВОЙТИ В ИГРУ ▶";
+    }
+    window.onUsernameInput();
+};
+
+window.cycleAuthAvatar = function(dir) {
+    AudioEngine.sfx('click');
+    authAvatarIdx = (authAvatarIdx + dir + AVATARS.length) % AVATARS.length;
+    const preview = document.getElementById('authAvatarPreview');
+    if (preview) preview.innerText = AVATARS[authAvatarIdx];
+};
 
 window.onUsernameInput = function() {
     const input = document.getElementById('authUsernameInput');
@@ -1715,17 +1759,6 @@ async function broadcastPresence(force = false) {
         } catch(e) {}
     }
     restRtdbFetch(`presence/${AppState.username}`, 'PUT', presenceData);
-}
-
-    if (rtdb && rtdbSet && rtdbRef) {
-        try {
-            const pRef = rtdbRef(rtdb, `diamond_plan_v2/presence/${AppState.username}`);
-            rtdbSet(pRef, presenceData);
-            if (rtdbOnDisconnect) rtdbOnDisconnect(pRef).remove().catch(() => {});
-        } catch(e) {}
-    } else {
-        restRtdbFetch(`presence/${AppState.username}`, 'PUT', presenceData);
-    }
 }
 
 /* =========================================================================
